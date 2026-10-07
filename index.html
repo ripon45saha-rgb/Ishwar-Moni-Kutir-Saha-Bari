@@ -6,6 +6,11 @@
 <meta name="theme-color" content="#7f1d1d">
 <meta name="description" content="ঈশ্বরমনি কুঠির, সাহা বাড়ি — খড়মা, দেওয়ানগঞ্জ, জামালপুর।">
 <title>ঈশ্বরমনি কুঠির | সাহা বাড়ি</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ঈশ্বরমনি কুঠির">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
@@ -111,6 +116,21 @@ body:not(.entered){overflow:hidden}
 .contact-phone{background:#7a1717;color:#fff}
 @media(max-width:600px){.contact-section{margin:22px 12px 16px;padding:20px 14px}.contact-section h2{font-size:22px}.contact-actions a{width:100%}}
 .contact-actions-right{justify-content:flex-end;}
+
+/* Puja countdown + app/language controls */
+.top-tools{display:flex;gap:8px;align-items:center;margin-left:auto;padding-left:12px}
+.tool-btn{border:1px solid rgba(255,217,120,.5);background:rgba(255,255,255,.08);color:#fff4d0;border-radius:999px;padding:7px 12px;font:700 12px "Noto Serif Bengali",serif;cursor:pointer}
+.tool-btn:hover{background:rgba(255,217,120,.16)}
+.install-btn{background:#d7a83d;color:#35100b;border-color:#e8c66f}
+.countdown-box{margin:28px auto 0;max-width:820px;padding:24px 18px;border-radius:22px;background:linear-gradient(135deg,#5d0816,#8e1828);border:1px solid rgba(255,217,120,.55);box-shadow:0 15px 35px rgba(60,5,12,.18);text-align:center;color:#fff}
+.countdown-title{font-size:24px;font-weight:800;color:#ffd978}
+.countdown-sub{margin:4px 0 16px;color:#ffe9bc}
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.countdown-unit{background:rgba(255,255,255,.09);border:1px solid rgba(255,217,120,.22);border-radius:16px;padding:13px 8px}
+.countdown-num{font-size:clamp(25px,5vw,40px);font-weight:800;line-height:1.1;color:#fff}
+.countdown-label{font-size:13px;color:#f5dca7;margin-top:3px}
+.countdown-done{font-size:24px;font-weight:800;color:#ffd978;padding:15px}
+@media(max-width:600px){.top-tools{padding-left:6px;gap:5px}.tool-btn{padding:6px 9px;font-size:11px}.countdown-grid{gap:6px}.countdown-unit{padding:11px 4px}.countdown-label{font-size:11px}.countdown-box{padding:20px 10px}}
 </style>
 <style>
 /* Final responsive polish */
@@ -285,6 +305,16 @@ img{max-width:100%}
 <section id="utsav">
  <div class="container">
   <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
+  <div class="countdown-box" id="countdownBox" aria-live="polite">
+   <div class="countdown-title">🪔 দুর্গোৎসব ২০২৬</div>
+   <div class="countdown-sub">মহা ষষ্ঠী শুরু — ২৮শে আশ্বিন (১৬ই অক্টোবর ২০২৬), সকাল ৯:০০টা</div>
+   <div class="countdown-grid">
+    <div class="countdown-unit"><div class="countdown-num" id="cdDays">--</div><div class="countdown-label">দিন</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdHours">--</div><div class="countdown-label">ঘণ্টা</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdMinutes">--</div><div class="countdown-label">মিনিট</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdSeconds">--</div><div class="countdown-label">সেকেন্ড</div></div>
+   </div>
+  </div>
   <div class="timeline">
    <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহালয়া</b><br>মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।</div></div>
    <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহা ষষ্ঠী</b><br>এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।</div></div>
@@ -523,6 +553,87 @@ async function loadUploadedGallery(){
  }catch(e){console.warn('Uploaded gallery load failed',e)}
 }
 loadUploadedGallery();
+
+// ===== PWA / Language / Durga Puja Countdown =====
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault(); deferredInstallPrompt=e;
+  const b=document.getElementById('installBtn'); if(b)b.style.display='inline-block';
+});
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  const b=document.getElementById('installBtn'); if(b)b.style.display='none';
+});
+async function installApp(){
+  if(!deferredInstallPrompt){
+    alert('এই অপশনটি Chrome/Android-এর installable mode-এ পাওয়া যাবে। Browser-এর ⋮ মেনু থেকে “Install app” বা “Add to Home screen” নির্বাচন করুন।');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  try{await deferredInstallPrompt.userChoice;}catch(e){}
+  deferredInstallPrompt=null;
+  const b=document.getElementById('installBtn'); if(b)b.style.display='none';
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+
+// Countdown target: Bangladesh time (UTC+6)
+const pujaTarget = new Date('2026-10-16T09:00:00+06:00').getTime();
+const bnDigits=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+function updateCountdown(){
+  const box=document.getElementById('countdownBox'); if(!box)return;
+  let diff=pujaTarget-Date.now();
+  if(diff<=0){
+    box.innerHTML='<div class="countdown-done">🪔 শুভ দুর্গোৎসব ২০২৬ — মহা ষষ্ঠীর শুভ সূচনা হয়েছে। 🙏</div>';
+    return;
+  }
+  const d=Math.floor(diff/86400000); diff%=86400000;
+  const h=Math.floor(diff/3600000); diff%=3600000;
+  const m=Math.floor(diff/60000); diff%=60000;
+  const sec=Math.floor(diff/1000);
+  document.getElementById('cdDays').textContent=bnDigits(d);
+  document.getElementById('cdHours').textContent=bnDigits(h);
+  document.getElementById('cdMinutes').textContent=bnDigits(m);
+  document.getElementById('cdSeconds').textContent=bnDigits(sec);
+}
+updateCountdown(); setInterval(updateCountdown,1000);
+
+// Lightweight bilingual UI: core navigation, headings and visitor interface.
+const translations={
+'পরিচিতি':'About','দুর্গোৎসব ২০২৬':'Durga Utsav 2026','গ্যালারি':'Gallery','কালীপূজা':'Shyama Puja','বিগত বছরের প্রতিমা':'Past Years’ Idols','অবস্থান':'Location',
+'সবার জন্য উন্মুক্ত':'Open to Everyone','সাহা বাড়ি':'Saha House','খড়মা • দেওয়ানগঞ্জ • জামালপুর':'Kharma • Dewanganj • Jamalpur',
+'🛕 দর্শনার্থী তথ্য':'🛕 Visitor Information','আপনার নাম :':'Your Name:','জেলা :':'District:','উপজেলা :':'Upazila:',
+'মন্দির নিয়ে আপনার মতামত :':'Your Opinion about the Temple:','⭐ ১০ এর মধ্যে রেটিং :':'⭐ Rating out of 10:',
+'মন্দিরের পরিবেশ, প্রতিমা, ব্যবহার, প্রসাদ ব্যবস্থাকে আপনি ১০ এর মধ্যে কত রেটিং করবেন?':'How would you rate the temple environment, idol, hospitality and prasad arrangements out of 10?',
+'🪔 প্রবেশ করুন':'🪔 Enter','জেলা নির্বাচন করুন':'Select District','উপজেলা নির্বাচন করুন':'Select Upazila',
+'আগে জেলা নির্বাচন করুন':'Select a district first','আপনার নাম লিখুন':'Enter your name','আপনার মতামত লিখুন...':'Write your opinion...',
+'🌺 শারদীয় দুর্গোৎসব':'🌺 Sharadiya Durga Utsav','ঈশ্বরমনি কুঠির, সাহা বাড়ি':'Ishwarmani Kuthir, Saha House',
+'🛕 আমাদের মন্দির':'🛕 Our Temple','📜 নিমন্ত্রণপত্র':'📜 Invitation Letter','📍 Google Maps-এ দেখুন ↗':'📍 View on Google Maps ↗',
+'খড়মা, দেওয়ানগঞ্জ':'Kharma, Dewanganj','জামালপুর':'Jamalpur'
+};
+const originalNodes=new Map();
+function walkText(node){
+  if(node.nodeType===Node.TEXT_NODE){
+    const t=node.nodeValue.trim();
+    if(t && translations[t] && !originalNodes.has(node)) originalNodes.set(node,t);
+  } else if(node.nodeType===Node.ELEMENT_NODE && !['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName)){
+    node.childNodes.forEach(walkText);
+  }
+}
+function setLanguage(en){
+  walkText(document.body);
+  originalNodes.forEach((orig,node)=>{
+    node.nodeValue=en?(translations[orig]||orig):orig;
+  });
+  document.documentElement.lang=en?'en':'bn';
+  const b=document.getElementById('langBtn'); if(b)b.textContent=en?'বাংলা':'English';
+  localStorage.setItem('ishwarmaniLang',en?'en':'bn');
+}
+function toggleLanguage(){setLanguage(localStorage.getItem('ishwarmaniLang')!=='en');}
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('ishwarmaniLang')==='en') setLanguage(true);
+});
 </script>
 
 
