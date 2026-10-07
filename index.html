@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7f1d1d">
+<meta name="description" content="ঈশ্বরমনি কুটির, সাহা বাড়ি — খড়মা, দেওয়ানগঞ্জ, জামালপুর।">
+<title>ঈশ্বরমনি কুটির | সাহা বাড়ি</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon:#7b1020; --deep:#3d0710; --gold:#d7a83d; --cream:#fff8e8;
+  --text:#35151a; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Serif Bengali",serif;color:var(--text);background:var(--cream);line-height:1.75}
+a{text-decoration:none;color:inherit}
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(61,7,16,.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(215,168,61,.35)}
+.navin{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:13px 20px}
+.brand{color:#ffe8a8;font-weight:800;font-size:19px}
+.links{display:flex;gap:20px;color:#fff;font-size:14px}
+.links a:hover{color:#ffd978}
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;background:linear-gradient(90deg,rgba(35,3,9,.78),rgba(75,5,17,.42)),url("temple.jpg") center/cover}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:28%;background:linear-gradient(transparent,var(--cream))}
+.hero-content{position:relative;z-index:1;padding:110px 20px 90px;max-width:900px}
+.om{font-size:58px;color:#ffd66a;font-family:serif;margin-bottom:5px;text-shadow:0 3px 20px #000}
+.kicker{letter-spacing:2px;color:#ffd978;font-size:14px}
+h1{font-size:clamp(38px,7vw,76px);line-height:1.15;margin:8px 0 12px}
+.subtitle{font-size:clamp(20px,3vw,30px);color:#ffe7ad}
+.location{margin-top:12px;color:#fff0c7}
+.mantra{margin:28px auto 0;padding:15px 20px;border:1px solid rgba(255,215,120,.5);border-radius:18px;background:rgba(50,2,8,.38);max-width:680px;font-family:"Tiro Bangla",serif;font-size:19px}
+.btn{display:inline-block;margin-top:28px;padding:11px 22px;border-radius:999px;background:var(--gold);color:#35100b;font-weight:800;box-shadow:0 8px 25px rgba(0,0,0,.25)}
+section{padding:82px 20px}
+.container{max-width:1120px;margin:auto}
+.section-head{text-align:center;margin-bottom:38px}
+.eyebrow{color:var(--maroon);font-weight:800;letter-spacing:1px}
+.section-head h2{font-size:clamp(28px,4vw,44px);color:var(--deep);line-height:1.25}
+.section-head p{max-width:700px;margin:8px auto;color:#6b4b50}
+.about{background:#fff}
+.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.about-img{width:100%;height:430px;object-fit:cover;border-radius:24px;box-shadow:0 18px 50px rgba(70,10,15,.16)}
+.card{background:#fffaf0;border:1px solid #edd8a3;border-radius:22px;padding:28px}
+.highlight{background:linear-gradient(135deg,#6b0918,#991e2e);color:#fff}
+.highlight h3{color:#ffd978;font-size:25px;margin-bottom:8px}
+.timeline{display:grid;gap:14px}
+.event{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid #efdcae;padding:17px 20px;border-radius:16px}
+.date{min-width:105px;color:var(--maroon);font-weight:800}
+.gallery{background:#fff}
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.gallery img{width:100%;height:340px;object-fit:cover;border-radius:18px;border:3px solid #f0d48b;cursor:pointer;transition:.25s}
+.gallery img:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(70,10,15,.15)}
+.invite{background:linear-gradient(135deg,#fff4d4,#fffaf1)}
+.invite-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.invite img{width:100%;height:620px;object-fit:contain;background:#fff;border-radius:16px;border:1px solid #e5ca82}
+.location-box{background:#4b0912;color:#fff}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:stretch}
+.map-placeholder{min-height:300px;border-radius:22px;background:linear-gradient(135deg,#6c111f,#2d050b);display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;border:1px solid #b87d32}
+footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
+.small{font-size:13px;color:#bda48b;margin-top:7px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:50;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}.modal img{max-width:95vw;max-height:90vh;border-radius:10px}.close{position:fixed;top:15px;right:22px;color:#fff;font-size:38px;cursor:pointer}
+@media(max-width:800px){
+ .links{display:none}.about-grid,.location-grid{grid-template-columns:1fr}.gallery-grid,.invite-grid{grid-template-columns:1fr}
+ .about-img{height:300px}.gallery img{height:300px}.invite img{height:auto;max-height:none}
+ section{padding:65px 16px}.navin{padding:12px 16px}.brand{font-size:16px}
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="navin">
+  <a class="brand" href="#home">🪔 ঈশ্বরমনি কুটির</a>
+  <div class="links">
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#location">অবস্থান</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="home">
+ <div class="hero-content">
+   <div class="om">ॐ</div>
+   <div class="kicker">শ্রী শ্রী দুর্গামাতা</div>
+   <h1>ঈশ্বরমনি কুটির</h1>
+   <div class="subtitle">সাহা বাড়ি</div>
+   <div class="location">খড়মা • দেওয়ানগঞ্জ • জামালপুর</div>
+   <div class="mantra">“সর্বে ভবন্তু সুখিনঃ, সর্বে সন্তু নিরাময়াঃ।”<br><small>সকলেই সুখী হোক, সকলেই রোগমুক্ত থাকুক।</small></div>
+   <a class="btn" href="#utsav">দুর্গোৎসব ২০২৬ দেখুন ↓</a>
+ </div>
+</header>
+
+<section id="about" class="about">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow">🛕 আমাদের মন্দির</div><h2>ঈশ্বরমনি কুটির, সাহা বাড়ি</h2><p>ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।</p></div>
+  <div class="about-grid">
+   <img class="about-img" src="temple.jpg" alt="ঈশ্বরমনি কুটির মন্দির">
+   <div class="card">
+    <h3 style="color:var(--maroon);font-size:27px;margin-bottom:12px">🙏 মায়ের আশীর্বাদে</h3>
+    <p>ঈশ্বরমনি কুটির (সাহা বাড়ি) অবস্থিত খড়মা, দেওয়ানগঞ্জ, জামালপুরে। এই ওয়েবসাইটে মন্দিরের পূজা, উৎসব, ছবি ও গুরুত্বপূর্ণ স্মৃতিগুলো সংরক্ষণ করা হবে।</p>
+    <div class="highlight" style="margin-top:20px;padding:22px;border-radius:18px">
+      <h3>শুভকামনা</h3>
+      <p>মায়ের কৃপায় সকলের জীবন শান্তি, সমৃদ্ধি ও মঙ্গলময় হোক।</p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="utsav">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুটির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
+  <div class="timeline">
+   <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহাষষ্ঠী</b><br>পূজার শুভ সূচনা ও বিশেষ আয়োজন।</div></div>
+   <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহাসপ্তমী</b><br>সপ্তমীর পূজা ও অন্যান্য ধর্মীয় অনুষ্ঠান।</div></div>
+   <div class="event"><div class="date">২৯ আশ্বিন</div><div><b>মহাষ্টমী</b><br>অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।</div></div>
+   <div class="event"><div class="date">৩০ আশ্বিন</div><div><b>মহানবমী</b><br>নবমীর পূজা ও সন্ধ্যারতি।</div></div>
+   <div class="event"><div class="date">১ কার্তিক</div><div><b>বিজয়া দশমী</b><br>পূজা সমাপন ও বিজয়া দশমীর অনুষ্ঠান।</div></div>
+  </div>
+  <p style="margin-top:22px;text-align:center;color:#72555a">নিমন্ত্রণপত্রে প্রদত্ত সময়সূচিই চূড়ান্ত হিসেবে বিবেচ্য।</p>
+ </div>
+</section>
+
+<section class="invite">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow">📜 নিমন্ত্রণপত্র</div><h2>২০২৬ সালের নিমন্ত্রণ পত্র</h2></div>
+  <div class="invite-grid">
+   <img src="durga-utsav-2026-cover.jpg" alt="দুর্গোৎসব ২০২৬ নিমন্ত্রণপত্র - প্রচ্ছদ" onclick="openImg(this.src)">
+   <img src="durga-utsav-2026-details.jpg" alt="দুর্গোৎসব ২০২৬ নিমন্ত্রণপত্র - বিস্তারিত" onclick="openImg(this.src)">
+  </div>
+ </div>
+</section>
+
+<section id="gallery" class="gallery">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow">📸 পূজার স্মৃতি</div><h2>ছবি গ্যালারি</h2><p>মন্দির ও এবারের পূজার কিছু বিশেষ মুহূর্ত। ভবিষ্যতে আরও ছবি এখানে যোগ করা যাবে।</p></div>
+  <div class="gallery-grid">
+   <img src="temple.jpg" alt="ঈশ্বরমনি কুটির" onclick="openImg(this.src)">
+   <img src="chokh-daan.jpg" alt="এবারের প্রতিমার চক্ষুদান" onclick="openImg(this.src)">
+  </div>
+ </div>
+</section>
+
+<section id="location" class="location-box">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow" style="color:#ffd978">📍 ঠিকানা</div><h2 style="color:#fff">আমাদের অবস্থান</h2></div>
+  <div class="location-grid">
+   <div class="card" style="color:var(--text)">
+    <h3 style="color:var(--maroon);font-size:26px">ঈশ্বরমনি কুটির, সাহা বাড়ি</h3>
+    <p style="margin-top:8px">খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ</p>
+    <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Kharma%2C%20Dewanganj%2C%20Jamalpur%2C%20Bangladesh" target="_blank">Google Maps-এ খুঁজুন ↗</a>
+   </div>
+   <div class="map-placeholder"><div><div style="font-size:52px">🛕</div><h3>খড়মা, দেওয়ানগঞ্জ</h3><p>জামালপুর</p><p class="small">সঠিক Google Maps pin পরে যোগ করা যাবে।</p></div></div>
+  </div>
+ </div>
+</section>
+
+<footer>
+ <div style="font-size:21px">ॐ • 🪔 • 🙏</div>
+ <div style="margin-top:7px">ঈশ্বরমনি কুটির, সাহা বাড়ি</div>
+ <div class="small">খড়মা, দেওয়ানগঞ্জ, জামালপুর</div>
+ <div class="small">© ২০২৬ ঈশ্বরমনি কুটির • সর্বমঙ্গল কামনা</div>
+</footer>
+
+<div class="modal" id="modal" onclick="this.classList.remove('open')">
+ <span class="close">×</span><img id="modalImg" src="" alt="বড় ছবি">
+</div>
+<script>
+function openImg(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('open')}
+</script>
+</body>
+</html>
