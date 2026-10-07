@@ -34,6 +34,17 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
+<div class="card" style="margin-bottom:18px">
+<h2>🍚 প্রসাদ ব্যবস্থাপনা</h2>
+<div class="small">২৯শে আশ্বিন ২০২৬ থেকে Website-এ এই তথ্য দেখা যাবে। এখান থেকে তথ্য পরিবর্তন করে Save করুন।</div>
+<label>শিরোনাম</label><input id="prasadTitle" value="প্রসাদের তথ্য">
+<label>প্রসাদের নাম / কী কী থাকবে</label><textarea id="prasadItems" rows="3" placeholder="খিচুড়ি, লাবড়া, পায়েস..."></textarea>
+<label>বিতরণের সময়</label><input id="prasadTime" placeholder="দুপুর ১:০০টা থেকে">
+<label>বিতরণের স্থান</label><input id="prasadPlace" placeholder="মন্দির প্রাঙ্গণ">
+<label>অতিরিক্ত ঘোষণা</label><textarea id="prasadNote" rows="3" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"></textarea>
+<button class="btn" onclick="savePrasad()">💾 প্রসাদের তথ্য Save করুন</button> <span id="prasadStatus" class="small"></span>
+</div>
+
 <div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
 <label>Gallery বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
 <option value="gallery">স্মৃতিপটে মন্দির প্রাঙ্গন ও আসন্ন শারদীয় দুর্গোৎসবের বিশেষ কিছু মুহুর্ত</option>
@@ -61,7 +72,7 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -96,51 +107,26 @@ async function loadPhotos(){
  }catch(e){el.textContent='Error: '+e.message;}
 }
 async function deletePhoto(id,path){
-  if(!confirm('এই ছবিটি মুছে ফেলবেন?')) return;
-  try{
-    const safePath = String(path);
+ if(!confirm('এই ছবিটি মুছে ফেলবেন?'))return;
+ try{
+  const safePath=String(path).split('/').map(encodeURIComponent).join('/');
+  let r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+safePath,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+  if(!r.ok){const t=await r.text(); throw Error('Storage delete failed: '+t);}
+  r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=minimal'}});
+  if(!r.ok){const t=await r.text(); throw Error('Database delete failed: '+t);}
+  alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
+  loadPhotos();
+ }catch(e){alert('❌ Delete হয়নি।
 
-    // Supabase Storage: remove files via POST /storage/v1/object/remove
-    let r = await fetch(
-      SUPABASE_URL + '/storage/v1/object/remove',
-      {
-        method:'POST',
-        headers:{
-          'apikey':SUPABASE_KEY,
-          'Authorization':'Bearer '+accessToken,
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({bucketId:'Gallery', prefixes:[safePath]})
-      }
-    );
+'+e.message+'
 
-    if(!r.ok){
-      const t=await r.text();
-      throw Error('Storage delete failed: '+t);
-    }
-
-    // Delete the database record too.
-    r = await fetch(
-      SUPABASE_URL + '/rest/v1/gallery_photos?id=eq.' + encodeURIComponent(id),
-      {
-        method:'DELETE',
-        headers:{...h(),'Prefer':'return=minimal'}
-      }
-    );
-
-    if(!r.ok){
-      const t=await r.text();
-      throw Error('Database delete failed: '+t);
-    }
-
-    alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
-    loadPhotos();
-  }catch(e){
-    alert('❌ Delete হয়নি।\n\n'+e.message);
-    loadPhotos();
-  }
+যদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
 }
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";location.reload()}
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos()}
+
+async function loadPrasad(){try{const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&id=eq.1',{headers:{...h()}});const d=await r.json();if(r.ok&&d.length){const x=d[0];prasadTitle.value=x.title||'';prasadItems.value=x.items||'';prasadTime.value=x.distribution_time||'';prasadPlace.value=x.place||'';prasadNote.value=x.note||'';}}catch(e){}}
+async function savePrasad(){const st=document.getElementById('prasadStatus');st.textContent='Saving...';try{const body={id:1,title:prasadTitle.value.trim(),items:prasadItems.value.trim(),distribution_time:prasadTime.value.trim(),place:prasadPlace.value.trim(),note:prasadNote.value.trim()};const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.1',{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());st.textContent='✅ Saved';}catch(e){st.textContent='❌ '+e.message;}}
+
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}
 </script>
 </body></html>
