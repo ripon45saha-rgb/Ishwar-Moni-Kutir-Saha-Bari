@@ -159,6 +159,64 @@ img{max-width:100%}
   .modal img{max-width:94vw;max-height:82vh}
 }
 </style>
+<style>
+/* Decorative alpana-style footer frame */
+.site-footer{
+  position:relative;
+  margin-top:0;
+  padding:42px 28px 38px;
+  background:#260005;
+  color:#f7dfb5;
+  text-align:center;
+  overflow:hidden;
+}
+.site-footer .alpana-frame{
+  max-width:1050px;
+  margin:0 auto;
+  padding:45px 24px 38px;
+  border:2px solid #e8bf75;
+  border-radius:8px;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(239,194,116,.12), transparent 22%),
+    radial-gradient(circle at 0% 50%, rgba(239,194,116,.08), transparent 18%),
+    radial-gradient(circle at 100% 50%, rgba(239,194,116,.08), transparent 18%);
+}
+.site-footer .alpana-frame:before,
+.site-footer .alpana-frame:after{
+  content:"✿  ❧  ❈  ❧  ✿";
+  position:absolute;
+  left:8%;
+  right:8%;
+  color:#f3d19a;
+  font-size:25px;
+  letter-spacing:8px;
+  line-height:1;
+}
+.site-footer .alpana-frame:before{top:-16px}
+.site-footer .alpana-frame:after{bottom:-16px}
+.site-footer .footer-corners{
+  position:absolute;
+  inset:10px;
+  pointer-events:none;
+  color:#f3d19a;
+  font-size:31px;
+  display:flex;
+  justify-content:space-between;
+  align-items:space-between;
+}
+.site-footer .footer-corners span:last-child{align-self:flex-end}
+.site-footer .footer-symbols{font-size:30px;margin-bottom:14px}
+.site-footer h3{margin:8px 0 10px;font-size:27px;color:#f4d69e}
+.site-footer p{margin:6px 0;color:#dfc49b}
+@media(max-width:600px){
+  .site-footer{padding:34px 14px 30px}
+  .site-footer .alpana-frame{padding:42px 16px 36px}
+  .site-footer h3{font-size:22px}
+  .site-footer .footer-symbols{font-size:25px}
+  .site-footer .alpana-frame:before,.site-footer .alpana-frame:after{font-size:18px;letter-spacing:4px}
+}
+</style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -241,7 +299,7 @@ img{max-width:100%}
 
 <section id="gallery" class="gallery">
  <div class="container">
-  <div class="section-head"><div class="eyebrow">📸 পূজার স্মৃতি</div><h2>ছবি গ্যালারি</h2><p>মন্দির ও এবারের পূজার কিছু বিশেষ মুহূর্ত। ভবিষ্যতে আরও ছবি এখানে যোগ করা যাবে।</p></div>
+  <div class="section-head"><div class="eyebrow">📸 পূজার স্মৃতি</div><h2>স্মৃতিপটে মন্দির প্রাঙ্গন ও আসন্ন শারদীয় দুর্গোৎসবের বিশেষ কিছু মুহুর্ত</h2><p>মন্দির ও এবারের পূজার কিছু বিশেষ মুহূর্ত। ভবিষ্যতে আরও ছবি এখানে যোগ করা যাবে।</p></div>
   <div class="gallery-grid">
    <img src="temple.jpg" alt="ঈশ্বরমনি কুঠির" onclick="openImg(this.src)">
    <img src="chokh-daan.jpg" alt="এবারের প্রতিমার চক্ষুদান" onclick="openImg(this.src)">
@@ -281,7 +339,7 @@ img{max-width:100%}
  <div class="container">
   <div class="section-head">
    <div class="eyebrow" style="color:#ffd978">🪔 কালীপূজা</div>
-   <h2 style="color:#fff">কালীপূজার স্মৃতি</h2>
+   <h2 style="color:#fff">শ্যামা পূজা</h2>
    <p style="color:#d9bdad">ঈশ্বরমনি কুঠিরের কালীপূজার কিছু বিশেষ মুহূর্ত।</p>
   </div>
   <div class="gallery-grid">
@@ -296,11 +354,11 @@ img{max-width:100%}
   <div class="section-inner">
     <div class="section-heading">
       <span class="eyebrow">স্মৃতি</span>
-      <h2>🪷 লক্ষ্মী পূজা স্মৃতি</h2>
+      <h2>🪷 কোজাগরী লক্ষ্মী পূজা</h2>
     </div>
     <div class="gallery-grid">
-      <img src="lokkhi-puja-1.jpg" alt="লক্ষ্মী পূজা স্মৃতি ১" onclick="openImg(this.src)">
-      <img src="lokkhi-puja-2.jpg" alt="লক্ষ্মী পূজা স্মৃতি ২" onclick="openImg(this.src)">
+      <img src="lokkhi-puja-1.jpg" alt="কোজাগরী লক্ষ্মী পূজা ১" onclick="openImg(this.src)">
+      <img src="lokkhi-puja-2.jpg" alt="কোজাগরী লক্ষ্মী পূজা ২" onclick="openImg(this.src)">
     </div>
   </div>
 </section>
@@ -309,7 +367,7 @@ img{max-width:100%}
   <div class="section-inner">
     <div class="section-heading">
       <span class="eyebrow">স্মৃতি</span>
-      <h2>🎉 ২০২৫ সালের দুর্গাপূজার আনন্দের কিছু ছবি</h2>
+      <h2>🎉 ২০২৫ সালের আনন্দঘন মধুময় স্মৃতি</h2>
     </div>
     <div class="gallery-grid">
       <img src="durga-2025-1.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ১" onclick="openImg(this.src)">
@@ -450,5 +508,16 @@ function openLightbox(src){openImg(src)}
  });
 })();
 </script>
+
+<footer class="site-footer">
+  <div class="alpana-frame">
+    <div class="footer-corners"><span>❀</span><span>❀</span></div>
+    <div class="footer-symbols">ॐ • 🪔 • 🙏</div>
+    <h3>ঈশ্বরমনি কুঠির, সাহা বাড়ি</h3>
+    <p>খড়মা, দেওয়ানগঞ্জ, জামালপুর</p>
+    <p>© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল সংরক্ষিত</p>
+  </div>
+</footer>
+
 <div style="text-align:center;padding:18px 12px;font-size:12px"><a href="admin.html" style="color:#7a1717;text-decoration:none">Admin</a></div></body>
 </html>
