@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7f1d1d">
-<meta name="description" content="ঈশ্বরমনি কুটির, সাহা বাড়ি — খড়মা, দেওয়ানগঞ্জ, জামালপুর।">
-<title>ঈশ্বরমনি কুটির | সাহা বাড়ি</title>
+<meta name="description" content="ঈশ্বরমনি কুঠির, সাহা বাড়ি — খড়মা, দেওয়ানগঞ্জ, জামালপুর।">
+<title>ঈশ্বরমনি কুঠির | সাহা বাড়ি</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
@@ -121,29 +121,68 @@ body:not(.entered){overflow:hidden}
 }
 
 </style>
-</head>
+<style>
+.visitor-card{width:min(560px,92vw);max-height:92vh;overflow:auto;padding:28px 24px}
+.visitor-form{margin-top:18px;text-align:left}.visitor-form h2{text-align:center;margin:0 0 18px}
+.visitor-form label{display:block;margin:12px 0 6px;font-weight:700}
+.visitor-form input,.visitor-form select,.visitor-form textarea{width:100%;box-sizing:border-box;border:1px solid rgba(120,80,20,.25);border-radius:12px;padding:12px 13px;font:inherit;background:rgba(255,255,255,.92);outline:none}
+.rating-row{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:8px 0 16px}
+.rating-row button{border:1px solid rgba(120,80,20,.25);background:#fff;border-radius:9px;padding:9px 2px;cursor:pointer;font-weight:800}
+.rating-row button.selected{background:#b8860b;color:#fff;border-color:#b8860b}
+.visitor-error{min-height:20px;margin:8px 0;color:#a33;text-align:center;font-size:.9rem}
+@media(max-width:520px){.visitor-card{padding:22px 16px}.rating-row{gap:3px}.rating-row button{padding:8px 0}}
+</style></head>
 <body>
 <nav class="nav"><div class="navin">
-  <a class="brand" href="#home">🪔 ঈশ্বরমনি কুটির</a>
+  <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <div class="links">
     <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 
 <header class="welcome" id="welcome">
- <div class="welcome-bg"></div>
+ <div id="welcome" class="welcome">
+  <div class="welcome-card visitor-card">
+    <div class="welcome-om">ॐ</div>
+    <div class="welcome-kicker">সবার জন্য উন্মুক্ত</div>
+    <h1>ঈশ্বরমনি কুঠির</h1>
+    <p class="welcome-subtitle">সাহা বাড়ি</p>
+    <p class="welcome-place">খড়মা • দেওয়ানগঞ্জ • জামালপুর</p>
+    <div class="visitor-form">
+      <h2>🛕 দর্শনার্থী তথ্য</h2>
+      <label>আপনার নাম :</label>
+      <input id="visitorName" type="text" placeholder="আপনার নাম লিখুন">
+      <label>জেলা :</label>
+      <select id="visitorDistrict"><option value="">জেলা নির্বাচন করুন</option></select>
+      <label>উপজেলা :</label>
+      <select id="visitorUpazila" disabled><option value="">আগে জেলা নির্বাচন করুন</option></select>
+      <label>মন্দির নিয়ে আপনার মতামত :</label>
+      <textarea id="visitorOpinion" rows="3" placeholder="আপনার মতামত লিখুন..."></textarea>
+      <label>⭐ ১০-এর মধ্যে রেটিং কত দিতে চান?</label>
+      <div class="rating-row" id="ratingRow">
+        <button type="button" data-rating="1">1</button><button type="button" data-rating="2">2</button>
+        <button type="button" data-rating="3">3</button><button type="button" data-rating="4">4</button>
+        <button type="button" data-rating="5">5</button><button type="button" data-rating="6">6</button>
+        <button type="button" data-rating="7">7</button><button type="button" data-rating="8">8</button>
+        <button type="button" data-rating="9">9</button><button type="button" data-rating="10">10</button>
+      </div>
+      <button class="enter-btn" type="button" onclick="submitVisitorInfo()">🪔 প্রবেশ করুন</button>
+      <p id="visitorError" class="visitor-error"></p>
+    </div>
+  </div>
+</div>
  <div class="welcome-overlay"></div>
  <div class="welcome-content">
    <div class="welcome-om">ॐ</div>
    <div class="welcome-kicker">শ্রী শ্রী দুর্গামাতা</div>
-   <h1>ঈশ্বরমনি কুটির</h1>
+   <h1>ঈশ্বরমনি কুঠির</h1>
    <div class="welcome-subtitle">সাহা বাড়ি</div>
    <div class="welcome-location">খড়মা • দেওয়ানগঞ্জ • জামালপুর</div>
    <div class="welcome-mantra">“সর্বে ভবন্তু সুখিনঃ, সর্বে সন্তু নিরাময়াঃ।”</div>
    <form class="entry-form" id="entryForm" onsubmit="submitEntry(event)">
      <div class="entry-field"><label for="visitorName">আপনার নাম :</label><input id="visitorName" type="text" placeholder="আপনার নাম লিখুন" required></div>
      <div class="entry-field"><label>আপনি কি আগে কখনো মন্দির দর্শন করতে এসেছিলেন :</label><div class="radio-row"><label><input type="radio" name="visited" value="হ্যাঁ" required> হ্যাঁ</label><label><input type="radio" name="visited" value="না"> না</label></div></div>
-     <div class="entry-field"><label for="interest">ঈশ্বরমনি কুটিরে আপনার আগ্রহের কারণ কী?</label><textarea id="interest" placeholder="আপনার উত্তর লিখুন" required></textarea></div>
+     <div class="entry-field"><label for="interest">ঈশ্বরমনি কুঠিরে আপনার আগ্রহের কারণ কী?</label><textarea id="interest" placeholder="আপনার উত্তর লিখুন" required></textarea></div>
      <button class="entry-submit" type="submit">পরিচয় নিশ্চিত করে এগিয়ে যান →</button>
      <div class="entry-welcome" id="entryWelcome"></div>
    </form>
@@ -155,12 +194,12 @@ body:not(.entered){overflow:hidden}
 <main id="siteContent">
 <section id="about" class="about">
  <div class="container">
-  <div class="section-head"><div class="eyebrow">🛕 আমাদের মন্দির</div><h2>ঈশ্বরমনি কুটির, সাহা বাড়ি</h2><p>ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।</p></div>
+  <div class="section-head"><div class="eyebrow">🛕 আমাদের মন্দির</div><h2>ঈশ্বরমনি কুঠির, সাহা বাড়ি</h2><p>ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।</p></div>
   <div class="about-grid">
-   <img class="about-img" src="temple.jpg" alt="ঈশ্বরমনি কুটির মন্দির">
+   <img class="about-img" src="temple.jpg" alt="ঈশ্বরমনি কুঠির মন্দির">
    <div class="card">
     <h3 style="color:var(--maroon);font-size:27px;margin-bottom:12px">🙏 মায়ের আশীর্বাদে</h3>
-    <p>ঈশ্বরমনি কুটির (সাহা বাড়ি) অবস্থিত খড়মা, দেওয়ানগঞ্জ, জামালপুরে। এই ওয়েবসাইটে মন্দিরের পূজা, উৎসব, ছবি ও গুরুত্বপূর্ণ স্মৃতিগুলো সংরক্ষণ করা হবে।</p>
+    <p>ঈশ্বরমনি কুঠির (সাহা বাড়ি) অবস্থিত খড়মা, দেওয়ানগঞ্জ, জামালপুরে। এই ওয়েবসাইটে মন্দিরের পূজা, উৎসব, ছবি ও গুরুত্বপূর্ণ স্মৃতিগুলো সংরক্ষণ করা হবে।</p>
     <div class="highlight" style="margin-top:20px;padding:22px;border-radius:18px">
       <h3>শুভকামনা</h3>
       <p>মায়ের কৃপায় সকলের জীবন শান্তি, সমৃদ্ধি ও মঙ্গলময় হোক।</p>
@@ -172,7 +211,7 @@ body:not(.entered){overflow:hidden}
 
 <section id="utsav">
  <div class="container">
-  <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুটির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
+  <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
   <div class="timeline">
    <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহাষষ্ঠী</b><br>পূজার শুভ সূচনা ও বিশেষ আয়োজন।</div></div>
    <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহাসপ্তমী</b><br>সপ্তমীর পূজা ও অন্যান্য ধর্মীয় অনুষ্ঠান।</div></div>
@@ -198,7 +237,7 @@ body:not(.entered){overflow:hidden}
  <div class="container">
   <div class="section-head"><div class="eyebrow">📸 পূজার স্মৃতি</div><h2>ছবি গ্যালারি</h2><p>মন্দির ও এবারের পূজার কিছু বিশেষ মুহূর্ত। ভবিষ্যতে আরও ছবি এখানে যোগ করা যাবে।</p></div>
   <div class="gallery-grid">
-   <img src="temple.jpg" alt="ঈশ্বরমনি কুটির" onclick="openImg(this.src)">
+   <img src="temple.jpg" alt="ঈশ্বরমনি কুঠির" onclick="openImg(this.src)">
    <img src="chokh-daan.jpg" alt="এবারের প্রতিমার চক্ষুদান" onclick="openImg(this.src)">
    <img src="puja-dhak-2026.jpg" alt="পূজার বাদ্যযন্ত্র ও আয়োজন" onclick="openImg(this.src)">
   </div>
@@ -211,7 +250,7 @@ body:not(.entered){overflow:hidden}
   <div class="section-head">
    <div class="eyebrow">🕰️ পূজার স্মৃতি</div>
    <h2>বিগত বছরের প্রতিমা</h2>
-   <p>ঈশ্বরমনি কুটিরের বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।</p>
+   <p>ঈশ্বরমনি কুঠিরের বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।</p>
   </div>
   <div class="gallery-grid">
    <img src="past-1.jpg" alt="বিগত বছরের প্রতিমা ১" onclick="openImg(this.src)">
@@ -234,7 +273,7 @@ body:not(.entered){overflow:hidden}
   <div class="section-head">
    <div class="eyebrow" style="color:#ffd978">🪔 কালীপূজা</div>
    <h2 style="color:#fff">কালীপূজার স্মৃতি</h2>
-   <p style="color:#d9bdad">ঈশ্বরমনি কুটিরের কালীপূজার কিছু বিশেষ মুহূর্ত।</p>
+   <p style="color:#d9bdad">ঈশ্বরমনি কুঠিরের কালীপূজার কিছু বিশেষ মুহূর্ত।</p>
   </div>
   <div class="gallery-grid">
    <img src="kali-puja-1.jpg" alt="কালীপূজা — প্রতিমা ও পূজার আয়োজন" onclick="openImg(this.src)">
@@ -248,7 +287,7 @@ body:not(.entered){overflow:hidden}
   <div class="section-head"><div class="eyebrow" style="color:#ffd978">📍 ঠিকানা</div><h2 style="color:#fff">আমাদের অবস্থান</h2></div>
   <div class="location-grid">
    <div class="card" style="color:var(--text)">
-    <h3 style="color:var(--maroon);font-size:26px">ঈশ্বরমনি কুটির, সাহা বাড়ি</h3>
+    <h3 style="color:var(--maroon);font-size:26px">ঈশ্বরমনি কুঠির, সাহা বাড়ি</h3>
     <p style="margin-top:8px">খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ</p>
     <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Kharma%2C%20Dewanganj%2C%20Jamalpur%2C%20Bangladesh" target="_blank">Google Maps-এ খুঁজুন ↗</a>
    </div>
@@ -261,9 +300,9 @@ body:not(.entered){overflow:hidden}
 
 <footer>
  <div style="font-size:21px">ॐ • 🪔 • 🙏</div>
- <div style="margin-top:7px">ঈশ্বরমনি কুটির, সাহা বাড়ি</div>
+ <div style="margin-top:7px">ঈশ্বরমনি কুঠির, সাহা বাড়ি</div>
  <div class="small">খড়মা, দেওয়ানগঞ্জ, জামালপুর</div>
- <div class="small">© ২০২৬ ঈশ্বরমনি কুটির • সর্বমঙ্গল কামনা</div>
+ <div class="small">© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল কামনা</div>
 </footer>
 
 <div class="modal" id="modal" onclick="this.classList.remove('open')">
@@ -295,5 +334,18 @@ function enterSite(){
 
 function openImg(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('open')}
 </script>
-</body>
+<script>
+const bdUpazilas={'জামালপুর': ['জামালপুর সদর', 'বকশীগঞ্জ', 'দেওয়ানগঞ্জ', 'ইসলামপুর', 'মাদারগঞ্জ', 'মেলান্দহ', 'সরিষাবাড়ী'], 'ময়মনসিংহ': ['ময়মনসিংহ সদর', 'ত্রিশাল', 'ভালুকা', 'ফুলবাড়ীয়া', 'ফুলপুর', 'গফরগাঁও', 'গৌরীপুর', 'হালুয়াঘাট', 'ঈশ্বরগঞ্জ', 'মুক্তাগাছা', 'নান্দাইল', 'তারাকান্দা', 'ধোবাউড়া'], 'শেরপুর': ['শেরপুর সদর', 'নকলা', 'নালিতাবাড়ী', 'শ্রীবরদী', 'ঝিনাইগাতী'], 'নেত্রকোনা': ['নেত্রকোনা সদর', 'আটপাড়া', 'বারহাট্টা', 'দুর্গাপুর', 'খালিয়াজুরী', 'কলমাকান্দা', 'কেন্দুয়া', 'মদন', 'মোহনগঞ্জ', 'পূর্বধলা'], 'ঢাকা': ['ঢাকা', 'সাভার', 'ধামরাই', 'কেরানীগঞ্জ', 'নবাবগঞ্জ', 'দোহার'], 'গাজীপুর': ['গাজীপুর সদর', 'কালিয়াকৈর', 'কালীগঞ্জ', 'কাপাসিয়া', 'শ্রীপুর'], 'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর', 'বন্দর', 'আড়াইহাজার', 'রূপগঞ্জ', 'সোনারগাঁ'], 'নরসিংদী': ['নরসিংদী সদর', 'বেলাব', 'মনোহরদী', 'পলাশ', 'রায়পুরা', 'শিবপুর'], 'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর', 'অষ্টগ্রাম', 'বাজিতপুর', 'ভৈরব', 'হোসেনপুর', 'ইটনা', 'করিমগঞ্জ', 'কটিয়াদী', 'কুলিয়ারচর', 'মিঠামইন', 'নিকলী', 'পাকুন্দিয়া', 'তাড়াইল'], 'টাঙ্গাইল': ['টাঙ্গাইল সদর', 'বাসাইল', 'ভুয়াপুর', 'দেলদুয়ার', 'ধনবাড়ী', 'ঘাটাইল', 'গোপালপুর', 'কালিহাতী', 'মধুপুর', 'মির্জাপুর', 'নাগরপুর', 'সখীপুর'], 'চট্টগ্রাম': ['চট্টগ্রাম', 'আনোয়ারা', 'বাঁশখালী', 'বোয়ালখালী', 'চন্দনাইশ', 'ফটিকছড়ি', 'হাটহাজারী', 'লোহাগাড়া', 'মীরসরাই', 'পটিয়া', 'রাঙ্গুনিয়া', 'রাউজান', 'সন্দ্বীপ', 'সাতকানিয়া', 'সীতাকুণ্ড'], 'কুমিল্লা': ['কুমিল্লা সদর', 'বরুড়া', 'ব্রাহ্মণপাড়া', 'বুড়িচং', 'চান্দিনা', 'চৌদ্দগ্রাম', 'দাউদকান্দি', 'দেবিদ্বার', 'হোমনা', 'লাকসাম', 'লালমাই', 'মেঘনা', 'মনোহরগঞ্জ', 'মুরাদনগর', 'নাঙ্গলকোট', 'তিতাস'], 'ফেনী': ['ফেনী সদর', 'ছাগলনাইয়া', 'দাগনভূঞা', 'ফুলগাজী', 'পরশুরাম', 'সোনাগাজী'], 'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর', 'আখাউড়া', 'আশুগঞ্জ', 'বাঞ্ছারামপুর', 'বিজয়নগর', 'কসবা', 'নবীনগর', 'নাসিরনগর', 'সরাইল'], 'চাঁদপুর': ['চাঁদপুর সদর', 'ফরিদগঞ্জ', 'হাইমচর', 'হাজীগঞ্জ', 'কচুয়া', 'মতলব উত্তর', 'মতলব দক্ষিণ', 'শাহরাস্তি'], 'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর', 'কমলনগর', 'রামগঞ্জ', 'রামগতি', 'রায়পুর'], 'নোয়াখালী': ['নোয়াখালী সদর', 'বেগমগঞ্জ', 'চাটখিল', 'কোম্পানীগঞ্জ', 'হাতিয়া', 'কবিরহাট', 'সেনবাগ', 'সুবর্ণচর'], 'কক্সবাজার': ['কক্সবাজার সদর', 'চকরিয়া', 'কুতুবদিয়া', 'মহেশখালী', 'পেকুয়া', 'রামু', 'টেকনাফ', 'উখিয়া'], 'রাজশাহী': ['রাজশাহী সদর', 'বাগমারা', 'বাঘা', 'চারঘাট', 'দুর্গাপুর', 'গোদাগাড়ী', 'মোহনপুর', 'পবা', 'পুঠিয়া', 'তানোর'], 'নাটোর': ['নাটোর সদর', 'বড়াইগ্রাম', 'বাগাতিপাড়া', 'গুরুদাসপুর', 'লালপুর', 'নলডাঙ্গা', 'সিংড়া'], 'নওগাঁ': ['নওগাঁ সদর', 'আত্রাই', 'বদলগাছী', 'ধামইরহাট', 'মান্দা', 'মহাদেবপুর', 'নিয়ামতপুর', 'পত্নীতলা', 'পোরশা', 'রাণীনগর', 'সাপাহার'], 'পাবনা': ['পাবনা সদর', 'আটঘরিয়া', 'বেড়া', 'ভাঙ্গুড়া', 'চাটমোহর', 'ফরিদপুর', 'ঈশ্বরদী', 'সাঁথিয়া', 'সুজানগর'], 'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর', 'বেলকুচি', 'চৌহালী', 'কামারখন্দ', 'কাজীপুর', 'রায়গঞ্জ', 'শাহজাদপুর', 'তাড়াশ', 'উল্লাপাড়া'], 'বগুড়া': ['বগুড়া সদর', 'আদমদীঘি', 'দুপচাঁচিয়া', 'ধুনট', 'গাবতলী', 'কাহালু', 'নন্দীগ্রাম', 'শাজাহানপুর', 'শেরপুর', 'শিবগঞ্জ', 'সোনাতলা'], 'জয়পুরহাট': ['জয়পুরহাট সদর', 'আক্কেলপুর', 'কালাই', 'ক্ষেতলাল', 'পাঁচবিবি'], 'রংপুর': ['রংপুর সদর', 'বদরগঞ্জ', 'গঙ্গাচড়া', 'কাউনিয়া', 'মিঠাপুকুর', 'পীরগাছা', 'পীরগঞ্জ', 'তারাগঞ্জ'], 'দিনাজপুর': ['দিনাজপুর সদর', 'বিরল', 'বীরগঞ্জ', 'বিরামপুর', 'বোচাগঞ্জ', 'চিরিরবন্দর', 'ফুলবাড়ী', 'ঘোড়াঘাট', 'হাকিমপুর', 'কাহারোল', 'খানসামা', 'নবাবগঞ্জ', 'পার্বতীপুর'], 'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর', 'বালিয়াডাঙ্গী', 'হরিপুর', 'পীরগঞ্জ', 'রাণীশংকৈল'], 'পঞ্চগড়': ['পঞ্চগড় সদর', 'আটোয়ারী', 'বোদা', 'দেবীগঞ্জ', 'তেঁতুলিয়া'], 'নীলফামারী': ['নীলফামারী সদর', 'ডোমার', 'ডিমলা', 'জলঢাকা', 'কিশোরগঞ্জ', 'সৈয়দপুর'], 'লালমনিরহাট': ['লালমনিরহাট সদর', 'আদিতমারী', 'কালীগঞ্জ', 'হাতীবান্ধা', 'পাটগ্রাম'], 'কুড়িগ্রাম': ['কুড়িগ্রাম সদর', 'ভুরুঙ্গামারী', 'চর রাজিবপুর', 'চিলমারী', 'ফুলবাড়ী', 'নাগেশ্বরী', 'রাজারহাট', 'রৌমারী', 'উলিপুর'], 'গাইবান্ধা': ['গাইবান্ধা সদর', 'ফুলছড়ি', 'গোবিন্দগঞ্জ', 'পলাশবাড়ী', 'সাদুল্লাপুর', 'সাঘাটা', 'সুন্দরগঞ্জ'], 'সিলেট': ['সিলেট সদর', 'বালাগঞ্জ', 'বিয়ানীবাজার', 'বিশ্বনাথ', 'বড়লেখা', 'কানাইঘাট', 'গোলাপগঞ্জ', 'জকিগঞ্জ', 'কোম্পানীগঞ্জ', 'ফেঞ্চুগঞ্জ', 'গোয়াইনঘাট', 'জৈন্তাপুর', 'ওসমানীনগর', 'দক্ষিণ সুরমা'], 'মৌলভীবাজার': ['মৌলভীবাজার সদর', 'বড়লেখা', 'জুড়ী', 'কমলগঞ্জ', 'কুলাউড়া', 'রাজনগর', 'শ্রীমঙ্গল'], 'হবিগঞ্জ': ['হবিগঞ্জ সদর', 'আজমিরীগঞ্জ', 'বাহুবল', 'বানিয়াচং', 'চুনারুঘাট', 'লাখাই', 'মাধবপুর', 'নবীগঞ্জ', 'শায়েস্তাগঞ্জ'], 'সুনামগঞ্জ': ['সুনামগঞ্জ সদর', 'দিরাই', 'ধর্মপাশা', 'দোয়ারাবাজার', 'জামালগঞ্জ', 'জগন্নাথপুর', 'তাহিরপুর', 'শাল্লা', 'ছাতক', 'শান্তিগঞ্জ', 'মধ্যনগর'], 'খুলনা': ['খুলনা সদর', 'বটিয়াঘাটা', 'দাকোপ', 'ডুমুরিয়া', 'দিঘলিয়া', 'কয়রা', 'পাইকগাছা', 'ফুলতলা', 'রূপসা', 'তেরখাদা'], 'বাগেরহাট': ['বাগেরহাট সদর', 'চিতলমারী', 'ফকিরহাট', 'কচুয়া', 'মোল্লাহাট', 'মোংলা', 'মোড়েলগঞ্জ', 'রামপাল', 'শরণখোলা'], 'সাতক্ষীরা': ['সাতক্ষীরা সদর', 'আশাশুনি', 'দেবহাটা', 'কলারোয়া', 'কালিগঞ্জ', 'শ্যামনগর', 'তালা'], 'যশোর': ['যশোর সদর', 'অভয়নগর', 'বাঘারপাড়া', 'চৌগাছা', 'ঝিকরগাছা', 'কেশবপুর', 'মনিরামপুর', 'শার্শা'], 'ঝিনাইদহ': ['ঝিনাইদহ সদর', 'হরিণাকুন্ডু', 'কালীগঞ্জ', 'কোটচাঁদপুর', 'মহেশপুর', 'শৈলকুপা'], 'মাগুরা': ['মাগুরা সদর', 'মহম্মদপুর', 'শালিখা', 'শ্রীপুর'], 'নড়াইল': ['নড়াইল সদর', 'কালিয়া', 'লোহাগড়া'], 'কুষ্টিয়া': ['কুষ্টিয়া সদর', 'ভেড়ামারা', 'দৌলতপুর', 'খোকসা', 'কুমারখালী', 'মিরপুর'], 'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর', 'আলমডাঙ্গা', 'দামুড়হুদা', 'জীবননগর'], 'মেহেরপুর': ['মেহেরপুর সদর', 'গাংনী', 'মুজিবনগর'], 'বরিশাল': ['বরিশাল সদর', 'আগৈলঝাড়া', 'বাবুগঞ্জ', 'বাকেরগঞ্জ', 'বানারীপাড়া', 'গৌরনদী', 'হিজলা', 'মেহেন্দিগঞ্জ', 'মুলাদী', 'উজিরপুর'], 'ভোলা': ['ভোলা সদর', 'বোরহানউদ্দিন', 'চরফ্যাশন', 'দৌলতখান', 'লালমোহন', 'মনপুরা', 'তজুমদ্দিন'], 'ঝালকাঠি': ['ঝালকাঠি সদর', 'কাঁঠালিয়া', 'নলছিটি', 'রাজাপুর'], 'পিরোজপুর': ['পিরোজপুর সদর', 'ভান্ডারিয়া', 'কাউখালী', 'মঠবাড়িয়া', 'নাজিরপুর', 'নেছারাবাদ', 'ইন্দুরকানী'], 'বরগুনা': ['বরগুনা সদর', 'আমতলী', 'বামনা', 'বেতাগী', 'পাথরঘাটা', 'তালতলী'], 'পটুয়াখালী': ['পটুয়াখালী সদর', 'বাউফল', 'দশমিনা', 'দুমকি', 'কলাপাড়া', 'মির্জাগঞ্জ', 'গলাচিপা', 'রাঙ্গাবালী']};
+const ds=document.getElementById('visitorDistrict'), us=document.getElementById('visitorUpazila');
+Object.keys(bdUpazilas).sort((a,b)=>a.localeCompare(b,'bn')).forEach(d=>{let o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o);});
+ds.onchange=()=>{us.innerHTML='<option value="">উপজেলা নির্বাচন করুন</option>';(bdUpazilas[ds.value]||[]).forEach(u=>{let o=document.createElement('option');o.value=u;o.textContent=u;us.appendChild(o);});us.disabled=!ds.value;};
+let rating=0;
+document.querySelectorAll('#ratingRow button').forEach(b=>b.onclick=()=>{rating=+b.dataset.rating;document.querySelectorAll('#ratingRow button').forEach(x=>x.classList.toggle('selected',+x.dataset.rating===rating));});
+function submitVisitorInfo(){
+ const name=document.getElementById('visitorName').value.trim(), opinion=document.getElementById('visitorOpinion').value.trim(), err=document.getElementById('visitorError');
+ if(!name||!ds.value||!us.value||!opinion||!rating){err.textContent='দয়া করে সব তথ্য পূরণ করে রেটিং নির্বাচন করুন।';return;}
+ localStorage.setItem('ishwarmaniVisitorInfo',JSON.stringify({name,district:ds.value,upazila:us.value,opinion,rating}));
+ if(typeof enterSite==='function') enterSite(); else {document.getElementById('welcome').style.display='none';document.body.classList.add('entered');}
+}
+</script></body>
 </html>
