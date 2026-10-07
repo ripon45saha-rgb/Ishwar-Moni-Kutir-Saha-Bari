@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#7f1d1d">
 <meta name="description" content="ঈশ্বরমনি কুঠির, সাহা বাড়ি — খড়মা, দেওয়ানগঞ্জ, জামালপুর।">
 <title>ঈশ্বরমনি কুঠির | সাহা বাড়ি</title>
@@ -70,14 +70,14 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
 
 /* Welcome / entry screen */
 .welcome{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:auto;background:linear-gradient(180deg,#25050b,#3d0710);color:#fff;padding:18px 12px;}
-.welcome-card{position:relative;z-index:2;width:min(560px,100%);max-height:calc(100dvh - 36px);overflow:auto;margin:auto;padding:26px 22px;border:1px solid rgba(255,217,120,.35);border-radius:24px;background:rgba(24,2,7,.86);box-shadow:0 18px 55px rgba(0,0,0,.38);}
+.welcome-card{position:relative;z-index:2;width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 36px);overflow:auto;margin:auto;padding:26px 22px;border:1px solid rgba(255,217,120,.35);border-radius:24px;background:rgba(24,2,7,.86);box-shadow:0 18px 55px rgba(0,0,0,.38);}
 .welcome-card:before{content:"ॐ";display:block;text-align:center;font-family:serif;font-size:54px;color:#ffd978;line-height:1.1;margin-bottom:3px;}
 .welcome-card .welcome-kicker{text-align:center;font-size:13px;letter-spacing:2px;color:#ffe3a0;}
 .welcome-card h1{text-align:center;font-size:clamp(30px,7vw,52px);line-height:1.15;margin:6px 0 2px;color:#fff;}
 .welcome-card .welcome-subtitle{text-align:center;font-size:20px;color:#ffe6af;}
 .welcome-place{text-align:center;margin:2px 0 14px;color:#f7e5c0;font-size:14px;}
 .welcome.hide{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease,visibility .45s ease;}
-.visitor-card{width:min(560px,100%);}
+.visitor-card{width:min(560px,calc(100vw - 24px));}
 .visitor-form{margin-top:8px;text-align:left;}
 .visitor-form h2{text-align:center;margin:0 0 16px;font-size:23px;color:#fff1c7;}
 .visitor-form label{display:block;margin:11px 0 5px;font-weight:700;color:#fff1d0;font-size:14px;}
@@ -90,6 +90,33 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
 body.entered{overflow:auto}
 body:not(.entered){overflow:hidden}
 @media(max-width:600px){.welcome{padding:10px 8px;align-items:center}.welcome-card{max-height:calc(100dvh - 20px);padding:20px 16px;border-radius:18px}.welcome-card:before{font-size:45px}.welcome-card h1{font-size:31px}.welcome-card .welcome-subtitle{font-size:18px}.visitor-form h2{font-size:20px}.visitor-form label{font-size:13px}.visitor-form input,.visitor-form select,.visitor-form textarea{font-size:14px;padding:10px 11px}.enter-btn{font-size:16px;padding:11px 24px}}
+
+/* Robust mobile/full-width layout fix */
+html,body{width:100%;min-width:0;max-width:100%;overflow-x:hidden;}
+body{margin:0;padding:0;}
+nav,.nav,header,.welcome,main,#siteContent,section,footer{width:100%;max-width:100%;}
+#siteContent{display:block;width:100%;margin:0;padding:0;}
+.container{width:100%;max-width:1120px;margin-left:auto;margin-right:auto;}
+img{max-width:100%;}
+@media(max-width:800px){
+  .navin{width:100%;}
+  .hero{width:100%;min-height:92vh;}
+  .hero-content{width:100%;padding:90px 16px 70px;}
+  section{width:100%;padding:52px 12px;}
+  .container{width:100%;max-width:none;}
+  .about-grid,.location-grid,.gallery-grid,.invite-grid{width:100%;}
+  .gallery img{height:auto;min-height:0;aspect-ratio:4/3;}
+  .about-img{height:auto;aspect-ratio:4/3;}
+  .invite img{width:100%;height:auto;}
+  .event{width:100%;}
+}
+@media(max-width:480px){
+  .brand{font-size:15px;}
+  .navin{padding:10px 12px;}
+  .section-head h2{font-size:28px;}
+  .section-head p{font-size:14px;}
+  .card{padding:18px;}
+}
 </style>
 <style>
 .visitor-card{width:min(560px,92vw);max-height:92vh;overflow:auto;padding:28px 24px}
