@@ -67,28 +67,77 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
  .about-img{height:300px}.gallery img{height:300px}.invite img{height:auto;max-height:none}
  section{padding:65px 16px}.navin{padding:12px 16px}.brand{font-size:16px}
 }
+
+/* Welcome / entry screen */
+.welcome{
+  position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:#21050b;color:#fff;transition:opacity .65s ease,visibility .65s ease;
+}
+.welcome.hide{opacity:0;visibility:hidden;pointer-events:none}
+.welcome-bg{
+  position:absolute;inset:0;background:url("temple.jpg") center/cover no-repeat;
+  transform:scale(1.03);filter:brightness(.62) saturate(.9);
+}
+.welcome-overlay{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(124,18,32,.18),rgba(20,2,7,.82)),
+             linear-gradient(180deg,rgba(20,2,7,.22),rgba(20,2,7,.8));
+}
+.welcome-content{
+  position:relative;z-index:2;text-align:center;padding:30px 20px;max-width:850px;
+  animation:welcomeIn 1.1s ease both;
+}
+.welcome-om{font-family:serif;font-size:64px;color:#ffd978;text-shadow:0 3px 22px rgba(0,0,0,.55)}
+.welcome-kicker{font-size:14px;letter-spacing:3px;color:#ffe3a0}
+.welcome h1{font-size:clamp(42px,8vw,82px);line-height:1.1;margin:8px 0 4px;color:#fff}
+.welcome-subtitle{font-size:clamp(22px,3vw,31px);color:#ffe6af}
+.welcome-location{margin-top:7px;color:#f7e5c0}
+.welcome-mantra{
+  margin:25px auto 0;padding:13px 20px;max-width:650px;border:1px solid rgba(255,217,120,.45);
+  border-radius:18px;background:rgba(30,2,7,.34);font-family:"Tiro Bangla",serif;font-size:18px;
+}
+.enter-btn{
+  margin-top:30px;border:1px solid rgba(255,238,183,.55);border-radius:999px;padding:14px 31px;
+  font:800 18px "Noto Serif Bengali",serif;color:#35100b;background:linear-gradient(135deg,#f5c85b,#d99a2b);
+  box-shadow:0 10px 35px rgba(0,0,0,.35);cursor:pointer;transition:.25s;
+}
+.enter-btn:hover{transform:translateY(-3px) scale(1.02)}
+.swipe-note{margin-top:12px;font-size:12px;color:#e9d7bd;opacity:.85}
+#siteContent{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease,visibility .7s}
+#siteContent.show{opacity:1;visibility:visible;transform:none}
+body.entered{overflow:auto}
+body:not(.entered){overflow:hidden}
+@keyframes welcomeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(max-width:600px){
+ .welcome-om{font-size:52px}.welcome-mantra{font-size:16px}.enter-btn{padding:13px 26px}
+}
+
 </style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুটির</a>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 
-<header class="hero" id="home">
- <div class="hero-content">
-   <div class="om">ॐ</div>
-   <div class="kicker">শ্রী শ্রী দুর্গামাতা</div>
+<header class="welcome" id="welcome">
+ <div class="welcome-bg"></div>
+ <div class="welcome-overlay"></div>
+ <div class="welcome-content">
+   <div class="welcome-om">ॐ</div>
+   <div class="welcome-kicker">শ্রী শ্রী দুর্গামাতা</div>
    <h1>ঈশ্বরমনি কুটির</h1>
-   <div class="subtitle">সাহা বাড়ি</div>
-   <div class="location">খড়মা • দেওয়ানগঞ্জ • জামালপুর</div>
-   <div class="mantra">“সর্বে ভবন্তু সুখিনঃ, সর্বে সন্তু নিরাময়াঃ।”<br><small>সকলেই সুখী হোক, সকলেই রোগমুক্ত থাকুক।</small></div>
-   <a class="btn" href="#utsav">দুর্গোৎসব ২০২৬ দেখুন ↓</a>
+   <div class="welcome-subtitle">সাহা বাড়ি</div>
+   <div class="welcome-location">খড়মা • দেওয়ানগঞ্জ • জামালপুর</div>
+   <div class="welcome-mantra">“সর্বে ভবন্তু সুখিনঃ, সর্বে সন্তু নিরাময়াঃ।”</div>
+   <button class="enter-btn" onclick="enterSite()">🪔 প্রবেশ করুন</button>
+   <div class="swipe-note">মন্দিরের ওয়েবসাইটে প্রবেশ করতে স্পর্শ করুন</div>
  </div>
 </header>
 
+<main id="siteContent">
 <section id="about" class="about">
  <div class="container">
   <div class="section-head"><div class="eyebrow">🛕 আমাদের মন্দির</div><h2>ঈশ্বরমনি কুটির, সাহা বাড়ি</h2><p>ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।</p></div>
@@ -136,6 +185,45 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
   <div class="gallery-grid">
    <img src="temple.jpg" alt="ঈশ্বরমনি কুটির" onclick="openImg(this.src)">
    <img src="chokh-daan.jpg" alt="এবারের প্রতিমার চক্ষুদান" onclick="openImg(this.src)">
+   <img src="puja-dhak-2026.jpg" alt="পূজার বাদ্যযন্ত্র ও আয়োজন" onclick="openImg(this.src)">
+  </div>
+ </div>
+</section>
+
+
+<section id="past" class="gallery" style="background:linear-gradient(180deg,#fff8e8,#fff)">
+ <div class="container">
+  <div class="section-head">
+   <div class="eyebrow">🕰️ পূজার স্মৃতি</div>
+   <h2>বিগত বছরের প্রতিমা</h2>
+   <p>ঈশ্বরমনি কুটিরের বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।</p>
+  </div>
+  <div class="gallery-grid">
+   <img src="past-1.jpg" alt="বিগত বছরের প্রতিমা ১" onclick="openImg(this.src)">
+   <img src="past-2.jpg" alt="বিগত বছরের প্রতিমা ২" onclick="openImg(this.src)">
+   <img src="past-3.jpg" alt="বিগত বছরের প্রতিমা ৩" onclick="openImg(this.src)">
+   <img src="past-4.jpg" alt="বিগত বছরের প্রতিমা ৪" onclick="openImg(this.src)">
+   <img src="past-5.jpg" alt="বিগত বছরের প্রতিমা ৫" onclick="openImg(this.src)">
+   <img src="past-6.jpg" alt="বিগত বছরের প্রতিমা ৬" onclick="openImg(this.src)">
+   <img src="past-7.jpg" alt="বিগত বছরের প্রতিমা ৭" onclick="openImg(this.src)">
+   <img src="past-8.jpg" alt="বিগত বছরের প্রতিমা ৮" onclick="openImg(this.src)">
+   <img src="past-9.jpg" alt="বিগত বছরের প্রতিমা ৯" onclick="openImg(this.src)">
+   <img src="past-10.jpg" alt="বিগত বছরের প্রতিমা ১০" onclick="openImg(this.src)">
+  </div>
+ </div>
+</section>
+
+
+<section id="kali-puja" class="gallery" style="background:#16070c;color:#fff">
+ <div class="container">
+  <div class="section-head">
+   <div class="eyebrow" style="color:#ffd978">🪔 কালীপূজা</div>
+   <h2 style="color:#fff">কালীপূজার স্মৃতি</h2>
+   <p style="color:#d9bdad">ঈশ্বরমনি কুটিরের কালীপূজার কিছু বিশেষ মুহূর্ত।</p>
+  </div>
+  <div class="gallery-grid">
+   <img src="kali-puja-1.jpg" alt="কালীপূজা — প্রতিমা ও পূজার আয়োজন" onclick="openImg(this.src)">
+   <img src="kali-puja-2.jpg" alt="কালীপূজা — প্রতিমার ছবি" onclick="openImg(this.src)">
   </div>
  </div>
 </section>
@@ -154,6 +242,8 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
  </div>
 </section>
 
+</main>
+
 <footer>
  <div style="font-size:21px">ॐ • 🪔 • 🙏</div>
  <div style="margin-top:7px">ঈশ্বরমনি কুটির, সাহা বাড়ি</div>
@@ -165,6 +255,17 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
  <span class="close">×</span><img id="modalImg" src="" alt="বড় ছবি">
 </div>
 <script>
+
+function enterSite(){
+  document.body.classList.add('entered');
+  document.getElementById('welcome').classList.add('hide');
+  document.getElementById('siteContent').classList.add('show');
+  setTimeout(function(){
+    document.getElementById('welcome').style.display='none';
+    window.scrollTo({top:0,behavior:'instant'});
+  },700);
+}
+
 function openImg(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('open')}
 </script>
 </body>
