@@ -424,13 +424,6 @@ img{max-width:100%}
 
 </main>
 
-<footer>
- <div style="font-size:21px">ॐ • 🪔 • 🙏</div>
- <div style="margin-top:7px">ঈশ্বরমনি কুঠির, সাহা বাড়ি</div>
- <div class="small">খড়মা, দেওয়ানগঞ্জ, জামালপুর</div>
- <div class="small">© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল কামনা</div>
-</footer>
-
 <div class="modal" id="modal" onclick="this.classList.remove('open')">
  <span class="close">×</span><img id="modalImg" src="" alt="বড় ছবি">
 </div>
@@ -514,6 +507,16 @@ function openLightbox(src){openImg(src)}
    us.disabled=!ds.value;
  });
 })();
+
+async function loadUploadedGallery(){
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.asc',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
+  if(!r.ok)return; const items=await r.json();
+  const map={gallery:'gallery',past:'past',shyama:'kali-puja',lokkhi:'lokkhi-puja',memory2025:'memory2025'};
+  items.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.innerHTML=`<img src="${String(x.public_url).replace(/"/g,'&quot;')}" alt="${String(x.caption||'মন্দিরের ছবি').replace(/"/g,'&quot;')}" onclick="openImg(this.src)">`; grid.appendChild(div);});
+ }catch(e){console.warn('Uploaded gallery load failed',e)}
+}
+loadUploadedGallery();
 </script>
 
 <footer class="site-footer">
