@@ -103,6 +103,14 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
 }
 .enter-btn:hover{transform:translateY(-3px) scale(1.02)}
 .swipe-note{margin-top:12px;font-size:12px;color:#e9d7bd;opacity:.85}
+.entry-form{margin:22px auto 0;max-width:560px;text-align:left;padding:20px;border:1px solid rgba(255,217,120,.38);border-radius:20px;background:rgba(24,2,7,.52);backdrop-filter:blur(8px);box-shadow:0 12px 35px rgba(0,0,0,.22)}
+.entry-field{margin-bottom:14px}.entry-field label{display:block;color:#ffe9b0;font-size:14px;font-weight:700;margin-bottom:6px}
+.entry-field input,.entry-field textarea{width:100%;border:1px solid rgba(255,230,170,.35);border-radius:12px;padding:11px 13px;background:rgba(255,255,255,.1);color:#fff;font:15px "Noto Serif Bengali",serif;outline:none}
+.entry-field input::placeholder,.entry-field textarea::placeholder{color:rgba(255,240,210,.65)}
+.entry-field textarea{min-height:78px;resize:vertical}.radio-row{display:flex;gap:18px;flex-wrap:wrap;color:#fff0c7;font-size:14px}.radio-row label{display:flex;align-items:center;gap:6px;font-weight:500;color:#fff0c7;margin:0}.radio-row input{accent-color:#e5b23d;width:auto}
+.entry-submit{width:100%;margin-top:4px;border:0;border-radius:999px;padding:13px 22px;font:800 17px "Noto Serif Bengali",serif;color:#35100b;background:linear-gradient(135deg,#f5c85b,#d99a2b);cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,.28)}
+.entry-welcome{display:none;margin-top:14px;color:#ffe9b0;font-size:15px}.entry-welcome.show{display:block}
+
 #siteContent{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease,visibility .7s}
 #siteContent.show{opacity:1;visibility:visible;transform:none}
 body.entered{overflow:auto}
@@ -132,8 +140,15 @@ body:not(.entered){overflow:hidden}
    <div class="welcome-subtitle">সাহা বাড়ি</div>
    <div class="welcome-location">খড়মা • দেওয়ানগঞ্জ • জামালপুর</div>
    <div class="welcome-mantra">“সর্বে ভবন্তু সুখিনঃ, সর্বে সন্তু নিরাময়াঃ।”</div>
-   <button class="enter-btn" onclick="enterSite()">🪔 প্রবেশ করুন</button>
-   <div class="swipe-note">মন্দিরের ওয়েবসাইটে প্রবেশ করতে স্পর্শ করুন</div>
+   <form class="entry-form" id="entryForm" onsubmit="submitEntry(event)">
+     <div class="entry-field"><label for="visitorName">আপনার নাম :</label><input id="visitorName" type="text" placeholder="আপনার নাম লিখুন" required></div>
+     <div class="entry-field"><label>আপনি কি আগে কখনো মন্দির দর্শন করতে এসেছিলেন :</label><div class="radio-row"><label><input type="radio" name="visited" value="হ্যাঁ" required> হ্যাঁ</label><label><input type="radio" name="visited" value="না"> না</label></div></div>
+     <div class="entry-field"><label for="interest">ঈশ্বরমনি কুটিরে আপনার আগ্রহের কারণ কী?</label><textarea id="interest" placeholder="আপনার উত্তর লিখুন" required></textarea></div>
+     <button class="entry-submit" type="submit">পরিচয় নিশ্চিত করে এগিয়ে যান →</button>
+     <div class="entry-welcome" id="entryWelcome"></div>
+   </form>
+   <button class="enter-btn" id="finalEnter" onclick="enterSite()" style="display:none">🪔 প্রবেশ করুন</button>
+   <div class="swipe-note">মন্দিরের ওয়েবসাইটে প্রবেশ করতে আগে পরিচিতির তথ্য দিন</div>
  </div>
 </header>
 
@@ -255,6 +270,18 @@ body:not(.entered){overflow:hidden}
  <span class="close">×</span><img id="modalImg" src="" alt="বড় ছবি">
 </div>
 <script>
+
+function submitEntry(event){
+  event.preventDefault();
+  const name=document.getElementById('visitorName').value.trim();
+  const visited=document.querySelector('input[name="visited"]:checked');
+  const interest=document.getElementById('interest').value.trim();
+  if(!name || !visited || !interest) return;
+  document.getElementById('entryWelcome').textContent='ধন্যবাদ, '+name+'। আপনার পরিচিতি গ্রহণ করা হয়েছে।';
+  document.getElementById('entryWelcome').classList.add('show');
+  document.querySelector('#entryForm .entry-submit').style.display='none';
+  document.getElementById('finalEnter').style.display='inline-block';
+}
 
 function enterSite(){
   document.body.classList.add('entered');
