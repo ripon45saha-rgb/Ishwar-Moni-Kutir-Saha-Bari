@@ -232,7 +232,7 @@ img{max-width:100%}
 <nav class="nav"><div class="navin">
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a id="prasadNav" href="#prasadSection" style="display:none">🍚 প্রসাদ</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 
@@ -536,7 +536,28 @@ async function loadUploadedGallery(){
   items.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.innerHTML=`<img src="${String(x.public_url).replace(/"/g,'&quot;')}" alt="${String(x.caption||'মন্দিরের ছবি').replace(/"/g,'&quot;')}" onclick="openImg(this.src)">`; grid.appendChild(div);});
  }catch(e){console.warn('Uploaded gallery load failed',e)}
 }
+
+async function loadPrasadInfo(){
+ const section=document.getElementById('prasadSection');
+ const nav=document.getElementById('prasadNav');
+ if(!section)return;
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&order=updated_at.desc&limit=1',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
+  if(!r.ok){section.style.display='none'; if(nav)nav.style.display='none'; return;}
+  const rows=await r.json(); const p=rows&&rows[0];
+  if(!p || !p.active || String(p.publish_date||'2026-10-14') > new Date().toLocaleDateString('en-CA')){
+    section.style.display='none'; if(nav)nav.style.display='none'; return;
+  }
+  document.getElementById('prasadTitle').textContent=p.title||'আজকের প্রসাদ';
+  document.getElementById('prasadItems').textContent=p.items||'';
+  document.getElementById('prasadTime').textContent=p.time||'সময় জানানো হবে';
+  document.getElementById('prasadPlace').textContent=p.location||'মন্দির প্রাঙ্গণ';
+  document.getElementById('prasadNote').textContent=p.note||'';
+  section.style.display='block'; if(nav)nav.style.display='inline-block';
+ }catch(e){section.style.display='none'; if(nav)nav.style.display='none'; console.warn('Prasad info load failed',e)}
+}
 loadUploadedGallery();
+loadPrasadInfo();
 </script>
 
 
