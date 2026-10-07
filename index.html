@@ -126,12 +126,14 @@ body:not(.entered){overflow:hidden}
 .visitor-form{margin-top:18px;text-align:left}.visitor-form h2{text-align:center;margin:0 0 18px}
 .visitor-form label{display:block;margin:12px 0 6px;font-weight:700}
 .visitor-form input,.visitor-form select,.visitor-form textarea{width:100%;box-sizing:border-box;border:1px solid rgba(120,80,20,.25);border-radius:12px;padding:12px 13px;font:inherit;background:rgba(255,255,255,.92);outline:none}
-.rating-row{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:8px 0 16px}
-.rating-row button{border:1px solid rgba(120,80,20,.25);background:#fff;border-radius:9px;padding:9px 2px;cursor:pointer;font-weight:800}
-.rating-row button.selected{background:#b8860b;color:#fff;border-color:#b8860b}
 .visitor-error{min-height:20px;margin:8px 0;color:#a33;text-align:center;font-size:.9rem}
 @media(max-width:520px){.visitor-card{padding:22px 16px}.rating-row{gap:3px}.rating-row button{padding:8px 0}}
-</style></head>
+</style><style>
+.audio-card{max-width:700px;margin:0 auto;padding:28px;border-radius:22px;background:rgba(255,248,230,.9);text-align:center;box-shadow:0 12px 30px rgba(70,40,10,.08)}
+.audio-card h3{margin:0 0 8px}
+.audio-card .enter-btn{display:inline-block;text-decoration:none;margin-top:12px}
+</style>
+</head>
 <body>
 <nav class="nav"><div class="navin">
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
@@ -152,20 +154,18 @@ body:not(.entered){overflow:hidden}
       <h2>🛕 দর্শনার্থী তথ্য</h2>
       <label>আপনার নাম :</label>
       <input id="visitorName" type="text" placeholder="আপনার নাম লিখুন">
+      <label>দর্শনার্থী বা ভক্তবৃন্দ কোথা হতে মন্দির দর্শন করতে এসেছেন :</label>
       <label>জেলা :</label>
       <select id="visitorDistrict"><option value="">জেলা নির্বাচন করুন</option></select>
       <label>উপজেলা :</label>
       <select id="visitorUpazila" disabled><option value="">আগে জেলা নির্বাচন করুন</option></select>
+
       <label>মন্দির নিয়ে আপনার মতামত :</label>
       <textarea id="visitorOpinion" rows="3" placeholder="আপনার মতামত লিখুন..."></textarea>
-      <label>⭐ ১০-এর মধ্যে রেটিং কত দিতে চান?</label>
-      <div class="rating-row" id="ratingRow">
-        <button type="button" data-rating="1">1</button><button type="button" data-rating="2">2</button>
-        <button type="button" data-rating="3">3</button><button type="button" data-rating="4">4</button>
-        <button type="button" data-rating="5">5</button><button type="button" data-rating="6">6</button>
-        <button type="button" data-rating="7">7</button><button type="button" data-rating="8">8</button>
-        <button type="button" data-rating="9">9</button><button type="button" data-rating="10">10</button>
-      </div>
+      <label>⭐ ১০ এর মধ্যে রেটিং :</label>
+      <label>মন্দিরের পরিবেশ, প্রতিমা, ব্যবহার, প্রসাদ ব্যবস্থাকে আপনি ১০ এর মধ্যে কত রেটিং করবেন?</label>
+      <input id="visitorRating" type="text" inputmode="numeric" placeholder="০/১০, ৯/১০, ১০/১০">
+
       <button class="enter-btn" type="button" onclick="submitVisitorInfo()">🪔 প্রবেশ করুন</button>
       <p id="visitorError" class="visitor-error"></p>
     </div>
@@ -263,6 +263,9 @@ body:not(.entered){overflow:hidden}
    <img src="past-8.jpg" alt="বিগত বছরের প্রতিমা ৮" onclick="openImg(this.src)">
    <img src="past-9.jpg" alt="বিগত বছরের প্রতিমা ৯" onclick="openImg(this.src)">
    <img src="past-10.jpg" alt="বিগত বছরের প্রতিমা ১০" onclick="openImg(this.src)">
+   <img src="past-11.jpg" alt="বিগত বছরের প্রতিমা ১১" onclick="openImg(this.src)">
+   <img src="past-12.jpg" alt="বিগত বছরের প্রতিমা ১২" onclick="openImg(this.src)">
+   <img src="past-13.jpg" alt="বিগত বছরের প্রতিমা ১৩" onclick="openImg(this.src)">
   </div>
  </div>
 </section>
@@ -280,6 +283,50 @@ body:not(.entered){overflow:hidden}
    <img src="kali-puja-2.jpg" alt="কালীপূজা — প্রতিমার ছবি" onclick="openImg(this.src)">
   </div>
  </div>
+</section>
+
+
+<section class="section" id="lokkhi-puja">
+  <div class="section-inner">
+    <div class="section-heading">
+      <span class="eyebrow">স্মৃতি</span>
+      <h2>🪷 লক্ষ্মী পূজা স্মৃতি</h2>
+    </div>
+    <div class="gallery-grid">
+      <img src="lokkhi-puja-1.jpg" alt="লক্ষ্মী পূজা স্মৃতি ১" onclick="openLightbox(this.src)">
+      <img src="lokkhi-puja-2.jpg" alt="লক্ষ্মী পূজা স্মৃতি ২" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<section class="section" id="durga-2025">
+  <div class="section-inner">
+    <div class="section-heading">
+      <span class="eyebrow">স্মৃতি</span>
+      <h2>🎉 ২০২৫ সালের দুর্গাপূজার আনন্দের কিছু ছবি</h2>
+    </div>
+    <div class="gallery-grid">
+      <img src="durga-2025-1.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ১" onclick="openLightbox(this.src)">
+      <img src="durga-2025-2.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ২" onclick="openLightbox(this.src)">
+      <img src="durga-2025-3.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ৩" onclick="openLightbox(this.src)">
+      <img src="durga-2025-4.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ৪" onclick="openLightbox(this.src)">
+      <img src="durga-2025-5.jpg" alt="২০২৫ সালের দুর্গাপূজার আনন্দের ছবি ৫" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mahalaya">
+  <div class="section-inner">
+    <div class="section-heading">
+      <span class="eyebrow">শ্রবণ</span>
+      <h2>🔱 মহালয়ার চণ্ডীপাঠ</h2>
+    </div>
+    <div class="audio-card">
+      <h3>মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ</h3>
+      <p>মহালয়ার পবিত্র চণ্ডীপাঠ শুনুন।</p>
+      <a class="enter-btn" href="https://youtu.be/AnrGifI3WHk?si=cCjC1HRbfFrR-C_Y" target="_blank" rel="noopener">▶️ চণ্ডীপাঠ শুনুন</a>
+    </div>
+  </div>
 </section>
 
 <section id="location" class="location-box">
@@ -339,12 +386,11 @@ const bdUpazilas={'জামালপুর': ['জামালপুর সদ�
 const ds=document.getElementById('visitorDistrict'), us=document.getElementById('visitorUpazila');
 Object.keys(bdUpazilas).sort((a,b)=>a.localeCompare(b,'bn')).forEach(d=>{let o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o);});
 ds.onchange=()=>{us.innerHTML='<option value="">উপজেলা নির্বাচন করুন</option>';(bdUpazilas[ds.value]||[]).forEach(u=>{let o=document.createElement('option');o.value=u;o.textContent=u;us.appendChild(o);});us.disabled=!ds.value;};
-let rating=0;
-document.querySelectorAll('#ratingRow button').forEach(b=>b.onclick=()=>{rating=+b.dataset.rating;document.querySelectorAll('#ratingRow button').forEach(x=>x.classList.toggle('selected',+x.dataset.rating===rating));});
+});
 function submitVisitorInfo(){
- const name=document.getElementById('visitorName').value.trim(), opinion=document.getElementById('visitorOpinion').value.trim(), err=document.getElementById('visitorError');
- if(!name||!ds.value||!us.value||!opinion||!rating){err.textContent='দয়া করে সব তথ্য পূরণ করে রেটিং নির্বাচন করুন।';return;}
- localStorage.setItem('ishwarmaniVisitorInfo',JSON.stringify({name,district:ds.value,upazila:us.value,opinion,rating}));
+ const name=document.getElementById('visitorName').value.trim(), opinion=document.getElementById('visitorOpinion').value.trim(), ratingText=document.getElementById('visitorRating').value.trim(), err=document.getElementById('visitorError');
+ if(!name||!ds.value||!us.value||!opinion||!ratingText){err.textContent='দয়া করে সব তথ্য পূরণ করে রেটিং লিখুন।';return;}
+ localStorage.setItem('ishwarmaniVisitorInfo',JSON.stringify({name,district:ds.value,upazila:us.value,opinion,rating:ratingText}));
  if(typeof enterSite==='function') enterSite(); else {document.getElementById('welcome').style.display='none';document.body.classList.add('entered');}
 }
 </script></body>
