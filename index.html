@@ -62,7 +62,15 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
 .small{font-size:13px;color:#bda48b;margin-top:7px}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:50;align-items:center;justify-content:center;padding:20px}
 .modal.open{display:flex}.modal img{max-width:95vw;max-height:90vh;border-radius:10px}.close{position:fixed;top:15px;right:22px;color:#fff;font-size:38px;cursor:pointer}
+
+.section-inner{max-width:1120px;margin:0 auto;width:100%;}
+.section-heading{text-align:center;max-width:800px;margin:0 auto 34px;}
+.section-heading h2{font-size:clamp(28px,4vw,44px);line-height:1.25;color:var(--deep);}
+.section-heading .eyebrow{color:var(--maroon);font-weight:800;}
+.section .gallery-grid{max-width:1120px;margin:0 auto;}
+main{display:block;width:100%;}
 @media(max-width:800px){
+ html,body,main{width:100%;max-width:100%;overflow-x:hidden;}
  .links{display:none}.about-grid,.location-grid{grid-template-columns:1fr}.gallery-grid,.invite-grid{grid-template-columns:1fr}
  .about-img{height:300px}.gallery img{height:300px}.invite img{height:auto;max-height:none}
  section{padding:65px 16px}.navin{padding:12px 16px}.brand{font-size:16px}
@@ -90,42 +98,7 @@ footer{background:#26040a;color:#e9cda0;text-align:center;padding:32px 20px}
 body.entered{overflow:auto}
 body:not(.entered){overflow:hidden}
 @media(max-width:600px){.welcome{padding:10px 8px;align-items:center}.welcome-card{max-height:calc(100dvh - 20px);padding:20px 16px;border-radius:18px}.welcome-card:before{font-size:45px}.welcome-card h1{font-size:31px}.welcome-card .welcome-subtitle{font-size:18px}.visitor-form h2{font-size:20px}.visitor-form label{font-size:13px}.visitor-form input,.visitor-form select,.visitor-form textarea{font-size:14px;padding:10px 11px}.enter-btn{font-size:16px;padding:11px 24px}}
-
-/* Robust mobile/full-width layout fix */
-html,body{width:100%;min-width:0;max-width:100%;overflow-x:hidden;}
-body{margin:0;padding:0;}
-nav,.nav,header,.welcome,main,#siteContent,section,footer{width:100%;max-width:100%;}
-#siteContent{display:block;width:100%;margin:0;padding:0;}
-.container{width:100%;max-width:1120px;margin-left:auto;margin-right:auto;}
-img{max-width:100%;}
-@media(max-width:800px){
-  .navin{width:100%;}
-  .hero{width:100%;min-height:92vh;}
-  .hero-content{width:100%;padding:90px 16px 70px;}
-  section{width:100%;padding:52px 12px;}
-  .container{width:100%;max-width:none;}
-  .about-grid,.location-grid,.gallery-grid,.invite-grid{width:100%;}
-  .gallery img{height:auto;min-height:0;aspect-ratio:4/3;}
-  .about-img{height:auto;aspect-ratio:4/3;}
-  .invite img{width:100%;height:auto;}
-  .event{width:100%;}
-}
-@media(max-width:480px){
-  .brand{font-size:15px;}
-  .navin{padding:10px 12px;}
-  .section-head h2{font-size:28px;}
-  .section-head p{font-size:14px;}
-  .card{padding:18px;}
-}
-</style>
 <style>
-.visitor-card{width:min(560px,92vw);max-height:92vh;overflow:auto;padding:28px 24px}
-.visitor-form{margin-top:18px;text-align:left}.visitor-form h2{text-align:center;margin:0 0 18px}
-.visitor-form label{display:block;margin:12px 0 6px;font-weight:700}
-.visitor-form input,.visitor-form select,.visitor-form textarea{width:100%;box-sizing:border-box;border:1px solid rgba(120,80,20,.25);border-radius:12px;padding:12px 13px;font:inherit;background:rgba(255,255,255,.92);outline:none}
-.visitor-error{min-height:20px;margin:8px 0;color:#a33;text-align:center;font-size:.9rem}
-@media(max-width:520px){.visitor-card{padding:22px 16px}.rating-row{gap:3px}.rating-row button{padding:8px 0}}
-</style><style>
 .audio-card{max-width:700px;margin:0 auto;padding:28px;border-radius:22px;background:rgba(255,248,230,.9);text-align:center;box-shadow:0 12px 30px rgba(70,40,10,.08)}
 .audio-card h3{margin:0 0 8px}
 .audio-card .enter-btn{display:inline-block;text-decoration:none;margin-top:12px}
@@ -189,11 +162,12 @@ img{max-width:100%;}
  <div class="container">
   <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
   <div class="timeline">
-   <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহাষষ্ঠী</b><br>পূজার শুভ সূচনা ও বিশেষ আয়োজন।</div></div>
-   <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহাসপ্তমী</b><br>সপ্তমীর পূজা ও অন্যান্য ধর্মীয় অনুষ্ঠান।</div></div>
+   <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহালয়া</b><br>মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।</div></div>
+   <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহাসপ্তমী</b><br>এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।</div></div>
    <div class="event"><div class="date">২৯ আশ্বিন</div><div><b>মহাষ্টমী</b><br>অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।</div></div>
    <div class="event"><div class="date">৩০ আশ্বিন</div><div><b>মহানবমী</b><br>নবমীর পূজা ও সন্ধ্যারতি।</div></div>
-   <div class="event"><div class="date">১ কার্তিক</div><div><b>বিজয়া দশমী</b><br>পূজা সমাপন ও বিজয়া দশমীর অনুষ্ঠান।</div></div>
+   <div class="event"><div class="date">১ কার্তিক</div><div><b>বিজয়া দশমী</b><br>দশমীর পূজা ও বিজয়ার আয়োজন।</div></div>
+   <div class="event"><div class="date">৩ কার্তিক</div><div><b>পূজা সমাপ্তি</b><br>২০২৬ সালের পূজার আয়োজনের সমাপ্তি।</div></div>
   </div>
   <p style="margin-top:22px;text-align:center;color:#72555a">নিমন্ত্রণপত্রে প্রদত্ত সময়সূচিই চূড়ান্ত হিসেবে বিবেচ্য।</p>
  </div>
@@ -299,8 +273,10 @@ img{max-width:100%;}
     </div>
     <div class="audio-card">
       <h3>মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ</h3>
-      <p>মহালয়ার পবিত্র চণ্ডীপাঠ শুনুন।</p>
-      <a class="enter-btn" href="https://youtu.be/AnrGifI3WHk?si=cCjC1HRbfFrR-C_Y" target="_blank" rel="noopener">▶️ চণ্ডীপাঠ শুনুন</a>
+      <p>মহালয়ার পবিত্র চণ্ডীপাঠ ওয়েবসাইট থেকেই শুনুন।</p>
+      <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#180207;box-shadow:0 10px 30px rgba(0,0,0,.16);">
+        <iframe src="https://www.youtube.com/embed/AnrGifI3WHk?rel=0" title="মহালয়ার চণ্ডীপাঠ — মহিষাসুরমর্দ্দিনী" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 </section>
@@ -357,10 +333,23 @@ function submitVisitorInfo(){
   const score=Number(n);
   if(!Number.isFinite(score) || score<0 || score>10){err.textContent='রেটিং ০ থেকে ১০-এর মধ্যে লিখুন। যেমন: ১০/১০';return;}
   err.textContent='';
+  localStorage.setItem('ishwarmaniVisitorInfo', JSON.stringify({name,district,upazila,opinion,rating,savedAt:Date.now()}));
   enterSite();
 }
 
 function openImg(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('open')}
+
+(function(){
+  try{
+    const saved=localStorage.getItem('ishwarmaniVisitorInfo');
+    if(saved){
+      const info=JSON.parse(saved);
+      if(info && info.name && info.district && info.upazila){
+        enterSite();
+      }
+    }
+  }catch(e){}
+})();
 
 (function(){
  const ds=document.getElementById('visitorDistrict'), us=document.getElementById('visitorUpazila');
