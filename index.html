@@ -381,7 +381,10 @@ function enterSite(){
   setTimeout(()=>{if(w) w.style.display='none'; window.scrollTo(0,0);},500);
 }
 
-function submitVisitorInfo(){
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+
+async function submitVisitorInfo(){
   const name=document.getElementById('visitorName').value.trim();
   const district=document.getElementById('visitorDistrict').value;
   const upazila=document.getElementById('visitorUpazila').value;
@@ -394,9 +397,32 @@ function submitVisitorInfo(){
   const n=rating.replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)).replace('/১০','').replace('/10','').trim();
   const score=Number(n);
   if(!Number.isFinite(score) || score<0 || score>10){err.textContent='রেটিং ০ থেকে ১০-এর মধ্যে লিখুন। যেমন: ১০/১০';return;}
-  err.textContent='';
-  localStorage.setItem('ishwarmaniVisitorInfo', JSON.stringify({name,district,upazila,opinion,rating,savedAt:Date.now()}));
-  enterSite();
+
+  err.textContent='তথ্য সংরক্ষণ হচ্ছে...';
+  try{
+    const response=await fetch(SUPABASE_URL+'/rest/v1/visitors',{
+      method:'POST',
+      headers:{
+        'apikey':SUPABASE_PUBLISHABLE_KEY,
+        'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY,
+        'Content-Type':'application/json',
+        'Prefer':'return=minimal'
+      },
+      body:JSON.stringify({name,district,upazila,opinion,rating})
+    });
+    if(!response.ok){
+      const detail=await response.text();
+      console.error('Supabase insert failed:',response.status,detail);
+      err.textContent='তথ্য সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।';
+      return;
+    }
+    err.textContent='';
+    localStorage.setItem('ishwarmaniVisitorInfo', JSON.stringify({name,district,upazila,opinion,rating,savedAt:Date.now()}));
+    enterSite();
+  }catch(e){
+    console.error('Supabase connection error:',e);
+    err.textContent='ইন্টারনেট সংযোগের সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+  }
 }
 
 function openImg(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('open')}
