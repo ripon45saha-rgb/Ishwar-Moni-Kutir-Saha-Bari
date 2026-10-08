@@ -17,6 +17,8 @@ label{display:block;font-weight:700;margin:14px 0 7px}input{width:100%;padding:1
 table{width:100%;border-collapse:collapse;min-width:850px;background:#fff}th,td{padding:12px;border-bottom:1px solid #eee1c7;text-align:left;vertical-align:top}
 th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#fffaf1}.small{font-size:13px;color:#725b52}
 .empty{text-align:center;padding:35px;color:#765e55}@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr}.login{margin:4vh auto}}
+
+.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
 </style>
 </head>
 <body>
@@ -34,16 +36,43 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
-<div class="card" style="margin-bottom:18px">
-<h2>🍚 প্রসাদ ব্যবস্থাপনা</h2>
-<div class="small">Main Website-এ তথ্য প্রকাশ করতে নিচের তথ্য পূরণ করে Publish করুন।</div>
-<label>শিরোনাম</label><input id="prasadTitle" value="প্রসাদের তথ্য">
-<label>প্রসাদের নাম / কী কী থাকবে</label><textarea id="prasadItems" rows="3" placeholder="খিচুড়ি, লাবড়া, পায়েস..."></textarea>
-<label>বিতরণের সময়</label><input id="prasadTime" placeholder="দুপুর ১:০০টা থেকে">
-<label>বিতরণের স্থান</label><input id="prasadPlace" placeholder="মন্দির প্রাঙ্গণ">
-<label>অতিরিক্ত ঘোষণা</label><textarea id="prasadNote" rows="3" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"></textarea>
-<label style="display:flex;align-items:center;gap:10px;font-weight:700"><input id="prasadActive" type="checkbox" checked style="width:auto"> Main Website-এ প্রকাশ করুন</label>
-<button class="btn" onclick="savePrasad()">📢 প্রসাদের তথ্য Publish করুন</button> <span id="prasadStatus" class="small"></span>
+
+<div id="editorSection" class="editor-card">
+ <div class="top"><div><h2>🛠️ Website Visual Editor</h2><div class="small">এখান থেকেই মোবাইলে ওয়েবসাইটের লেখা, Navbar, Countdown, Timeline ও Footer বদলে Save & Publish করতে পারবেন।</div></div></div>
+ <div class="editor-grid">
+  <div>
+   <label>🏠 পরিচিতির শিরোনাম</label><input id="edAboutTitle" type="text">
+   <label>পরিচিতির লেখা</label><textarea id="edAboutText"></textarea>
+   <label>🌺 দুর্গোৎসবের শিরোনাম</label><input id="edUtsavTitle" type="text">
+   <label>দুর্গোৎসবের লেখা</label><textarea id="edUtsavText"></textarea>
+  </div>
+  <div>
+   <label>⏳ Countdown তারিখ ও সময়</label><input id="edCountdown" type="datetime-local">
+   <label>Countdown শিরোনাম</label><input id="edCountdownLabel" type="text">
+   <label>Countdown-এর নিচের লেখা</label><input id="edCountdownSub" type="text">
+   <label>📜 Timeline</label><textarea id="edTimeline" placeholder="এক লাইনে একটি event: তারিখ | শিরোনাম | বিবরণ"></textarea>
+   <div class="editor-help">উদাহরণ: ২৮ আশ্বিন | মহা ষষ্ঠী | এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।</div>
+  </div>
+ </div>
+ <div>
+  <label>🧭 Navbar Menu</label><div id="edNavRows"></div>
+  <button class="btn secondary" type="button" onclick="addNavRow()">＋ Menu যোগ করুন</button>
+ </div>
+ <div class="editor-grid" style="margin-top:10px">
+  <div>
+   <label>Footer-এর নাম</label><input id="edFooterTitle" type="text">
+   <label>Footer-এর ঠিকানা</label><input id="edFooterAddress" type="text">
+  </div>
+  <div>
+   <label>🍚 প্রসাদের নাম</label><input id="edPrasadTitle" type="text">
+   <label>কী কী থাকবে</label><textarea id="edPrasadItems"></textarea>
+   <label>বিতরণের সময়</label><input id="edPrasadTime" type="text">
+   <label>বিতরণের স্থান</label><input id="edPrasadLocation" type="text">
+   <label>অতিরিক্ত ঘোষণা</label><textarea id="edPrasadNote"></textarea>
+   <label style="display:flex;align-items:center;gap:8px;font-weight:700"><input id="edPrasadActive" type="checkbox" style="width:auto"> প্রসাদ তথ্য প্রকাশ করুন</label>
+  </div>
+ </div>
+ <div class="save-row"><button class="btn" onclick="saveWebsiteEditor()">💾 Save & Publish</button><button class="btn secondary" onclick="loadWebsiteEditor()">↻ Reload</button><span id="editorStatus" class="small"></span></div>
 </div>
 
 <div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
@@ -73,7 +102,7 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -120,41 +149,73 @@ async function deletePhoto(id,path){
  }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message+'\n\nযদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
 }
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";location.reload()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor()}
 
-async function loadPrasad(){
- const st=document.getElementById('prasadStatus');
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&order=updated_at.desc&limit=1',{headers:h()});
-  if(!r.ok) throw Error(await r.text());
-  const d=await r.json();
-  if(d.length){const x=d[0];
-   document.getElementById('prasadTitle').value=x.title||'';
-   document.getElementById('prasadItems').value=x.items||'';
-   document.getElementById('prasadTime').value=x.time||'';
-   document.getElementById('prasadPlace').value=x.location||'';
-   document.getElementById('prasadNote').value=x.note||'';
-   document.getElementById('prasadActive').checked=x.active===true;
-  }
-  st.textContent='বর্তমান প্রসাদ তথ্য লোড হয়েছে।';
- }catch(e){st.textContent='❌ প্রসাদ তথ্য লোড হয়নি: '+e.message;}
+let websiteContentCache={};
+const defaultNav=[
+ {label:'পরিচিতি',href:'#about'},
+ {label:'দুর্গোৎসব ২০২৬',href:'#utsav'},
+ {label:'গ্যালারি',href:'#gallery'},
+ {label:'কালীপূজা',href:'#kali-puja'},
+ {label:'বিগত বছরের প্রতিমা',href:'#past'},
+ {label:'🍚 প্রসাদ ব্যবস্থাপনা',href:'#prasadSection'},
+ {label:'অবস্থান',href:'#location'}
+];
+function addNavRow(label='',href=''){
+ const box=document.getElementById('edNavRows'); if(!box)return;
+ const row=document.createElement('div');row.className='editor-nav-row';
+ row.innerHTML='<input class="nav-label" type="text" placeholder="Menu নাম"><input class="nav-href" type="text" placeholder="#section-id"><button class="btn secondary" type="button">🗑️</button>';
+ row.querySelector('.nav-label').value=label;row.querySelector('.nav-href').value=href;
+ row.querySelector('button').onclick=()=>row.remove();box.appendChild(row);
 }
-async function savePrasad(){
- const st=document.getElementById('prasadStatus'); st.textContent='Publish হচ্ছে...';
- const body={title:document.getElementById('prasadTitle').value.trim()||'প্রসাদ ব্যবস্থাপনা',items:document.getElementById('prasadItems').value.trim(),time:document.getElementById('prasadTime').value.trim(),location:document.getElementById('prasadPlace').value.trim(),note:document.getElementById('prasadNote').value.trim(),active:document.getElementById('prasadActive').checked,updated_at:new Date().toISOString()};
- try{
-  let r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=id&order=id.asc&limit=1',{headers:h()});
-  if(!r.ok)throw Error(await r.text());
-  const rows=await r.json();
-  if(rows.length){
-   r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.'+encodeURIComponent(rows[0].id),{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
-  }else{
-   r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
-  }
-  if(!r.ok)throw Error(await r.text());
-  st.textContent='✅ প্রসাদের তথ্য Publish হয়েছে।';
- }catch(e){st.textContent='❌ Publish হয়নি: '+e.message;}
+function localDateTimeValue(iso){
+ const d=new Date(iso||'2026-10-16T09:00:00+06:00');
+ const pad=n=>String(n).padStart(2,'0');
+ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
-
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}
+async function loadWebsiteEditor(){
+ const st=document.getElementById('editorStatus'); if(!st)return; st.textContent='Editor data লোড হচ্ছে...';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}), rows=await r.json();
+  if(!r.ok)throw Error(rows.message||'Website content table পাওয়া যায়নি।');
+  websiteContentCache={}; rows.forEach(x=>websiteContentCache[x.section]=x.content||{});
+  const a=websiteContentCache.about||{}; document.getElementById('edAboutTitle').value=a.title||'ঈশ্বরমনি কুঠির, সাহা বাড়ি'; document.getElementById('edAboutText').value=a.text||'ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।';
+  const u=websiteContentCache.utsav||{}; document.getElementById('edUtsavTitle').value=u.title||'দুর্গোৎসব ২০২৬'; document.getElementById('edUtsavText').value=u.text||'ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।';
+  const c=websiteContentCache.countdown||{}; document.getElementById('edCountdown').value=localDateTimeValue(c.target); document.getElementById('edCountdownLabel').value=c.label||'🪔 মহাষষ্ঠী শুরু হতে বাকি'; document.getElementById('edCountdownSub').value=c.sub||'২৮শে আশ্বিন • ১৬ই অক্টোবর ২০২৬ • সকাল ৯:০০টা';
+  const t=websiteContentCache.timeline||{}; const events=t.events||[
+   {date:'২২ আশ্বিন',title:'মহালয়া',text:'মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।'},{date:'২৮ আশ্বিন',title:'মহা ষষ্ঠী',text:'এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।'},{date:'২৯ ও ৩০ আশ্বিন',title:'মহা সপ্তমী',text:'মহা সপ্তমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।'},{date:'১ কার্তিক',title:'মহা অষ্টমী',text:'মহা অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।'},{date:'২ কার্তিক',title:'মহা নবমী',text:'মহা নবমীর পূজা ও সন্ধ্যারতি।'},{date:'৩ কার্তিক',title:'বিজয়া দশমী',text:'দশমীর পূজা ও বিজয়ার আয়োজন।'}]; document.getElementById('edTimeline').value=events.map(e=>`${e.date||''} | ${e.title||''} | ${e.text||''}`).join('\n');
+  const f=websiteContentCache.footer||{}; document.getElementById('edFooterTitle').value=f.title||'ঈশ্বরমনি কুঠির, সাহা বাড়ি'; document.getElementById('edFooterAddress').value=f.address||'খড়মা, দেওয়ানগঞ্জ, জামালপুর';
+  const n=websiteContentCache.navbar||{}; const nav=n.items&&n.items.length?n.items:defaultNav; document.getElementById('edNavRows').innerHTML=''; nav.forEach(x=>addNavRow(x.label,x.href));
+  const p=websiteContentCache.prasad||{}; document.getElementById('edPrasadTitle').value=p.title||'';document.getElementById('edPrasadItems').value=p.items||'';document.getElementById('edPrasadTime').value=p.time||'';document.getElementById('edPrasadLocation').value=p.location||'';document.getElementById('edPrasadNote').value=p.note||'';document.getElementById('edPrasadActive').checked=p.active===true;
+  st.textContent='✅ Editor ready';
+ }catch(e){st.textContent='❌ '+e.message;}
+}
+async function upsertWebsiteSection(section,content){
+ const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?on_conflict=section',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({section,content,updated_at:new Date().toISOString()})});
+ if(!r.ok)throw Error(await r.text());
+}
+async function saveWebsiteEditor(){
+ const st=document.getElementById('editorStatus'); st.textContent='Saving...';
+ try{
+  const nav=[...document.querySelectorAll('#edNavRows .editor-nav-row')].map(r=>({label:r.querySelector('.nav-label').value.trim(),href:r.querySelector('.nav-href').value.trim()})).filter(x=>x.label&&x.href);
+  const events=document.getElementById('edTimeline').value.split(/\n+/).map(line=>line.split('|').map(x=>x.trim())).filter(x=>x.length>=3&&x[0]&&x[1]).map(x=>({date:x[0],title:x[1],text:x.slice(2).join(' | ')}));
+  const targetLocal=document.getElementById('edCountdown').value; const target=targetLocal?new Date(targetLocal).toISOString():'2026-10-16T03:00:00.000Z';
+  await Promise.all([
+   upsertWebsiteSection('navbar',{items:nav}),
+   upsertWebsiteSection('about',{title:document.getElementById('edAboutTitle').value.trim(),text:document.getElementById('edAboutText').value.trim()}),
+   upsertWebsiteSection('utsav',{title:document.getElementById('edUtsavTitle').value.trim(),text:document.getElementById('edUtsavText').value.trim()}),
+   upsertWebsiteSection('countdown',{target,label:document.getElementById('edCountdownLabel').value.trim(),sub:document.getElementById('edCountdownSub').value.trim()}),
+   upsertWebsiteSection('timeline',{events}),
+   upsertWebsiteSection('footer',{title:document.getElementById('edFooterTitle').value.trim(),address:document.getElementById('edFooterAddress').value.trim()}),
+   upsertWebsiteSection('prasad',{title:document.getElementById('edPrasadTitle').value.trim(),items:document.getElementById('edPrasadItems').value.trim(),time:document.getElementById('edPrasadTime').value.trim(),location:document.getElementById('edPrasadLocation').value.trim(),note:document.getElementById('edPrasadNote').value.trim(),active:document.getElementById('edPrasadActive').checked})
+  ]);
+  // Keep the existing prasad_info feature in sync too.
+  const p={title:document.getElementById('edPrasadTitle').value.trim()||'আজকের প্রসাদ',items:document.getElementById('edPrasadItems').value.trim(),time:document.getElementById('edPrasadTime').value.trim(),location:document.getElementById('edPrasadLocation').value.trim(),note:document.getElementById('edPrasadNote').value.trim(),active:document.getElementById('edPrasadActive').checked};
+  let pr=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=id&order=updated_at.desc&limit=1',{headers:h()}); let pd=await pr.json();
+  if(pd&&pd.length){await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.'+pd[0].id,{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({...p,updated_at:new Date().toISOString()})});}
+  else {await fetch(SUPABASE_URL+'/rest/v1/prasad_info',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(p)});}
+  st.innerHTML='<span class="ok">✅ Save & Publish সফল হয়েছে</span>';
+ }catch(e){st.textContent='❌ Save হয়নি: '+e.message;}
+}
 </script>
 </body></html>
