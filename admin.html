@@ -134,26 +134,52 @@ async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
  try{const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json(); if(!r.ok)throw Error(d.message||'Load failed');
  if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
- el.innerHTML=d.map(x=>`<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(x.caption||'কোনো caption নেই')}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" onclick="deletePhoto(${x.id},${JSON.stringify(x.path)})">Delete</button></div>`).join('');
+ el.innerHTML=d.map(x=>{const ep=encodeURIComponent(String(x.path||''));return `<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(x.caption||'কোনো caption নেই')}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" data-photo-id="${Number(x.id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">Delete</button></div>`}).join('');
  }catch(e){el.textContent='Error: '+e.message;}
 }
-async function deletePhoto(id,path){
+async function deletePhotoFromButton(btn){
+ const id=Number(btn.dataset.photoId);
+ const path=decodeURIComponent(btn.dataset.photoPath||'');
+ if(!id || !path){alert('❌ ছবির তথ্য পাওয়া যায়নি।');return;}
+ await deletePhoto(id,path,btn);
+}
+async function deletePhoto(id,path,rowBtn){
  if(!confirm('এই ছবিটি মুছে ফেলবেন?'))return;
+ if(rowBtn){rowBtn.disabled=true;rowBtn.textContent='Deleting...';}
  try{
-  // প্রথমে database record delete করি—এতে website থেকে ছবিটি নিশ্চিতভাবে চলে যাবে।
-  let r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=minimal'}});
-  if(!r.ok){const t=await r.text(); throw Error('Database delete failed: '+t);}
-  // এরপর storage file-টাও delete করার চেষ্টা করি।
-  let storageOk=true, storageError='';
+  // ১) Website থেকে নিশ্চিতভাবে সরানোর জন্য hidden list-এ path যোগ করি।
+  // Database DELETE policy না থাকলেও website-এ ছবিটি আর দেখাবে না।
+  let rr=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:h()});
+  let rows=await rr.json();
+  if(!rr.ok)throw Error(rows.message||'Delete settings load failed');
+  let hidden=(rows[0]&&rows[0].content)||{};
+  hidden[String(id)]={id:Number(id),path:String(path)};
+  await upsertWebsiteSection('deletedUploadedPhotos',hidden);
+
+  // ২) Database record delete করার চেষ্টা। সফল হলে list থেকেও permanently বাদ যাবে।
+  let r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=representation'}});
+  let dbDeleted=false;
+  if(r.ok){
+   const deletedRows=await r.json().catch(()=>[]);
+   dbDeleted=Array.isArray(deletedRows)?deletedRows.length>0:true;
+  }
+
+  // ৩) Storage file delete করার চেষ্টা।
+  let storageOk=true;
   try{
    const safePath=String(path).split('/').map(encodeURIComponent).join('/');
    r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+safePath,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
-   if(!r.ok){storageOk=false;storageError=await r.text();}
-  }catch(e){storageOk=false;storageError=e.message;}
-  loadPhotos();
-  if(storageOk) alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
-  else alert('✅ Website থেকে ছবি মুছে গেছে।\n\n⚠️ Storage-এর পুরোনো file delete করা যায়নি, তাই পরে storage cleanup লাগতে পারে।');
- }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message);}
+   storageOk=r.ok;
+  }catch(e){storageOk=false;}
+
+  await loadPhotos();
+  if(dbDeleted && storageOk) alert('✅ ছবি সম্পূর্ণভাবে মুছে ফেলা হয়েছে।');
+  else if(dbDeleted) alert('✅ Website ও Database থেকে ছবি মুছে গেছে।\n\n⚠️ Storage file delete হয়নি।');
+  else alert('✅ Website থেকে ছবি সরানো হয়েছে।\n\nDatabase/Storage permission থাকলে পরের ধাপে file-টিও delete হবে।');
+ }catch(e){
+  if(rowBtn){rowBtn.disabled=false;rowBtn.textContent='Delete';}
+  alert('❌ Delete হয়নি।\n\n'+e.message);
+ }
 }
 const STATIC_PHOTOS=[['gallery-1','স্মৃতিপটে — ছবি ১'],['gallery-2','স্মৃতিপটে — ছবি ২'],['gallery-3','স্মৃতিপটে — ছবি ৩'],['past-1','বিগত বছরের প্রতিমা — ছবি ১'],['past-2','বিগত বছরের প্রতিমা — ছবি ২'],['past-3','বিগত বছরের প্রতিমা — ছবি ৩'],['past-4','বিগত বছরের প্রতিমা — ছবি ৪'],['past-5','বিগত বছরের প্রতিমা — ছবি ৫'],['past-6','বিগত বছরের প্রতিমা — ছবি ৬'],['past-7','বিগত বছরের প্রতিমা — ছবি ৭'],['past-8','বিগত বছরের প্রতিমা — ছবি ৮'],['past-9','বিগত বছরের প্রতিমা — ছবি ৯'],['kali-puja-1','শ্যামা পূজা — ছবি ১'],['kali-puja-2','শ্যামা পূজা — ছবি ২']];
 async function loadStaticPhotos(){const el=document.getElementById('staticPhotoList');if(!el)return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();if(!r.ok)throw Error(d.message||'Load failed');const state=(d[0]&&d[0].content)||{};el.innerHTML=STATIC_PHOTOS.map(([key,label])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee1c7"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state[key]===false?'':'checked'} style="width:auto"><span>${label}</span></label>`).join('')}catch(e){el.textContent='❌ Load হয়নি: '+e.message}}
