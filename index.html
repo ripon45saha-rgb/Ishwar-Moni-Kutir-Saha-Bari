@@ -733,14 +733,14 @@ async function loadLampCount(){
  const localCount=getLocalLampCount();
  document.getElementById('lampCount').textContent=Number(localCount).toLocaleString('bn-BD');
  if(localStorage.getItem(lampLitKey())==='1'){document.getElementById('lampStage').classList.add('lamp-lit');document.getElementById('lampNote').textContent='আপনার প্রদীপ আজও জ্বলছে। 🙏';document.getElementById('lampBtn').disabled=true;}
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.virtualLamp',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});if(!r.ok)return;const rows=await r.json();const c=(rows[0]&&rows[0].content)||{};const serverCount=Number(c.count||0);const resetAt=Number(c.resetAt||0);const lastReset=Number(localStorage.getItem('ishwarmaniLampLastReset')||0);if(resetAt>lastReset){localStorage.removeItem(lampTodayKey());localStorage.setItem('ishwarmaniLampLastReset',String(resetAt));document.getElementById('lampCount').textContent='০';}else if(serverCount>0&&localCount===0){document.getElementById('lampCount').textContent=serverCount.toLocaleString('bn-BD');}}catch(e){}
+ try{const r=await fetch(SUPABASE_URL+'/rest/v1/virtual_lamp?id=eq.1&select=count,updated_at',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});if(!r.ok)return;const rows=await r.json();const serverCount=Number((rows[0]&&rows[0].count)||0);document.getElementById('lampCount').textContent=serverCount.toLocaleString('bn-BD');}catch(e){}
 }
 async function lightVirtualLamp(){
  const stage=document.getElementById('lampStage'),btn=document.getElementById('lampBtn'),note=document.getElementById('lampNote');
  if(localStorage.getItem(lampLitKey())==='1'){stage.classList.add('lamp-lit');note.textContent='আপনার প্রদীপ আজও জ্বলছে। 🙏';return;}
  btn.disabled=true;stage.classList.add('lamp-lit');localStorage.setItem(lampLitKey(),'1');
  const next=getLocalLampCount()+1;setLocalLampCount(next);document.getElementById('lampCount').textContent=next.toLocaleString('bn-BD');note.textContent='আপনার প্রদীপ জ্বলে উঠেছে। মঙ্গল হোক সবার। 🙏';
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/increment_virtual_lamp',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:'{}'});if(r.ok){const out=await r.json();if(out&&out.count!=null){document.getElementById('lampCount').textContent=Number(out.count).toLocaleString('bn-BD');}}else{console.warn('Virtual lamp server count failed',await r.text());}}catch(e){console.warn('Virtual lamp RPC failed',e)}
+ try{const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/light_virtual_lamp',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:'{}'});if(r.ok){const out=await r.json();const serverCount=Number(out||0);document.getElementById('lampCount').textContent=serverCount.toLocaleString('bn-BD');}else{console.warn('Virtual lamp server count failed',await r.text());}}catch(e){console.warn('Virtual lamp RPC failed',e)}
 }
 loadLampCount();
 
