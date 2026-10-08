@@ -20,6 +20,19 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 
 .editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
 </style>
+
+<style id="admin-professional-redesign">
+:root{--adm-maroon:#6f1118;--adm-deep:#25070a;--adm-gold:#d6a84f;--adm-cream:#fff8e9}
+body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:"Noto Sans Bengali",Arial,sans-serif}.wrap{max-width:1240px;padding:22px 18px 45px}
+#dashboard>.top{background:linear-gradient(135deg,#31070c,#74151c);color:#fff;border-radius:24px;padding:22px 24px;box-shadow:0 18px 45px rgba(60,5,10,.2);border:1px solid rgba(214,168,79,.35)}
+#dashboard>.top h1{color:#ffe7ad;margin:0}.card,.editor-card{border-radius:20px!important;box-shadow:0 12px 34px rgba(70,25,10,.08)!important;border-color:#ead7b0!important}.stats{grid-template-columns:repeat(3,1fr);gap:16px}.stat{border-radius:18px;background:linear-gradient(135deg,#fff,#fff8e9);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:rgba(214,168,79,.12)}.stat b{font-size:34px}.editor-card{background:linear-gradient(180deg,#fff,#fffaf1)!important}.editor-card h2,.card h2{color:var(--adm-maroon)}.btn{background:linear-gradient(135deg,#7d171d,#5f0d13);box-shadow:0 6px 14px rgba(95,13,19,.15)}.btn.secondary{background:#f0dfb8;color:#4b1512;box-shadow:none}.table-wrap{box-shadow:0 8px 22px rgba(70,25,10,.06)}th{background:linear-gradient(90deg,#6f1118,#851b22)}
+@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr 1fr}.stat b{font-size:28px}#dashboard>.top{padding:18px 16px;border-radius:20px}}
+@media(max-width:460px){.stats{grid-template-columns:1fr}.top{align-items:flex-start}.top>div{width:100%}.top .btn{margin-top:4px}}
+</style>
+
+<style id="professional-admin-v2">
+#dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -87,6 +100,7 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: ২০২৬ সালের পূজার একটি মুহূর্ত">
 <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি Upload করুন</button> <span id="uploadStatus" class="small"></span>
 </div>
+
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ Uploaded Photos</h2><div id="photoList" class="small">Loading...</div></div>
 <div class="card"><div class="top"><h2>👥 Visitor Information</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
@@ -186,6 +200,8 @@ async function loadStaticPhotos(){const el=document.getElementById('staticPhotoL
 async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
 
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
+
+
 if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}
 
 let websiteContentCache={};
