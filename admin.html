@@ -87,6 +87,8 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: ২০২৬ সালের পূজার একটি মুহূর্ত">
 <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি Upload করুন</button> <span id="uploadStatus" class="small"></span>
 </div>
+
+<div class="card" style="margin-bottom:18px"><h2>🪔 ঈশ্বরমনি প্রদীপ</h2><div class="small">Homepage-এর Virtual প্রদীপের মোট count দেখা/শূন্য করার জন্য।</div><div style="margin-top:12px;font-size:20px;font-weight:800">বর্তমান প্রদীপ: <span id="adminLampCount">—</span> 🪔</div><br><button class="btn secondary" onclick="loadLampAdmin()">↻ Refresh</button> <button class="btn" style="background:#a11" onclick="resetLampAdmin()">Reset Count</button><span id="lampAdminStatus" class="small" style="margin-left:10px"></span></div>
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ Uploaded Photos</h2><div id="photoList" class="small">Loading...</div></div>
 <div class="card"><div class="top"><h2>👥 Visitor Information</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
@@ -103,7 +105,7 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadLampAdmin();loadStaticPhotos()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -186,6 +188,10 @@ async function loadStaticPhotos(){const el=document.getElementById('staticPhotoL
 async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
 
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
+
+async function loadLampAdmin(){try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.virtualLamp',{headers:h()});const rows=await r.json();if(!r.ok)throw Error(rows.message||'Load failed');const c=(rows[0]&&rows[0].content)||{};document.getElementById('adminLampCount').textContent=Number(c.count||0).toLocaleString('bn-BD');}catch(e){document.getElementById('lampAdminStatus').textContent='❌ '+e.message}}
+async function resetLampAdmin(){if(!confirm('Virtual প্রদীপের count শূন্য করবেন?'))return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?on_conflict=section',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({section:'virtualLamp',content:{count:0}})});if(!r.ok)throw Error(await r.text());document.getElementById('adminLampCount').textContent='0';document.getElementById('lampAdminStatus').textContent='✅ Reset হয়েছে';}catch(e){document.getElementById('lampAdminStatus').textContent='❌ '+e.message}}
+
 if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}
 
 let websiteContentCache={};
