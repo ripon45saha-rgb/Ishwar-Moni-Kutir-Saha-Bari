@@ -227,6 +227,49 @@ img{max-width:100%}
   .site-footer .alpana-frame:before,.site-footer .alpana-frame:after{font-size:18px;letter-spacing:4px}
 }
 </style>
+
+<style>
+/* Mobile navigation + Mahashasthi countdown */
+.countdown-box{
+  max-width:900px;
+  margin:0 auto 28px;
+  padding:24px 18px;
+  text-align:center;
+  border:1px solid #e4c56f;
+  border-radius:22px;
+  background:linear-gradient(135deg,#fffaf0,#fff3d2);
+  box-shadow:0 12px 30px rgba(75,20,10,.10);
+}
+.countdown-title{font-size:26px;font-weight:800;color:var(--maroon);margin-bottom:4px}
+.countdown-sub{font-size:16px;color:#6b4b50;margin-bottom:18px}
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.countdown-unit{background:#fff;border:1px solid #ecd9a5;border-radius:16px;padding:12px 8px}
+.countdown-num{font-size:32px;font-weight:800;color:var(--deep);line-height:1.15}
+.countdown-label{font-size:14px;color:#72555a;margin-top:3px}
+
+@media(max-width:800px){
+  .nav{position:fixed}
+  .navin{width:100%;max-width:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 8px 10px;gap:5px}
+  .brand{font-size:16px;line-height:1.25;text-align:center}
+  .links{display:flex !important;width:100%;max-width:100%;justify-content:center;align-items:center;flex-wrap:wrap;gap:3px 8px;font-size:12px;line-height:1.45;overflow:visible}
+  .links a{display:inline-block;white-space:nowrap;padding:1px 0}
+  html,body,main,#siteContent{width:100%;max-width:100%;overflow-x:clip}
+  section,.container,.section-head,.timeline,.event{max-width:100%;min-width:0}
+  .countdown-box{margin-top:4px;padding:18px 10px;border-radius:18px}
+  .countdown-title{font-size:22px}
+  .countdown-sub{font-size:14px;line-height:1.7}
+  .countdown-grid{gap:7px}
+  .countdown-unit{padding:10px 4px;border-radius:12px}
+  .countdown-num{font-size:24px}
+  .countdown-label{font-size:12px}
+}
+@media(max-width:420px){
+  .links{font-size:11px;gap:2px 7px}
+  .countdown-grid{gap:5px}
+  .countdown-num{font-size:21px}
+  .countdown-label{font-size:11px}
+}
+</style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -285,6 +328,16 @@ img{max-width:100%}
 <section id="utsav">
  <div class="container">
   <div class="section-head"><div class="eyebrow">🌺 শারদীয় দুর্গোৎসব</div><h2>দুর্গোৎসব ২০২৬</h2><p>ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।</p></div>
+  <div class="countdown-box" id="countdownBox" aria-live="polite">
+   <div class="countdown-title">🪔 মহাষষ্ঠী শুরু হতে বাকি</div>
+   <div class="countdown-sub">২৮শে আশ্বিন • ১৬ই অক্টোবর ২০২৬ • সকাল ৯:০০টা</div>
+   <div class="countdown-grid">
+    <div class="countdown-unit"><div class="countdown-num" id="cdDays">--</div><div class="countdown-label">দিন</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdHours">--</div><div class="countdown-label">ঘণ্টা</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdMinutes">--</div><div class="countdown-label">মিনিট</div></div>
+    <div class="countdown-unit"><div class="countdown-num" id="cdSeconds">--</div><div class="countdown-label">সেকেন্ড</div></div>
+   </div>
+  </div>
   <div class="timeline">
    <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহালয়া</b><br>মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।</div></div>
    <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহা ষষ্ঠী</b><br>এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।</div></div>
@@ -527,6 +580,32 @@ function openLightbox(src){openImg(src)}
    us.disabled=!ds.value;
  });
 })();
+
+function updateMahashasthiCountdown(){
+ const target=new Date('2026-10-16T09:00:00+06:00').getTime();
+ const now=Date.now();
+ const box=document.getElementById('countdownBox');
+ if(!box)return;
+ const diff=target-now;
+ if(diff<=0){
+   box.querySelector('.countdown-title').textContent='🪔 মহাষষ্ঠী শুরু হয়েছে';
+   box.querySelector('.countdown-sub').textContent='২৮শে আশ্বিন • ১৬ই অক্টোবর ২০২৬ • সকাল ৯:০০টা';
+   ['cdDays','cdHours','cdMinutes','cdSeconds'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='০';});
+   return;
+ }
+ const totalSeconds=Math.floor(diff/1000);
+ const days=Math.floor(totalSeconds/86400);
+ const hours=Math.floor((totalSeconds%86400)/3600);
+ const minutes=Math.floor((totalSeconds%3600)/60);
+ const seconds=totalSeconds%60;
+ const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+ document.getElementById('cdDays').textContent=bn(days);
+ document.getElementById('cdHours').textContent=bn(hours).padStart(2,'০');
+ document.getElementById('cdMinutes').textContent=bn(minutes).padStart(2,'০');
+ document.getElementById('cdSeconds').textContent=bn(seconds).padStart(2,'০');
+}
+updateMahashasthiCountdown();
+setInterval(updateMahashasthiCountdown,1000);
 
 async function loadPrasadPublic(){
  try{
