@@ -232,7 +232,7 @@ img{max-width:100%}
 <nav class="nav"><div class="navin">
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a id="prasadNav" href="#prasadSection" style="display:none">🍚 প্রসাদ</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 
@@ -429,11 +429,11 @@ img{max-width:100%}
 </section>
 
 
-<section id="prasadSection" style="display:none">
+<section id="prasadSection">
  <div class="container">
-  <div class="section-head"><div class="eyebrow">🍚 ভোগ ও প্রসাদ</div><h2>প্রসাদ তথ্য</h2><p>পূজার দিনের প্রসাদ ও বিতরণের প্রয়োজনীয় তথ্য।</p></div>
+  <div class="section-head"><div class="eyebrow">🍚 প্রসাদ ব্যবস্থাপনা</div><h2>প্রসাদ ব্যবস্থাপনা</h2><p id="prasadIntro">প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।</p></div>
   <div class="card" id="prasadCard" style="max-width:900px;margin:auto;text-align:center">
-   <h3 id="prasadTitle" style="color:var(--maroon);font-size:28px;margin:0 0 12px">প্রসাদের তথ্য</h3>
+   <h3 id="prasadTitle" style="color:var(--maroon);font-size:28px;margin:0 0 12px">প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে</h3>
    <p id="prasadItems" style="font-size:18px;line-height:1.8"></p>
    <div class="highlight" style="margin:18px 0"><b>🕐 বিতরণের সময়</b><div id="prasadTime" style="margin-top:6px"></div></div>
    <div><b>📍 স্থান</b><div id="prasadPlace" style="margin-top:6px"></div></div>
@@ -528,6 +528,32 @@ function openLightbox(src){openImg(src)}
  });
 })();
 
+async function loadPrasadPublic(){
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&order=updated_at.desc&limit=1',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
+  if(!r.ok)return;
+  const d=await r.json();
+  const sec=document.getElementById('prasadSection');
+  if(!sec)return;
+  if(!d.length || d[0].active!==true){
+    document.getElementById('prasadTitle').textContent='প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে';
+    document.getElementById('prasadItems').textContent='';
+    document.getElementById('prasadTime').textContent='';
+    document.getElementById('prasadPlace').textContent='';
+    document.getElementById('prasadNote').textContent='';
+    return;
+  }
+  const x=d[0];
+  document.getElementById('prasadTitle').textContent=x.title||'আজকের প্রসাদ';
+  document.getElementById('prasadItems').textContent=x.items||'';
+  document.getElementById('prasadTime').textContent=x.time||'';
+  document.getElementById('prasadPlace').textContent=x.location||'';
+  document.getElementById('prasadNote').textContent=x.note||'';
+  document.getElementById('prasadIntro').textContent='প্রসাদ বিতরণের প্রয়োজনীয় তথ্য';
+ }catch(e){console.warn('Prasad load failed',e)}
+}
+loadPrasadPublic();
+
 async function loadUploadedGallery(){
  try{
   const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.asc',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
@@ -536,28 +562,7 @@ async function loadUploadedGallery(){
   items.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.innerHTML=`<img src="${String(x.public_url).replace(/"/g,'&quot;')}" alt="${String(x.caption||'মন্দিরের ছবি').replace(/"/g,'&quot;')}" onclick="openImg(this.src)">`; grid.appendChild(div);});
  }catch(e){console.warn('Uploaded gallery load failed',e)}
 }
-
-async function loadPrasadInfo(){
- const section=document.getElementById('prasadSection');
- const nav=document.getElementById('prasadNav');
- if(!section)return;
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&order=updated_at.desc&limit=1',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
-  if(!r.ok){section.style.display='none'; if(nav)nav.style.display='none'; return;}
-  const rows=await r.json(); const p=rows&&rows[0];
-  if(!p || !p.active || String(p.publish_date||'2026-10-14') > new Date().toLocaleDateString('en-CA')){
-    section.style.display='none'; if(nav)nav.style.display='none'; return;
-  }
-  document.getElementById('prasadTitle').textContent=p.title||'আজকের প্রসাদ';
-  document.getElementById('prasadItems').textContent=p.items||'';
-  document.getElementById('prasadTime').textContent=p.time||'সময় জানানো হবে';
-  document.getElementById('prasadPlace').textContent=p.location||'মন্দির প্রাঙ্গণ';
-  document.getElementById('prasadNote').textContent=p.note||'';
-  section.style.display='block'; if(nav)nav.style.display='inline-block';
- }catch(e){section.style.display='none'; if(nav)nav.style.display='none'; console.warn('Prasad info load failed',e)}
-}
 loadUploadedGallery();
-loadPrasadInfo();
 </script>
 
 

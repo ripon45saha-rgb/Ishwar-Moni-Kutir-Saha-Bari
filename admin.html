@@ -26,7 +26,7 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 <p class="small">শুধু মন্দিরের প্রশাসকের জন্য।</p>
 <label>Admin Email</label><input id="email" type="email" autocomplete="username" placeholder="আপনার admin email">
 <label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="আপনার password">
-<br><br><button class="btn" type="button" onclick="login()">🔐 Login</button> <button class="btn secondary" type="button" onclick="clearSession()">Reset Login</button><div id="loginMsg" class="msg err"></div>
+<br><br><button class="btn" onclick="login()">🔐 Login</button><div id="loginMsg" class="msg err"></div>
 </section>
 <section id="dashboard" style="display:none">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
@@ -36,14 +36,13 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 </div>
 <div class="card" style="margin-bottom:18px">
 <h2>🍚 প্রসাদ ব্যবস্থাপনা</h2>
-<div class="small">২৯শে আশ্বিন ২০২৬ (১৪ অক্টোবর ২০২৬) থেকে ওয়েবসাইটে তথ্য দেখা যাবে। এখান থেকে তথ্য পরিবর্তন করে Save করুন।</div>
-<label>প্রসাদের নাম</label><input id="prasadTitle" value="আজকের প্রসাদ" placeholder="যেমন: মহাপ্রসাদ">
-<label>কী কী থাকবে</label><textarea id="prasadItems" rows="4" placeholder="যেমন: খিচুড়ি, লাবড়া, পায়েস, মিষ্টি"></textarea>
-<label>বিতরণের সময়</label><input id="prasadTime" placeholder="যেমন: দুপুর ১:৩০টা থেকে ৩:০০টা">
-<label>বিতরণের স্থান</label><input id="prasadPlace" placeholder="যেমন: মন্দির প্রাঙ্গণ">
-<label>অতিরিক্ত ঘোষণা</label><textarea id="prasadNote" rows="3" placeholder="যেকোনো গুরুত্বপূর্ণ ঘোষণা"></textarea>
-<label style="display:flex;align-items:center;gap:10px;font-weight:700"><input id="prasadActive" type="checkbox" checked style="width:auto"> প্রসাদ তথ্য সক্রিয় রাখুন</label>
-<br><button class="btn" onclick="savePrasad()">💾 প্রসাদের তথ্য Save করুন</button> <span id="prasadStatus" class="small"></span>
+<div class="small">২৯শে আশ্বিন ২০২৬ থেকে Website-এ এই তথ্য দেখা যাবে। এখান থেকে তথ্য পরিবর্তন করে Save করুন।</div>
+<label>শিরোনাম</label><input id="prasadTitle" value="প্রসাদের তথ্য">
+<label>প্রসাদের নাম / কী কী থাকবে</label><textarea id="prasadItems" rows="3" placeholder="খিচুড়ি, লাবড়া, পায়েস..."></textarea>
+<label>বিতরণের সময়</label><input id="prasadTime" placeholder="দুপুর ১:০০টা থেকে">
+<label>বিতরণের স্থান</label><input id="prasadPlace" placeholder="মন্দির প্রাঙ্গণ">
+<label>অতিরিক্ত ঘোষণা</label><textarea id="prasadNote" rows="3" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"></textarea>
+<button class="btn" onclick="savePrasad()">💾 প্রসাদের তথ্য Save করুন</button> <span id="prasadStatus" class="small"></span>
 </div>
 
 <div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
@@ -69,21 +68,11 @@ let accessToken=sessionStorage.getItem("ishwarmani_admin_token")||"", visitors=[
 function h(){return {"apikey":SUPABASE_KEY,"Authorization":"Bearer "+accessToken}}
 function showMsg(t){let e=document.getElementById("loginMsg");e.textContent=t;e.style.display="block"}
 async function login(){
- const email=document.getElementById("email").value.trim();
- const password=document.getElementById("password").value;
- if(!email||!password){showMsg("Email ও password দিন।");return;}
- showMsg("Login হচ্ছে...");
- try{
-  const r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({email,password})});
-  const text=await r.text(); let d={}; try{d=text?JSON.parse(text):{};}catch{}
-  if(!r.ok) throw Error(d.error_description||d.msg||d.message||("Login failed (HTTP "+r.status+")"));
-  if(!d.access_token) throw Error("Supabase access token পাওয়া যায়নি।");
-  accessToken=d.access_token; sessionStorage.setItem("ishwarmani_admin_token",accessToken);
-  document.getElementById("loginBox").style.display="none"; document.getElementById("dashboard").style.display="block";
-  loadVisitors(); loadPhotos(); loadPrasad();
- }catch(e){sessionStorage.removeItem("ishwarmani_admin_token"); accessToken=""; showMsg("❌ "+e.message);}
-}
-function clearSession(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";document.getElementById("loginMsg").style.display="none";}
+let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+if(!email||!password)return showMsg("Email ও password দিন।");
+try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
+if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -127,39 +116,16 @@ async function deletePhoto(id,path){
   if(!r.ok){const t=await r.text(); throw Error('Database delete failed: '+t);}
   alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
   loadPhotos();
- }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message+'\n\nRLS policy error হলে Supabase policy ঠিক করতে হবে।');}
+ }catch(e){alert('❌ Delete হয়নি।
+
+'+e.message+'
+
+যদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
 }
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";location.reload()}
 
-async function loadPrasad(){
- const st=document.getElementById('prasadStatus');
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&order=updated_at.desc&limit=1',{headers:h()});
-  if(!r.ok) throw Error(await r.text());
-  const d=await r.json();
-  if(d.length){const x=d[0];
-   document.getElementById('prasadTitle').value=x.title||'';
-   document.getElementById('prasadItems').value=x.items||'';
-   document.getElementById('prasadTime').value=x.time||'';
-   document.getElementById('prasadPlace').value=x.location||'';
-   document.getElementById('prasadNote').value=x.note||'';
-   document.getElementById('prasadActive').checked=x.active!==false;
-  }
-  st.textContent='বর্তমান প্রসাদ তথ্য লোড হয়েছে।';
- }catch(e){st.textContent='❌ প্রসাদ তথ্য লোড হয়নি: '+e.message;}
-}
-async function savePrasad(){
- const st=document.getElementById('prasadStatus'); st.textContent='Save হচ্ছে...';
- const body={title:document.getElementById('prasadTitle').value.trim()||'আজকের প্রসাদ',items:document.getElementById('prasadItems').value.trim(),time:document.getElementById('prasadTime').value.trim(),location:document.getElementById('prasadPlace').value.trim(),note:document.getElementById('prasadNote').value.trim(),active:document.getElementById('prasadActive').checked,publish_date:'2026-10-14',updated_at:new Date().toISOString()};
- try{
-  let r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=id&order=id.asc&limit=1',{headers:h()});
-  if(!r.ok)throw Error(await r.text());
-  const rows=await r.json();
-  if(rows.length){r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.'+encodeURIComponent(rows[0].id),{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});}
-  else{r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});}
-  if(!r.ok)throw Error(await r.text()); st.textContent='✅ প্রসাদের তথ্য সফলভাবে Save হয়েছে।';
- }catch(e){st.textContent='❌ Save হয়নি: '+e.message;}
-}
+async function loadPrasad(){try{const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=*&id=eq.1',{headers:{...h()}});const d=await r.json();if(r.ok&&d.length){const x=d[0];prasadTitle.value=x.title||'';prasadItems.value=x.items||'';prasadTime.value=x.distribution_time||'';prasadPlace.value=x.place||'';prasadNote.value=x.note||'';}}catch(e){}}
+async function savePrasad(){const st=document.getElementById('prasadStatus');st.textContent='Saving...';try{const body={id:1,title:prasadTitle.value.trim(),items:prasadItems.value.trim(),distribution_time:prasadTime.value.trim(),place:prasadPlace.value.trim(),note:prasadNote.value.trim()};const r=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.1',{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());st.textContent='✅ Saved';}catch(e){st.textContent='❌ '+e.message;}}
 
 if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadPrasad()}
 </script>
