@@ -102,7 +102,7 @@ async function login(){
 let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
-if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);
+if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
 document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
@@ -140,20 +140,26 @@ async function loadPhotos(){
 async function deletePhoto(id,path){
  if(!confirm('এই ছবিটি মুছে ফেলবেন?'))return;
  try{
-  const safePath=String(path).split('/').map(encodeURIComponent).join('/');
-  let r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+safePath,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
-  if(!r.ok){const t=await r.text(); throw Error('Storage delete failed: '+t);}
-  r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=minimal'}});
+  // প্রথমে database record delete করি—এতে website থেকে ছবিটি নিশ্চিতভাবে চলে যাবে।
+  let r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=minimal'}});
   if(!r.ok){const t=await r.text(); throw Error('Database delete failed: '+t);}
-  alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
+  // এরপর storage file-টাও delete করার চেষ্টা করি।
+  let storageOk=true, storageError='';
+  try{
+   const safePath=String(path).split('/').map(encodeURIComponent).join('/');
+   r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+safePath,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+   if(!r.ok){storageOk=false;storageError=await r.text();}
+  }catch(e){storageOk=false;storageError=e.message;}
   loadPhotos();
- }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message+'\n\nযদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
+  if(storageOk) alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
+  else alert('✅ Website থেকে ছবি মুছে গেছে।\n\n⚠️ Storage-এর পুরোনো file delete করা যায়নি, তাই পরে storage cleanup লাগতে পারে।');
+ }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message);}
 }
 const STATIC_PHOTOS=[['gallery-1','স্মৃতিপটে — ছবি ১'],['gallery-2','স্মৃতিপটে — ছবি ২'],['gallery-3','স্মৃতিপটে — ছবি ৩'],['past-1','বিগত বছরের প্রতিমা — ছবি ১'],['past-2','বিগত বছরের প্রতিমা — ছবি ২'],['past-3','বিগত বছরের প্রতিমা — ছবি ৩'],['past-4','বিগত বছরের প্রতিমা — ছবি ৪'],['past-5','বিগত বছরের প্রতিমা — ছবি ৫'],['past-6','বিগত বছরের প্রতিমা — ছবি ৬'],['past-7','বিগত বছরের প্রতিমা — ছবি ৭'],['past-8','বিগত বছরের প্রতিমা — ছবি ৮'],['past-9','বিগত বছরের প্রতিমা — ছবি ৯'],['kali-puja-1','শ্যামা পূজা — ছবি ১'],['kali-puja-2','শ্যামা পূজা — ছবি ২']];
-async function loadStaticPhotos(){const el=document.getElementById('staticPhotoList');if(!el)return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/site_settings?select=key,value&key=like.staticPhoto.*',{headers:{...h()}}),d=await r.json();if(!r.ok)throw Error(d.message||'Load failed');const state={};d.forEach(x=>state[x.key]=x.value!=='false');el.innerHTML=STATIC_PHOTOS.map(([key,label])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee1c7"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state['staticPhoto.'+key]===false?'':'checked'} style="width:auto"><span>${label}</span></label>`).join('')}catch(e){el.textContent='❌ '+e.message}}
-async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const body=[...document.querySelectorAll('.static-photo-toggle')].map(x=>({key:'staticPhoto.'+x.dataset.key,value:x.checked?'true':'false'}));const r=await fetch(SUPABASE_URL+'/rest/v1/site_settings',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
+async function loadStaticPhotos(){const el=document.getElementById('staticPhotoList');if(!el)return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();if(!r.ok)throw Error(d.message||'Load failed');const state=(d[0]&&d[0].content)||{};el.innerHTML=STATIC_PHOTOS.map(([key,label])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee1c7"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state[key]===false?'':'checked'} style="width:auto"><span>${label}</span></label>`).join('')}catch(e){el.textContent='❌ Load হয়নি: '+e.message}}
+async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
 
-function logout(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";location.reload()}
+function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}
 
 let websiteContentCache={};

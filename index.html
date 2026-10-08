@@ -663,10 +663,9 @@ loadWebsiteContent();
 
 async function loadStaticPhotoVisibility(){
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/site_settings?select=key,value&key=like.staticPhoto.*',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
-  if(!r.ok)return; const rows=await r.json(); const hidden={};
-  rows.forEach(x=>hidden[x.key]=String(x.value)==='false');
-  document.querySelectorAll('img[data-static-photo]').forEach(img=>{if(hidden['staticPhoto.'+img.dataset.staticPhoto]){const wrap=img.closest('.gallery-grid > div')||img; wrap.style.display='none';}});
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
+  if(!r.ok)return; const rows=await r.json(); const hidden=(rows[0]&&rows[0].content)||{};
+  document.querySelectorAll('img[data-static-photo]').forEach(img=>{if(hidden[img.dataset.staticPhoto]===false){const wrap=img.closest('.gallery-grid > div')||img; wrap.style.display='none';}});
  }catch(e){console.warn('Static photo visibility load failed',e)}
 }
 loadStaticPhotoVisibility();
