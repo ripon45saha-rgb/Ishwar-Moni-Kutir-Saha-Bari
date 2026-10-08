@@ -297,7 +297,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 :root{--pro-maroon:#651018;--pro-deep:#26050a;--pro-gold:#e0b14d;--pro-cream:#fff8e9}
 .nav{box-shadow:0 8px 25px rgba(35,3,9,.16)}
 .navin{min-height:64px}.brand{letter-spacing:.2px}.links a{padding:8px 0;transition:.2s}.links a:hover{transform:translateY(-1px)}
-.mobile-menu-btn{display:none;border:1px solid rgba(255,231,173,.4);background:rgba(255,255,255,.08);color:#ffe7ad;border-radius:10px;padding:7px 10px;font-size:20px}
+.mobile-menu-btn{display:block;position:fixed;right:18px;top:14px;z-index:100;border:1px solid rgba(255,231,173,.48);background:rgba(52,4,10,.92);color:#ffe7ad;border-radius:14px;padding:9px 12px;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.24);backdrop-filter:blur(10px)}.links{position:fixed;display:none !important;top:0;right:0;left:auto;transform:none;width:min(330px,86vw);height:100vh;background:rgba(42,3,9,.985);border-left:1px solid rgba(215,168,61,.38);padding:86px 18px 24px;box-shadow:-18px 0 45px rgba(0,0,0,.35);z-index:90;overflow-y:auto}.links.mobile-open{display:flex !important;flex-direction:column;gap:5px}.links a{padding:14px 16px!important;border:1px solid rgba(255,255,255,.07);border-radius:12px;text-align:left;color:#ffe9b8!important;background:rgba(255,255,255,.025)}.links a:hover{background:rgba(215,168,61,.12);transform:translateX(-3px)}.links a:last-child{border-bottom:1px solid rgba(255,255,255,.07)}
 .pro-hero{position:relative;min-height:560px;margin:0;max-width:none;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#24050a url("temple.jpg") center/cover no-repeat;color:#fff}
 .pro-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,2,7,.86),rgba(68,7,16,.38),rgba(20,2,6,.62))}
 .pro-hero-content{position:relative;z-index:2;text-align:center;max-width:820px;padding:110px 20px 90px}.pro-badge{display:inline-block;border:1px solid rgba(255,220,139,.55);background:rgba(25,2,7,.5);padding:7px 15px;border-radius:999px;color:#ffe5a3;font-size:14px;backdrop-filter:blur(6px)}
@@ -307,17 +307,21 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 .pro-quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.pro-quick-grid a{background:rgba(255,255,255,.96);border:1px solid #ecd7a5;border-radius:18px;padding:18px 12px;text-align:center;box-shadow:0 12px 30px rgba(67,20,8,.08);transition:.22s}.pro-quick-grid a:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(67,20,8,.14)}.pro-quick-grid span{display:block;font-size:29px;margin-bottom:4px}.pro-quick-grid b{display:block;color:var(--pro-maroon);font-size:15px}.pro-quick-grid small{color:#80665c}
 .section-head{margin-bottom:30px}.section-head h2{letter-spacing:-.2px}.card,.event,.gallery img,.invite img{box-shadow:0 10px 30px rgba(60,10,15,.06)}
 @media(max-width:900px){.pro-quick-grid{grid-template-columns:repeat(3,1fr)}.pro-hero{min-height:500px}}
-@media(max-width:600px){.mobile-menu-btn{display:block}.navin{position:relative}.links{position:absolute;display:none;top:62px;left:10px;right:10px;background:rgba(47,4,11,.98);border:1px solid rgba(215,168,61,.3);border-radius:16px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.28)}.links.mobile-open{display:flex;flex-direction:column;gap:0}.links a{padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.08)}.links a:last-child{border-bottom:0}.pro-hero{min-height:460px}.pro-hero-content{padding:90px 18px 70px}.pro-badge{font-size:11px}.pro-hero-actions a{width:100%;max-width:260px}.pro-quick{margin-top:-30px}.pro-quick-grid{grid-template-columns:repeat(2,1fr);gap:10px}.pro-quick-grid a{padding:14px 8px}.pro-quick-grid a:last-child{grid-column:1/-1}.pro-quick-grid b{font-size:13px}.pro-quick-grid small{font-size:10px}}
+@media(max-width:600px){.navin{position:relative}.mobile-menu-btn{right:12px;top:10px}.links{width:min(310px,88vw);padding-top:78px}.pro-hero{min-height:460px}.pro-hero-content{padding:90px 18px 70px}.pro-badge{font-size:11px}.pro-hero-actions a{width:100%;max-width:260px}.pro-quick{margin-top:-30px}.pro-quick-grid{grid-template-columns:repeat(2,1fr);gap:10px}.pro-quick-grid a{padding:14px 8px}.pro-quick-grid a:last-child{grid-column:1/-1}.pro-quick-grid b{font-size:13px}.pro-quick-grid small{font-size:10px}}
 </style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
-  <button class="mobile-menu-btn" type="button" aria-label="মেনু" onclick="document.querySelector('.links').classList.toggle('mobile-open')">☰</button>
+  <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
   <div class="links">
     <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
+<script>
+function toggleSiteMenu(btn){const m=document.querySelector('.links');if(!m)return;const open=m.classList.toggle('mobile-open');btn.setAttribute('aria-expanded',open?'true':'false');}
+document.addEventListener('click',e=>{const m=document.querySelector('.links'),b=document.querySelector('.mobile-menu-btn');if(!m||!b)return;if(!m.contains(e.target)&&!b.contains(e.target)){m.classList.remove('mobile-open');b.setAttribute('aria-expanded','false');}if(e.target.closest('.links a')){m.classList.remove('mobile-open');b.setAttribute('aria-expanded','false');}});
+</script>
 
 <header class="welcome" id="welcome">
   <div class="welcome-card visitor-card">
