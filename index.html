@@ -740,7 +740,7 @@ async function lightVirtualLamp(){
  if(localStorage.getItem(lampLitKey())==='1'){stage.classList.add('lamp-lit');note.textContent='আপনার প্রদীপ আজও জ্বলছে। 🙏';return;}
  btn.disabled=true;stage.classList.add('lamp-lit');localStorage.setItem(lampLitKey(),'1');
  const next=getLocalLampCount()+1;setLocalLampCount(next);document.getElementById('lampCount').textContent=next.toLocaleString('bn-BD');note.textContent='আপনার প্রদীপ জ্বলে উঠেছে। মঙ্গল হোক সবার। 🙏';
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.virtualLamp',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});let rows=r.ok?await r.json():[];let c=(rows[0]&&rows[0].content)||{};c.count=Number(c.count||0)+1;await fetch(SUPABASE_URL+'/rest/v1/website_content?on_conflict=section',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({section:'virtualLamp',content:c})});}catch(e){}
+ try{const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/increment_virtual_lamp',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:'{}'});if(r.ok){const out=await r.json();if(out&&out.count!=null){document.getElementById('lampCount').textContent=Number(out.count).toLocaleString('bn-BD');}}else{console.warn('Virtual lamp server count failed',await r.text());}}catch(e){console.warn('Virtual lamp RPC failed',e)}
 }
 loadLampCount();
 
