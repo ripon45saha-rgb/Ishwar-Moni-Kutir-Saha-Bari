@@ -116,11 +116,7 @@ async function deletePhoto(id,path){
   if(!r.ok){const t=await r.text(); throw Error('Database delete failed: '+t);}
   alert('✅ ছবি সফলভাবে মুছে ফেলা হয়েছে।');
   loadPhotos();
- }catch(e){alert('❌ Delete হয়নি।
-
-'+e.message+'
-
-যদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
+ }catch(e){alert('❌ Delete হয়নি।\n\n'+e.message+'\n\nযদি RLS policy error দেখায়, Supabase SQL Editor-এ Storage ও gallery_photos-এর DELETE policy দিতে হবে।');}
 }
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");accessToken="";location.reload()}
 
