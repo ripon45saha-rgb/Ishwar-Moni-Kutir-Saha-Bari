@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ঈশ্বরমনি কুঠির — Admin Panel</title>
+<title>ঈশ্বরমনি কুঠির — 🏠 Overview</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#fff8eb;color:#32100e}
 .wrap{max-width:1200px;margin:auto;padding:20px}.card{background:white;border:1px solid #ead7b0;border-radius:18px;padding:20px;box-shadow:0 8px 30px rgba(70,25,10,.08)}
@@ -20,6 +20,18 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 
 .editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.committee-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px;margin:10px 0;padding:10px;background:#fffdf7;border:1px solid #ead7b0;border-radius:12px}.committee-editor-row input{width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;font:inherit}.committee-editor-row button{white-space:nowrap}@media(max-width:700px){.committee-editor-row{grid-template-columns:1fr}.committee-editor-row button{width:100%}}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
 .admin-navbar{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:10px;margin:0 0 18px;background:rgba(255,248,233,.96);backdrop-filter:blur(10px);border:1px solid #ead7b0;border-radius:16px;box-shadow:0 8px 22px rgba(70,25,10,.08)}.admin-navbar a{white-space:nowrap;text-decoration:none;background:#fff;border:1px solid #ead7b0;color:#6f1118;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:800}.admin-navbar a:hover,.admin-navbar a:focus{background:#6f1118;color:white}.admin-section-active{outline:2px solid #d6a84f;outline-offset:2px;scroll-margin-top:90px}@media(max-width:700px){.admin-navbar{margin:0 0 12px;padding:8px}.admin-navbar a{padding:9px 11px}}
+
+/* Separate admin pages: show only the selected workspace after login */
+body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
+body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
+body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
+body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
+body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
+body[data-admin-view="gallery"] #visitorSection{display:none!important}
+body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
+body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
+.admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
+.page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
 </style>
 
 <style id="admin-professional-redesign">
@@ -47,7 +59,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 </style>
 
 </head>
-<body>
+<body data-admin-view="overview">
 <div class="wrap">
 <section id="loginBox" class="login-shell">
   <div class="login-art">
@@ -77,12 +89,12 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 </section>
 <section id="dashboard" style="display:none">
 <nav class="admin-navbar" aria-label="Admin sections">
-<a href="#overview" onclick="showAdminSection('overview')">🏠 Overview</a>
-<a href="#clickAnalytics" onclick="showAdminSection('clickAnalytics')">🔱 চণ্ডীপাঠ ক্লিক</a>
-<a href="#editorSection" onclick="showAdminSection('editorSection')">🛠️ Website Editor</a>
-<a href="#committeeEditorCard" onclick="showAdminSection('committeeEditorCard')">🙏 পূজা কমিটি</a>
-<a href="#photosSection" onclick="showAdminSection('photosSection')">📸 ছবি</a>
-<a href="#visitorSection" onclick="showAdminSection('visitorSection')">👥 দর্শনার্থী</a>
+<a href="admin.html" aria-current="page">🏠 Overview</a>
+<a href="chandipath-clicks.html">🔱 চণ্ডীপাঠ ক্লিক</a>
+<a href="website-editor.html">🛠️ Website Editor</a>
+<a href="committee.html">🙏 পূজা কমিটি</a>
+<a href="gallery.html">📸 Gallery</a>
+<a href="visitors.html">👥 দর্শনার্থী</a>
 </nav>
 <div id="overview">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
