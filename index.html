@@ -571,7 +571,7 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
     </div>
     <div class="audio-card" style="text-align:center;padding:28px 20px;">
       <p style="margin:0 0 20px;color:#6b4b50;">মহালয়ার পবিত্র চণ্ডীপাঠ শুনতে আলাদা শ্রবণ পেজে প্রবেশ করুন।</p>
-      <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
+      <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন" onclick="trackChandipathClick(event)">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
     </div>
   </div>
 </section>
@@ -920,6 +920,19 @@ async function copyChandiLink(){
   const status=document.getElementById('chandiCopyStatus');
   try{await navigator.clipboard.writeText(url); if(status) status.textContent='শ্রবণ পেজের লিংক কপি হয়েছে। এখন যেকাউকে পাঠাতে পারো।';}
   catch(e){if(status) status.textContent='এই লিংকটি কপি করে শেয়ার করো: '+url; }
+}
+</script>
+
+<script id="chandipath-click-tracker">
+// Tracks each click on the Mahalaya listening link. Requires the SQL setup file.
+async function trackChandipathClick(event){
+  try{
+    const payload={source:'homepage_mahalaya_button', clicked_at:new Date().toISOString()};
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),1800);
+    await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload),keepalive:true,signal:controller.signal});
+    clearTimeout(timeout);
+  }catch(err){console.debug('Chandipath click count unavailable until database setup is complete.');}
 }
 </script>
 </body>

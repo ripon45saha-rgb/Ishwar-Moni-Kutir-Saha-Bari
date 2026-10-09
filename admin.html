@@ -33,6 +33,9 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 <style id="professional-admin-v2">
 #dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
+<style id="admin-layout-polish">
+#dashboard{max-width:1280px;margin:0 auto}.wrap{max-width:1320px;margin:0 auto}.stats{margin:18px 0 24px}.card,.editor-card{margin-bottom:22px!important}.card>.top,.editor-card>.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.card h2,.editor-card h2{line-height:1.35}.table-wrap{overflow-x:auto;border-radius:14px}table{min-width:760px}.small{line-height:1.65}.editor-grid{gap:22px}.save-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px}.stats .stat{border:1px solid #f0dfbe}.admin-section-label{margin-top:30px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -48,6 +51,10 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 <div><button class="btn secondary" onclick="loadVisitors()">↻ Refresh</button> <button class="btn" onclick="logout()">Logout</button></div></div>
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
+</div>
+<div class="card" id="chandipathStatsCard" style="margin:0 0 20px;border:1px solid #ead7b0;background:linear-gradient(120deg,#fff9e9,#fff)!important">
+ <div class="top"><div><h2 style="margin:0">🔱 মহালয়ার চণ্ডীপাঠ — ক্লিক পরিসংখ্যান</h2><div class="small">হোমপেজের “সরাসরি চণ্ডীপাঠ শুনুন” বাটনে মোট কতবার ক্লিক হয়েছে</div></div><button class="btn secondary" onclick="loadChandipathStats()">↻ আপডেট</button></div>
+ <div class="stats" style="margin:14px 0 0"><div class="stat"><span>মোট ক্লিক</span><b id="chandiTotalClicks">—</b></div><div class="stat"><span>আজকের ক্লিক</span><b id="chandiTodayClicks">—</b></div><div class="stat"><span>গত ৭ দিনের ক্লিক</span><b id="chandiWeekClicks">—</b></div></div><div id="chandiStatsStatus" class="small" style="margin-top:10px">পরিসংখ্যান লোড হচ্ছে…</div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -123,12 +130,20 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadChandipathStats();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
 if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
+async function loadChandipathStats(){
+ const status=document.getElementById('chandiStatsStatus'); if(!status)return; status.textContent='ক্লিকের তথ্য লোড হচ্ছে…';
+ try{const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=clicked_at&order=clicked_at.desc',{headers:h()}); const d=await r.json(); if(!r.ok)throw Error(d.message||'ডেটাবেস সেটআপ প্রয়োজন'); const rows=Array.isArray(d)?d:[]; const now=new Date(),today=now.toLocaleDateString('en-CA'),weekStart=new Date(now); weekStart.setDate(now.getDate()-6); weekStart.setHours(0,0,0,0);
+ document.getElementById('chandiTotalClicks').textContent=rows.length.toLocaleString('bn-BD');
+ document.getElementById('chandiTodayClicks').textContent=rows.filter(x=>x.clicked_at&&new Date(x.clicked_at).toLocaleDateString('en-CA')===today).length.toLocaleString('bn-BD');
+ document.getElementById('chandiWeekClicks').textContent=rows.filter(x=>x.clicked_at&&new Date(x.clicked_at)>=weekStart).length.toLocaleString('bn-BD'); status.textContent='সর্বশেষ আপডেট: '+now.toLocaleString('bn-BD');
+ }catch(e){['chandiTotalClicks','chandiTodayClicks','chandiWeekClicks'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—'}); status.textContent='ক্লিক গণনা চালু করতে chandipath_clicks SQL সেটআপ চালাতে হবে।';}
+}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
 function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -208,7 +223,7 @@ async function saveStaticPhotos(){const st=document.getElementById('staticPhotoS
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadChandipathStats();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}
 
 let websiteContentCache={};
 const defaultNav=[
