@@ -34,15 +34,46 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 <style id="professional-admin-v2">
 #dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
+
+<style id="professional-login-entry">
+body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:radial-gradient(ellipse at 12% 10%,rgba(214,168,79,.18),transparent 35%),linear-gradient(135deg,#1e0609 0%,#4c0d13 48%,#26070b 100%);}
+.login-shell{width:min(100%,980px);min-height:590px;margin:5vh auto;display:grid;grid-template-columns: .92fr 1.08fr;overflow:hidden;border-radius:28px;background:#fffdf8;border:1px solid rgba(220,180,95,.6);box-shadow:0 30px 90px rgba(0,0,0,.32);}
+.login-art{position:relative;overflow:hidden;padding:54px 42px;color:#fff5dc;background:radial-gradient(circle at 50% 42%,rgba(214,168,79,.18),transparent 30%),linear-gradient(155deg,#7a171e,#35080d 75%);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;isolation:isolate}
+.login-art:before,.login-art:after{content:"";position:absolute;border:1px solid rgba(229,190,105,.25);border-radius:50%;width:390px;height:390px;z-index:-1;left:-160px;bottom:-210px}.login-art:after{width:280px;height:280px;left:auto;right:-150px;top:-120px;bottom:auto}
+.login-brand-mark{width:70px;height:70px;display:grid;place-items:center;border:1px solid rgba(232,195,112,.8);border-radius:50%;font-size:39px;color:#f3d48b;margin-bottom:30px;box-shadow:0 0 0 8px rgba(214,168,79,.07),0 0 34px rgba(214,168,79,.12)}
+.login-kicker,.login-art-note,.login-eyebrow{letter-spacing:2.4px;font-size:10px;font-weight:800}.login-art h1{font-size:clamp(28px,3vw,39px);line-height:1.35;color:#ffe3a0;margin:15px 0 12px}.login-art-lead{font-size:15px;line-height:1.9;color:#f5e8d6;max-width:300px;margin:0}.login-art-rule{display:flex;align-items:center;gap:12px;width:100%;max-width:230px;margin:28px 0 22px;color:#e7bf6b}.login-art-rule:before,.login-art-rule:after{content:"";height:1px;background:rgba(231,191,107,.5);flex:1}.login-art-note{color:#f2d18a}.login-art-foot{font-size:12px;color:#e8d1c0;margin-top:8px}.login-art-mandala{position:absolute;right:18px;bottom:2px;font-size:155px;color:rgba(235,198,117,.07);line-height:1;pointer-events:none}
+.login-form-side{padding:52px clamp(26px,5vw,60px) 28px;display:flex;flex-direction:column;justify-content:center}.login-form-head{margin-bottom:25px}.login-lock{display:grid;place-items:center;width:45px;height:45px;border-radius:14px;background:#fff2d5;color:#77161d;font-size:24px;margin-bottom:18px}.login-eyebrow{color:#a67b2b}.login-form-head h2{font-size:27px;color:#451015;margin:8px 0}.login-form-head p{color:#82716b;font-size:13px;margin:0;line-height:1.7}.login-form-side label{font-size:13px;color:#4a2825;margin:18px 0 8px}.login-input-wrap{display:flex;align-items:center;gap:10px;border:1px solid #e7d9c1;border-radius:13px;background:#fff;padding:0 13px;color:#9a7a56;transition:.2s}.login-input-wrap:focus-within{border-color:#b98b37;box-shadow:0 0 0 4px rgba(214,168,79,.14)}.login-input-wrap input{border:0!important;box-shadow:none!important;outline:none!important;background:transparent;padding:15px 0;min-width:0;color:#32100e;font:inherit}.login-input-wrap input::placeholder{color:#b3a49b}.password-toggle{border:0;background:#fff4df;color:#7b171d;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}.login-submit{width:100%;margin-top:24px;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-radius:13px;font-size:14px;letter-spacing:.1px}.login-submit:disabled{opacity:.65;cursor:wait;transform:none}.login-security-note{display:flex;gap:9px;align-items:flex-start;margin-top:25px;padding:13px;border:1px solid #f0e3ca;border-radius:12px;background:#fffaf0;color:#8b766a;font-size:11px;line-height:1.7}.login-security-note span:first-child{color:#b58938;font-size:16px}.login-copyright{text-align:center;margin-top:25px;color:#b1a39a;font-size:10px;letter-spacing:1.3px}.login-mobile-brand{display:none}.login-shell .msg{font-size:13px;line-height:1.7}.login-shell .msg.err{border:1px solid #f1b9b9}
+@media(max-width:720px){body:has(#loginBox:not([style*="display: none"])){background:linear-gradient(160deg,#4b0b11,#210609)}.login-shell{grid-template-columns:1fr;min-height:0;margin:14px auto;border-radius:22px;width:100%}.login-art{display:none}.login-form-side{padding:27px 23px 23px}.login-mobile-brand{display:flex;align-items:center;gap:12px;margin-bottom:31px}.login-mobile-brand>span{display:grid;place-items:center;width:47px;height:47px;border-radius:15px;background:#70151b;color:#f6d78d;font-size:25px}.login-mobile-brand b{display:block;color:#4a1115;font-size:16px}.login-mobile-brand small{display:block;color:#a07c41;font-size:9px;letter-spacing:1.7px;margin-top:3px}.login-form-head{margin-bottom:20px}.login-lock{display:none}.login-form-head h2{font-size:24px}.login-copyright{margin-top:20px}}
+</style>
+
 </head>
 <body>
 <div class="wrap">
-<section id="loginBox" class="card login">
-<h1>🪔 ঈশ্বরমনি কুঠির</h1><h2>Admin Panel</h2>
-<p class="small">শুধু মন্দিরের প্রশাসকের জন্য।</p>
-<label>Admin Email</label><input id="email" type="email" autocomplete="username" placeholder="আপনার admin email">
-<label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="আপনার password">
-<br><br><button class="btn" onclick="login()">🔐 Login</button><div id="loginMsg" class="msg err"></div>
+<section id="loginBox" class="login-shell">
+  <div class="login-art">
+    <div class="login-brand-mark" aria-hidden="true">ॐ</div>
+    <div class="login-kicker">ISHWARMONI KUTIR · OFFICIAL</div>
+    <h1>ঈশ্বরমনি কুঠির</h1>
+    <p class="login-art-lead">ঐতিহ্য, ভক্তি ও পরিবারের পূজার স্মৃতি—এক জায়গায়।</p>
+    <div class="login-art-rule"><span>✦</span></div>
+    <div class="login-art-note">ADMINISTRATION PORTAL</div>
+    <p class="login-art-foot">শুধুমাত্র অনুমোদিত প্রশাসকের জন্য</p>
+    <div class="login-art-mandala" aria-hidden="true">✺</div>
+  </div>
+  <div class="login-form-side">
+    <div class="login-mobile-brand"><span>ॐ</span><div><b>ঈশ্বরমনি কুঠির</b><small>OFFICIAL ADMIN</small></div></div>
+    <div class="login-form-head"><span class="login-lock">♙</span><div class="login-eyebrow">SECURE ACCESS</div><h2>অ্যাডমিন লগইন</h2><p>আপনার অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p></div>
+    <form id="adminLoginForm" onsubmit="event.preventDefault();login()">
+      <label for="email">ইমেইল ঠিকানা</label>
+      <div class="login-input-wrap"><span aria-hidden="true">✉</span><input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required></div>
+      <label for="password">পাসওয়ার্ড</label>
+      <div class="login-input-wrap"><span aria-hidden="true">●</span><input id="password" type="password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড" required><button type="button" class="password-toggle" id="togglePassword" aria-label="পাসওয়ার্ড দেখুন" onclick="toggleAdminPassword()">দেখুন</button></div>
+      <button class="btn login-submit" id="loginButton" type="submit"><span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span></button>
+      <div id="loginMsg" class="msg err" role="alert" aria-live="polite"></div>
+    </form>
+    <div class="login-security-note"><span>♢</span><span>আপনার লগইন তথ্য গোপন রাখুন। শেয়ার করা ডিভাইসে কাজ শেষে Logout করুন।</span></div>
+    <div class="login-copyright">© ঈশ্বরমনি কুঠির · ADMIN PANEL</div>
+  </div>
 </section>
 <section id="dashboard" style="display:none">
 <nav class="admin-navbar" aria-label="Admin sections">
@@ -136,12 +167,14 @@ const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co', SUPABASE_KEY='sb_
 let accessToken=sessionStorage.getItem("ishwarmani_admin_token")||"", visitors=[];
 function h(){return {"apikey":SUPABASE_KEY,"Authorization":"Bearer "+accessToken}}
 function showMsg(t){let e=document.getElementById("loginMsg");e.textContent=t;e.style.display="block"}
+function toggleAdminPassword(){const p=document.getElementById("password"),b=document.getElementById("togglePassword");if(!p||!b)return;const visible=p.type==="password";p.type=visible?"text":"password";b.textContent=visible?"লুকান":"দেখুন";b.setAttribute("aria-label",visible?"পাসওয়ার্ড লুকান":"পাসওয়ার্ড দেখুন")}
 async function login(){
 let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
-if(!email||!password)return showMsg("Email ও password দিন।");
+if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার্ড দিন।");
+const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
