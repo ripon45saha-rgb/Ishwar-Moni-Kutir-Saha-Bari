@@ -924,15 +924,29 @@ async function copyChandiLink(){
 </script>
 
 <script id="chandipath-click-tracker">
-// Tracks each click on the Mahalaya listening link. Requires the SQL setup file.
+// Record the click before navigating away, so the browser does not cancel the request.
+let chandipathClickInProgress = false;
 async function trackChandipathClick(event){
-  try{
-    const payload={source:'homepage_mahalaya_button', clicked_at:new Date().toISOString()};
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),1800);
-    await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload),keepalive:true,signal:controller.signal});
-    clearTimeout(timeout);
-  }catch(err){console.debug('Chandipath click count unavailable until database setup is complete.');}
+  const link = event.currentTarget;
+  if (!link || chandipathClickInProgress) { event.preventDefault(); return; }
+  event.preventDefault();
+  chandipathClickInProgress = true;
+  const destination = link.href;
+  const navigationFallback = setTimeout(() => { window.location.href = destination; }, 2500);
+  try {
+    const response = await fetch(SUPABASE_URL + '/rest/v1/chandipath_clicks', {
+      method: 'POST',
+      headers: {'apikey': SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
+      body: JSON.stringify({source: 'homepage_mahalaya_button'}),
+      keepalive: true
+    });
+    if (!response.ok) console.error('Chandipath click tracking failed:', response.status, await response.text());
+  } catch (err) {
+    console.error('Chandipath click tracking failed:', err);
+  } finally {
+    clearTimeout(navigationFallback);
+    window.location.href = destination;
+  }
 }
 </script>
 </body>
