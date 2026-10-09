@@ -761,7 +761,7 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links){let items=nav.items.map(x=>({...x,href:x.href==='puja-committee.html'?'puja-committee.html':(x.href==='committee.html'?'puja-committee.html':x.href)}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
+   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
    links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};

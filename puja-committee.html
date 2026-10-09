@@ -7,7 +7,7 @@
 :root{--maroon:#681522;--deep:#3c0c15;--gold:#d6b56c;--cream:#fff9ed;--ink:#32151a}*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8e9,#fffdf8 55%,#f8eee0);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}header{background:radial-gradient(circle at 80% 20%,#8b2635,transparent 38%),linear-gradient(135deg,#3c0c15,#681522);color:#fff8e9;padding:28px 18px 42px;text-align:center;border-bottom:4px solid var(--gold)}.mark{font-size:38px}h1{font-size:clamp(25px,5vw,38px);margin:8px 0;color:#ffe3a0}.subtitle{opacity:.9}.wrap{max-width:1000px;margin:-20px auto 40px;padding:0 16px}.toolbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}.btn{display:inline-block;border:1px solid #e5d3ad;border-radius:999px;background:#fffaf0;color:var(--maroon);padding:11px 17px;text-decoration:none;font-weight:750;box-shadow:0 5px 16px #42101812}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.person{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #ead8b5;border-radius:18px;padding:17px;box-shadow:0 8px 24px #4210180a}.num{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:50%;background:var(--maroon);color:#ffdf91;font-weight:800}.role{font-size:13px;color:#97713a;font-weight:750;margin-bottom:4px}.name{font-size:17px;font-weight:800;overflow-wrap:anywhere}.foot{text-align:center;color:#876e62;font-size:13px;padding:24px}@media(max-width:600px){.grid{grid-template-columns:1fr}.person{padding:14px}header{padding-top:22px}}
 </style></head><body>
 <header><div class="mark">🪔 🔱 🪔</div><h1>ঈশ্বরমনি কুঠির</h1><div class="subtitle">দুর্গাপূজা উদযাপন কমিটি</div></header>
-<main class="wrap"><div class="toolbar"><a class="btn" href="index.html">← মূল ওয়েবসাইট</a><a class="btn" href="index.html#utsav">দুর্গোৎসব ২০২৬</a></div><section class="grid" aria-label="পূজা উদযাপন কমিটির সদস্য">
+<main class="wrap"><div class="toolbar"><a class="btn" href="index.html">← মূল ওয়েবসাইট</a><a class="btn" href="index.html#utsav">দুর্গোৎসব ২০২৬</a></div><section class="grid" id="committeeGrid" aria-label="পূজা উদযাপন কমিটির সদস্য">
 <article class="person"><span class="num">১</span><div><div class="role">সভাপতি</div><div class="name">শ্রী বিমল সাহা</div></div></article>
 <article class="person"><span class="num">২</span><div><div class="role">সহ সভাপতি</div><div class="name">শ্রী রবিন্দ্রনাথ সাহা</div></div></article>
 <article class="person"><span class="num">৩</span><div><div class="role">সহ সভাপতি</div><div class="name">শ্রী সুধন সাহা</div></div></article>
@@ -22,4 +22,27 @@
 <article class="person"><span class="num">১২</span><div><div class="role">পূজা ও ধর্ম বিষয়ক সম্পাদিকা</div><div class="name">আন্না রানি সাহা</div></div></article>
 <article class="person"><span class="num">১৩</span><div><div class="role">সদস্য</div><div class="name">পপি রানি সাহা</div></div></article>
 <article class="person"><span class="num">১৪</span><div><div class="role">সদস্য</div><div class="name">লিপি সাহা</div></div></article>
-</section><div class="foot">ঈশ্বরমনি কুঠির · খড়মা, দেওয়ানগঞ্জ, জামালপুর</div></main></body></html>
+</section><p id="committeeStatus" class="foot" aria-live="polite">কমিটির সর্বশেষ তথ্য লোড হচ্ছে...</p><div class="foot">ঈশ্বরমনি কুঠির · খড়মা, দেওয়ানগঞ্জ, জামালপুর</div></main>
+<script>
+// Keep this public key limited to browser-safe Supabase access; RLS must allow public read of the committee section.
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+const fallbackMembers=[
+{role:'সভাপতি',name:'শ্রী বিমল সাহা'},
+{role:'সহ সভাপতি',name:'শ্রী রবিন্দ্রনাথ সাহা'},
+{role:'সহ সভাপতি',name:'শ্রী সুধন সাহা'},
+{role:'সাধারণ সম্পাদক',name:'শ্রী মতিলাল সাহা'},
+{role:'যুগ্ম সম্পাদক',name:'শ্রী রিপন সাহা'},
+{role:'সহ সাধারণ সম্পাদক',name:'শ্রী সোভন সাহা'},
+{role:'অর্থ সম্পাদক',name:'শ্রী লিটন সাহা'},
+{role:'সহ অর্থ সম্পাদক',name:'শ্রী বিশ্বনাথ সাহা'},
+{role:'মন্দির সংস্কার ও উন্নয়ন বিষয়ক সম্পাদক',name:'শ্রী রনজিৎ কুমার সাহা'},
+{role:'মহিলা বিষয়ক সম্পাদিকা',name:'মুক্তি রানি সাহা'},
+{role:'সহ মহিলা বিষয়ক সম্পাদিকা',name:'লিপি রানি সাহা'},
+{role:'পূজা ও ধর্ম বিষয়ক সম্পাদিকা',name:'আন্না রানি সাহা'},
+{role:'সদস্য',name:'পপি রানি সাহা'},
+{role:'সদস্য',name:'লিপি সাহা'}];
+function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderCommittee(members){const grid=document.getElementById('committeeGrid');grid.innerHTML=members.filter(m=>m&&String(m.role||'').trim()&&String(m.name||'').trim()).map((m,i)=>`<article class="person"><span class="num">${i+1}</span><div><div class="role">${escapeHTML(m.role)}</div><div class="name">${escapeHTML(m.name)}</div></div></article>`).join('');}
+(async function loadCommittee(){const status=document.getElementById('committeeStatus');try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.committee',{headers:{apikey:SUPABASE_KEY}});const d=await r.json();if(!r.ok)throw new Error(d.message||'Supabase request failed');const members=d?.[0]?.content?.members;if(Array.isArray(members)&&members.length){renderCommittee(members);status.textContent='অ্যাডমিন প্যানেল থেকে প্রকাশিত সর্বশেষ কমিটি দেখানো হচ্ছে।';}else{renderCommittee(fallbackMembers);status.textContent='ডিফল্ট কমিটির তথ্য দেখানো হচ্ছে। অ্যাডমিন প্যানেল থেকে Save & Publish করলে এখানে আপডেট হবে।';}}catch(e){renderCommittee(fallbackMembers);status.textContent='সর্বশেষ তথ্য লোড হয়নি; সংরক্ষিত ডিফল্ট তালিকা দেখানো হচ্ছে।';console.error('Committee load error:',e);}})();
+</script></body></html>
