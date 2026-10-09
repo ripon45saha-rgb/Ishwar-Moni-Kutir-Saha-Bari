@@ -352,7 +352,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#committee" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 <script>
@@ -475,13 +475,6 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
 </section>
 
 
-<section id="committee" class="committee-section">
- <div class="container">
-  <div class="section-head"><div class="eyebrow" data-i18n="committeeEyebrow">🙏 আমাদের পরিচালনা</div><h2 id="committeeHeading" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</h2><p data-i18n="committeeIntro">পূজার আয়োজন ও পরিচালনায় যুক্ত কমিটির সদস্যবৃন্দ</p></div>
-  <div id="committeeMembers" class="committee-grid" aria-live="polite"></div>
- </div>
-</section>
-
 <section class="invite">
  <div class="container">
   <div class="section-head"><div class="eyebrow">📜 নিমন্ত্রণপত্র</div><h2>২০২৬ সালের নিমন্ত্রণ পত্র</h2></div>
@@ -576,21 +569,9 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
       <span class="eyebrow">শ্রবণ</span>
       <h2>🔱 মহালয়ার চণ্ডীপাঠ</h2>
     </div>
-    <div class="audio-card">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-        <div style="width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#f2b632;color:#fff;font-size:22px;flex:0 0 48px;">🔱</div>
-        <div>
-          <h3 style="margin:0;">মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ</h3>
-        </div>
-      </div>
-      <div style="position:relative;width:100%;aspect-ratio:16/9;height:auto;border-radius:16px;overflow:hidden;background:#180207;box-shadow:0 10px 30px rgba(0,0,0,.16);">
-        <iframe src="https://www.youtube.com/embed/AnrGifI3WHk?rel=0&controls=1&modestbranding=1" title="মহালয়ার চণ্ডীপাঠ — মহিষাসুরমর্দ্দিনী" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px;">
-        <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
-        <button type="button" class="btn" style="margin-top:0;border:0;cursor:pointer;font:inherit;" onclick="copyChandiLink()" data-i18n="🔗 শ্রবণ পেজের লিংক কপি করুন">🔗 শ্রবণ পেজের লিংক কপি করুন</button>
-      </div>
-      <p id="chandiCopyStatus" style="text-align:center;margin-top:10px;font-size:14px;color:#6b4b50;" aria-live="polite"></p>
+    <div class="audio-card" style="text-align:center;padding:28px 20px;">
+      <p style="margin:0 0 20px;color:#6b4b50;">মহালয়ার পবিত্র চণ্ডীপাঠ শুনতে আলাদা শ্রবণ পেজে প্রবেশ করুন।</p>
+      <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
     </div>
   </div>
 </section>
@@ -780,7 +761,7 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links){let items=nav.items.slice();if(!items.some(x=>x.href==='#committee')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'#committee'});}
+   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'committee.html'});}
    links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};
@@ -796,7 +777,6 @@ async function loadWebsiteContent(){
    const tl=document.getElementById('contentTimeline');
    if(tl) tl.innerHTML=t.events.map(ev=>`<div class="event"><div class="date">${String(ev.date||'')}</div><div><b>${String(ev.title||'')}</b><br>${String(ev.text||'')}</div></div>`).join('');
   }
-  renderCommitteeMembers(data.committee&&Array.isArray(data.committee.members)?data.committee.members:DEFAULT_COMMITTEE_MEMBERS);
  }catch(e){console.warn('Website content load failed',e)}
 }
 
@@ -825,7 +805,7 @@ async function loadPrasadPublic(){
  }catch(e){console.warn('Prasad load failed',e)}
 }
 loadPrasadPublic();
-renderCommitteeMembers(DEFAULT_COMMITTEE_MEMBERS);
+
 loadWebsiteContent();
 
 async function loadStaticPhotoVisibility(){
