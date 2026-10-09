@@ -116,6 +116,11 @@ body:not(.entered){overflow:hidden}
 .language-toggle{position:fixed;top:12px;right:66px;z-index:101;display:flex;gap:2px;align-items:center;padding:4px;border:1px solid rgba(255,231,173,.55);border-radius:999px;background:rgba(255,248,232,.96);box-shadow:0 5px 18px rgba(0,0,0,.18);font-family:Arial,sans-serif}
 .language-toggle button{border:0;background:transparent;color:#651018;font-size:12px;font-weight:800;padding:7px 10px;border-radius:999px;cursor:pointer}
 .language-toggle button.active{background:#7b1020;color:#fff}
+/* Show the language switch directly on the visitor-information entry screen. */
+.welcome-language-toggle{position:absolute;top:12px;right:12px;z-index:5}
+body:not(.entered) .nav .language-toggle{display:none}
+body.entered .welcome-language-toggle{display:none}
+@media(max-width:600px){.welcome-language-toggle{top:10px;right:10px}.welcome-card{padding-top:54px}}
 .puja-history{background:#faf5ee;color:#35151a}
 .puja-history .history-wrap{max-width:1120px;margin:auto}
 .puja-history .history-eyebrow{color:#8b2635;font-weight:800;letter-spacing:.5px}
@@ -345,6 +350,10 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
 
 <header class="welcome" id="welcome">
   <div class="welcome-card visitor-card">
+    <div class="language-toggle welcome-language-toggle" role="group" aria-label="Choose language">
+      <button type="button" data-language="bn" class="active" aria-pressed="true">বাংলা</button>
+      <button type="button" data-language="en" aria-pressed="false">EN</button>
+    </div>
     <div class="welcome-kicker">সবার জন্য উন্মুক্ত</div>
     <h1>ঈশ্বরমনি কুঠির</h1>
     <p class="welcome-subtitle">সাহা বাড়ি</p>
@@ -860,6 +869,7 @@ loadUploadedGallery();
    if(el.children.length===0){const raw=(el.textContent||'').trim();if(!raw)return;if(!el.dataset.originalText)el.dataset.originalText=raw;const original=el.dataset.originalText;el.textContent=current==='en'?(translations[original]||original):original;}
   });
   document.querySelectorAll('input[placeholder],textarea[placeholder],select[aria-label]').forEach(el=>{const key=el.getAttribute('placeholder')||el.getAttribute('aria-label');if(!el.dataset.originalPlaceholder)el.dataset.originalPlaceholder=key;if(current==='en')el.setAttribute(el.hasAttribute('placeholder')?'placeholder':'aria-label',attrTranslations[el.dataset.originalPlaceholder]||el.dataset.originalPlaceholder);else el.setAttribute(el.hasAttribute('placeholder')?'placeholder':'aria-label',el.dataset.originalPlaceholder)});
+  document.querySelectorAll('.visitor-form select option').forEach(opt=>{if(!opt.dataset.originalText)opt.dataset.originalText=opt.textContent.trim();const original=opt.dataset.originalText;opt.textContent=current==='en'?(translations[original]||original):original;});
   document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(current==='en'&&historyEnglish[key])el.innerHTML=historyEnglish[key];else if(current==='bn'&&historyBangla[key])el.innerHTML=historyBangla[key];});
  }
  document.querySelectorAll('[data-language]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.language)));
