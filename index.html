@@ -937,7 +937,7 @@ async function trackChandipathClick(event){
     const response = await fetch(SUPABASE_URL + '/rest/v1/chandipath_clicks', {
       method: 'POST',
       headers: {'apikey': SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
-      body: JSON.stringify({source: 'homepage_mahalaya_button'}),
+      body: JSON.stringify((() => { let v={}; try { v=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}'); } catch(e) {} return {source:'homepage_mahalaya_button', visitor_name:v.name||'অজানা/তথ্য দেননি', district:v.district||null, upazila:v.upazila||null}; })()),
       keepalive: true
     });
     if (!response.ok) console.error('Chandipath click tracking failed:', response.status, await response.text());

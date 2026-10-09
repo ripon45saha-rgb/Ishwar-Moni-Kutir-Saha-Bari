@@ -19,6 +19,7 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 .empty{text-align:center;padding:35px;color:#765e55}@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr}.login{margin:4vh auto}}
 
 .editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.committee-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px;margin:10px 0;padding:10px;background:#fffdf7;border:1px solid #ead7b0;border-radius:12px}.committee-editor-row input{width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;font:inherit}.committee-editor-row button{white-space:nowrap}@media(max-width:700px){.committee-editor-row{grid-template-columns:1fr}.committee-editor-row button{width:100%}}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
+.admin-navbar{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:10px;margin:0 0 18px;background:rgba(255,248,233,.96);backdrop-filter:blur(10px);border:1px solid #ead7b0;border-radius:16px;box-shadow:0 8px 22px rgba(70,25,10,.08)}.admin-navbar a{white-space:nowrap;text-decoration:none;background:#fff;border:1px solid #ead7b0;color:#6f1118;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:800}.admin-navbar a:hover,.admin-navbar a:focus{background:#6f1118;color:white}.admin-section-active{outline:2px solid #d6a84f;outline-offset:2px;scroll-margin-top:90px}@media(max-width:700px){.admin-navbar{margin:0 0 12px;padding:8px}.admin-navbar a{padding:9px 11px}}
 </style>
 
 <style id="admin-professional-redesign">
@@ -33,9 +34,6 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 <style id="professional-admin-v2">
 #dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
-<style id="admin-layout-polish">
-#dashboard{max-width:1280px;margin:0 auto}.wrap{max-width:1320px;margin:0 auto}.stats{margin:18px 0 24px}.card,.editor-card{margin-bottom:22px!important}.card>.top,.editor-card>.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.card h2,.editor-card h2{line-height:1.35}.table-wrap{overflow-x:auto;border-radius:14px}table{min-width:760px}.small{line-height:1.65}.editor-grid{gap:22px}.save-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px}.stats .stat{border:1px solid #f0dfbe}.admin-section-label{margin-top:30px}
-</style>
 </head>
 <body>
 <div class="wrap">
@@ -47,14 +45,27 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 <br><br><button class="btn" onclick="login()">🔐 Login</button><div id="loginMsg" class="msg err"></div>
 </section>
 <section id="dashboard" style="display:none">
+<nav class="admin-navbar" aria-label="Admin sections">
+<a href="#overview" onclick="showAdminSection('overview')">🏠 Overview</a>
+<a href="#clickAnalytics" onclick="showAdminSection('clickAnalytics')">🔱 চণ্ডীপাঠ ক্লিক</a>
+<a href="#editorSection" onclick="showAdminSection('editorSection')">🛠️ Website Editor</a>
+<a href="#committeeEditorCard" onclick="showAdminSection('committeeEditorCard')">🙏 পূজা কমিটি</a>
+<a href="#photosSection" onclick="showAdminSection('photosSection')">📸 ছবি</a>
+<a href="#visitorSection" onclick="showAdminSection('visitorSection')">👥 দর্শনার্থী</a>
+</nav>
+<div id="overview">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
 <div><button class="btn secondary" onclick="loadVisitors()">↻ Refresh</button> <button class="btn" onclick="logout()">Logout</button></div></div>
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
-<div class="card" id="chandipathStatsCard" style="margin:0 0 20px;border:1px solid #ead7b0;background:linear-gradient(120deg,#fff9e9,#fff)!important">
- <div class="top"><div><h2 style="margin:0">🔱 মহালয়ার চণ্ডীপাঠ — ক্লিক পরিসংখ্যান</h2><div class="small">হোমপেজের “সরাসরি চণ্ডীপাঠ শুনুন” বাটনে মোট কতবার ক্লিক হয়েছে</div></div><button class="btn secondary" onclick="loadChandipathStats()">↻ আপডেট</button></div>
- <div class="stats" style="margin:14px 0 0"><div class="stat"><span>মোট ক্লিক</span><b id="chandiTotalClicks">—</b></div><div class="stat"><span>আজকের ক্লিক</span><b id="chandiTodayClicks">—</b></div><div class="stat"><span>গত ৭ দিনের ক্লিক</span><b id="chandiWeekClicks">—</b></div></div><div id="chandiStatsStatus" class="small" style="margin-top:10px">পরিসংখ্যান লোড হচ্ছে…</div>
+</div>
+
+<div class="card" id="clickAnalytics" style="margin-bottom:18px">
+<div class="top"><div><h2>🔱 মহালয়ার চণ্ডীপাঠ ক্লিক রিপোর্ট</h2><div class="small">কে ক্লিক করেছে—দর্শনার্থী ফর্মে দেওয়া নাম থাকলে দেখাবে; নাম না থাকলে অজানা দেখাবে।</div></div><button class="btn secondary" onclick="loadChandipathClicks()">↻ রিপোর্ট Refresh</button></div>
+<div class="stats"><div class="stat">মোট ক্লিক<b id="cpTotal">—</b></div><div class="stat">আজকের ক্লিক<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ক্লিক<b id="cpWeek">—</b></div></div>
+<div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -101,7 +112,7 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
  <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">＋ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">💾 কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">↻ Reload</button><span id="committeeEditorStatus" class="small"></span></div>
 </div>
 
-<div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
+<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
 <label>Gallery বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
 <option value="gallery">স্মৃতিপটে মন্দির প্রাঙ্গন ও আসন্ন শারদীয় দুর্গোৎসবের বিশেষ কিছু মুহুর্ত</option>
 <option value="past">বিগত বছরের প্রতিমা</option>
@@ -116,7 +127,7 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
 
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ Uploaded Photos</h2><div id="photoList" class="small">Loading...</div></div>
-<div class="card"><div class="top"><h2>👥 Visitor Information</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
+<div class="card" id="visitorSection"><div class="top"><h2>👥 Visitor Information</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
 <tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
 </section></div>
@@ -130,24 +141,33 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadChandipathStats();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
 if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
-async function loadChandipathStats(){
- const status=document.getElementById('chandiStatsStatus'); if(!status)return; status.textContent='ক্লিকের তথ্য লোড হচ্ছে…';
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=clicked_at&order=clicked_at.desc',{headers:h()}); const d=await r.json(); if(!r.ok)throw Error(d.message||'ডেটাবেস সেটআপ প্রয়োজন'); const rows=Array.isArray(d)?d:[]; const now=new Date(),today=now.toLocaleDateString('en-CA'),weekStart=new Date(now); weekStart.setDate(now.getDate()-6); weekStart.setHours(0,0,0,0);
- document.getElementById('chandiTotalClicks').textContent=rows.length.toLocaleString('bn-BD');
- document.getElementById('chandiTodayClicks').textContent=rows.filter(x=>x.clicked_at&&new Date(x.clicked_at).toLocaleDateString('en-CA')===today).length.toLocaleString('bn-BD');
- document.getElementById('chandiWeekClicks').textContent=rows.filter(x=>x.clicked_at&&new Date(x.clicked_at)>=weekStart).length.toLocaleString('bn-BD'); status.textContent='সর্বশেষ আপডেট: '+now.toLocaleString('bn-BD');
- }catch(e){['chandiTotalClicks','chandiTodayClicks','chandiWeekClicks'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—'}); status.textContent='ক্লিক গণনা চালু করতে chandipath_clicks SQL সেটআপ চালাতে হবে।';}
-}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
 function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
+async function loadChandipathClicks(){
+ const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
+ if(!status||!body)return; status.textContent='ক্লিক রিপোর্ট লোড হচ্ছে…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&order=clicked_at.desc&limit=500',{headers:h()});
+  const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
+  const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
+  const stamp=x=>new Date(x.clicked_at||x.created_at||0);
+  document.getElementById('cpTotal').textContent=rows.length;
+  document.getElementById('cpToday').textContent=rows.filter(x=>stamp(x)>=start).length;
+  document.getElementById('cpWeek').textContent=rows.filter(x=>stamp(x)>=week).length;
+  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'অজানা/তথ্য দেননি')}</td><td>${esc(x.district||'—')}</td><td>${esc(x.upazila||'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">এখনো কোনো ক্লিক রেকর্ড নেই। SQL চালানো হয়েছে কি না দেখুন।</td></tr>';
+  status.textContent=`${rows.length}টি ক্লিক রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ৫০০টি দেখানো হচ্ছে।`;
+ }catch(e){status.textContent='ক্লিক রিপোর্ট লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="5" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
+}
+function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
+
 async function uploadPhoto(){
  const file=document.getElementById('photoFile').files[0], section=document.getElementById('photoSection').value, caption=document.getElementById('photoCaption').value.trim(), st=document.getElementById('uploadStatus');
  if(!file){st.textContent='আগে একটি ছবি নির্বাচন করুন।';return;}
@@ -223,7 +243,7 @@ async function saveStaticPhotos(){const st=document.getElementById('staticPhotoS
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadChandipathStats();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}
 
 let websiteContentCache={};
 const defaultNav=[
