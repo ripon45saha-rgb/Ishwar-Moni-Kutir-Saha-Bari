@@ -586,6 +586,11 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
       <div style="position:relative;width:100%;aspect-ratio:16/9;height:auto;border-radius:16px;overflow:hidden;background:#180207;box-shadow:0 10px 30px rgba(0,0,0,.16);">
         <iframe src="https://www.youtube.com/embed/AnrGifI3WHk?rel=0&controls=1&modestbranding=1" title="মহালয়ার চণ্ডীপাঠ — মহিষাসুরমর্দ্দিনী" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px;">
+        <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
+        <button type="button" class="btn" style="margin-top:0;border:0;cursor:pointer;font:inherit;" onclick="copyChandiLink()" data-i18n="🔗 শ্রবণ পেজের লিংক কপি করুন">🔗 শ্রবণ পেজের লিংক কপি করুন</button>
+      </div>
+      <p id="chandiCopyStatus" style="text-align:center;margin-top:10px;font-size:14px;color:#6b4b50;" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -888,7 +893,7 @@ loadUploadedGallery();
   'স্মৃতিপটে মন্দির প্রাঙ্গন ও আসন্ন শারদীয় দুর্গোৎসবের বিশেষ কিছু মুহুর্ত':'Temple Grounds and Special Moments from the Upcoming Sharadiya Durga Puja',
   '🕰️ পূজার স্মৃতি':'🕰️ Puja Memories','বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।':'Memories of Durga Puja idols from previous years.',
   '🪔 কালীপূজা':'🪔 Kali Puja','শ্যামা পূজা':'Shyama Puja','ঈশ্বরমনি কুঠিরের কালীপূজার কিছু বিশেষ মুহূর্ত।':'Special moments from Kali Puja at Ishwarmani Kutir.',
-  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja','🎉 ২০২৫ সালের আনন্দঘন মধুময় স্মৃতি':'🎉 Joyful Memories of 2025','🔱 মহালয়ার চণ্ডীপাঠ':'🔱 Mahalaya Chandi Recitation','মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ':'Mahishasuramardini — Chandi Recitation',
+  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja','🎉 ২০২৫ সালের আনন্দঘন মধুময় স্মৃতি':'🎉 Joyful Memories of 2025','🔱 মহালয়ার চণ্ডীপাঠ':'🔱 Mahalaya Chandi Recitation','মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ':'Mahishasuramardini — Chandi Recitation','🎧 সরাসরি চণ্ডীপাঠ শুনুন':'🎧 Listen to Chandi Path','🔗 শ্রবণ পেজের লিংক কপি করুন':'🔗 Copy listening page link',
   'আমাদের অবস্থান':'Our Location','খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ':'Kharma, Dewanganj, Jamalpur, Bangladesh','খড়মা, দেওয়ানগঞ্জ':'Kharma, Dewanganj','📍 Google Maps-এ দেখুন ↗':'📍 View on Google Maps ↗',
   '🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।':'Prasad details will be announced soon.','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে':'Prasad details will be announced soon.','🕐 বিতরণের সময়':'🕐 Distribution Time',
   'আমাদের সঙ্গে যোগাযোগ করুন':'Contact Us','যোগাযোগ':'Contact','খড়মা, দেওয়ানগঞ্জ, জামালপুর':'Kharma, Dewanganj, Jamalpur','© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল সংরক্ষিত':'© 2026 Ishwarmani Kutir • May all be blessed'
@@ -928,5 +933,14 @@ loadUploadedGallery();
 })();
 </script>
 
+
+<script id="chandi-share-helper">
+async function copyChandiLink(){
+  const url=new URL('chandipath.html',window.location.href).href;
+  const status=document.getElementById('chandiCopyStatus');
+  try{await navigator.clipboard.writeText(url); if(status) status.textContent='শ্রবণ পেজের লিংক কপি হয়েছে। এখন যেকাউকে পাঠাতে পারো।';}
+  catch(e){if(status) status.textContent='এই লিংকটি কপি করে শেয়ার করো: '+url; }
+}
+</script>
 </body>
 </html>
