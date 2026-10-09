@@ -333,6 +333,18 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 @media(max-width:900px){.pro-quick-grid{grid-template-columns:repeat(3,1fr)}.pro-hero{min-height:500px}}
 @media(max-width:600px){.navin{position:relative}.mobile-menu-btn{right:12px;top:10px}.links{width:min(310px,88vw);padding-top:78px}.pro-hero{min-height:460px}.pro-hero-content{padding:90px 18px 70px}.pro-badge{font-size:11px}.pro-hero-actions a{width:100%;max-width:260px}.pro-quick{margin-top:-30px}.pro-quick-grid{grid-template-columns:repeat(2,1fr);gap:10px}.pro-quick-grid a{padding:14px 8px}.pro-quick-grid a:last-child{grid-column:1/-1}.pro-quick-grid b{font-size:13px}.pro-quick-grid small{font-size:10px}}
 </style>
+
+<style id="committee-section-styles">
+.committee-section{background:linear-gradient(180deg,#fffaf0,#fff);padding-top:64px;padding-bottom:70px}
+.committee-section .section-head h2{color:#681522}
+.committee-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:980px;margin:28px auto 0}
+.committee-person{display:flex;align-items:center;gap:14px;padding:17px 18px;border:1px solid #ead9b6;border-radius:16px;background:#fffdf8;box-shadow:0 8px 24px rgba(76,25,20,.045);min-width:0}
+.committee-number{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:50%;background:#6b1421;color:#f5d37e;font-weight:800}
+.committee-role{font-size:13px;color:#8c6a36;margin-bottom:4px;font-weight:700}
+.committee-name{font-size:17px;font-weight:800;color:#351016;overflow-wrap:anywhere}
+@media(max-width:620px){.committee-grid{grid-template-columns:1fr;gap:10px}.committee-person{padding:14px}.committee-name{font-size:16px}}
+</style>
+
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -340,7 +352,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="#committee" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 <script>
@@ -459,6 +471,14 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
    <div class="event"><div class="date">৩ কার্তিক</div><div><b>বিজয়া দশমী</b><br>দশমীর পূজা ও বিজয়ার আয়োজন।</div></div>
   </div>
   <p style="margin-top:22px;text-align:center;color:#72555a">নিমন্ত্রণপত্রে প্রদত্ত সময়সূচিই চূড়ান্ত হিসেবে বিবেচ্য।</p>
+ </div>
+</section>
+
+
+<section id="committee" class="committee-section">
+ <div class="container">
+  <div class="section-head"><div class="eyebrow" data-i18n="committeeEyebrow">🙏 আমাদের পরিচালনা</div><h2 id="committeeHeading" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</h2><p data-i18n="committeeIntro">পূজার আয়োজন ও পরিচালনায় যুক্ত কমিটির সদস্যবৃন্দ</p></div>
+  <div id="committeeMembers" class="committee-grid" aria-live="polite"></div>
  </div>
 </section>
 
@@ -720,6 +740,33 @@ updateMahashasthiCountdown();
 setInterval(updateMahashasthiCountdown,1000);
 
 
+
+const DEFAULT_COMMITTEE_MEMBERS = [
+ {role:'সভাপতি',name:'শ্রী বিমল সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী রবিন্দ্রনাথ সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী সুধন সাহা'},
+ {role:'সাধারণ সম্পাদক',name:'শ্রী মতিলাল সাহা'},
+ {role:'যুগ্ম সম্পাদক',name:'শ্রী রিপন সাহা'},
+ {role:'সহ সাধারণ সম্পাদক',name:'শ্রী সোভন সাহা'},
+ {role:'অর্থ সম্পাদক',name:'শ্রী লিটন সাহা'},
+ {role:'সহ অর্থ সম্পাদক',name:'শ্রী বিশ্বনাথ সাহা'},
+ {role:'মন্দির সংস্কার ও উন্নয়ন বিষয়ক সম্পাদক',name:'শ্রী রনজিৎ কুমার সাহা'},
+ {role:'মহিলা বিষয়ক সম্পাদিকা',name:'মুক্তি রানি সাহা'},
+ {role:'সহ মহিলা বিষয়ক সম্পাদিকা',name:'লিপি রানি সাহা'},
+ {role:'পূজা ও ধর্ম বিষয়ক সম্পাদিকা',name:'আন্না রানি সাহা'},
+ {role:'সদস্য',name:'পপি রানি সাহা'},
+ {role:'সদস্য',name:'লিপি সাহা'}
+];
+const COMMITTEE_ROLE_EN={'সভাপতি':'President','সহ সভাপতি':'Vice President','সাধারণ সম্পাদক':'General Secretary','যুগ্ম সম্পাদক':'Joint Secretary','সহ সাধারণ সম্পাদক':'Assistant General Secretary','অর্থ সম্পাদক':'Treasurer','সহ অর্থ সম্পাদক':'Assistant Treasurer','মন্দির সংস্কার ও উন্নয়ন বিষয়ক সম্পাদক':'Temple Renovation & Development Secretary','মহিলা বিষয়ক সম্পাদিকা':'Women’s Affairs Secretary','সহ মহিলা বিষয়ক সম্পাদিকা':'Assistant Women’s Affairs Secretary','পূজা ও ধর্ম বিষয়ক সম্পাদিকা':'Puja & Religious Affairs Secretary','সদস্য':'Member'};
+function committeeEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderCommitteeMembers(members){
+ window.__committeeMembers=Array.isArray(members)?members:DEFAULT_COMMITTEE_MEMBERS;
+ const el=document.getElementById('committeeMembers');if(!el)return;
+ const rows=Array.isArray(members)?members:DEFAULT_COMMITTEE_MEMBERS;
+ const english=document.documentElement.lang==='en';
+ el.innerHTML=rows.filter(x=>x&&String(x.name||'').trim()&&String(x.role||'').trim()).map((x,i)=>`<article class="committee-person"><div class="committee-number">${i+1}</div><div><div class="committee-role">${committeeEsc(english?(COMMITTEE_ROLE_EN[x.role]||x.role):x.role)}</div><div class="committee-name">${committeeEsc(x.name)}</div></div></article>`).join('');
+}
+
 async function loadWebsiteContent(){
  try{
   const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
@@ -728,7 +775,8 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links) links.innerHTML=nav.items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');
+   if(links){let items=nav.items.slice();if(!items.some(x=>x.href==='#committee')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'#committee'});}
+   links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};
   const a=data.about||{}; set('contentAboutTitle',a.title); set('contentAboutText',a.text);
@@ -743,6 +791,7 @@ async function loadWebsiteContent(){
    const tl=document.getElementById('contentTimeline');
    if(tl) tl.innerHTML=t.events.map(ev=>`<div class="event"><div class="date">${String(ev.date||'')}</div><div><b>${String(ev.title||'')}</b><br>${String(ev.text||'')}</div></div>`).join('');
   }
+  renderCommitteeMembers(data.committee&&Array.isArray(data.committee.members)?data.committee.members:DEFAULT_COMMITTEE_MEMBERS);
  }catch(e){console.warn('Website content load failed',e)}
 }
 
@@ -771,6 +820,7 @@ async function loadPrasadPublic(){
  }catch(e){console.warn('Prasad load failed',e)}
 }
 loadPrasadPublic();
+renderCommitteeMembers(DEFAULT_COMMITTEE_MEMBERS);
 loadWebsiteContent();
 
 async function loadStaticPhotoVisibility(){
@@ -823,7 +873,7 @@ loadUploadedGallery();
 (function(){
  const translations={
   '🪔 ঈশ্বরমনি কুঠির':'🪔 Ishwarmani Kutir',
-  'পরিচিতি':'About','দুর্গোৎসব ২০২৬':'Durga Puja 2026','গ্যালারি':'Gallery','কালীপূজা':'Kali Puja','বিগত বছরের প্রতিমা':'Past Idols','অবস্থান':'Location','🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements',
+  'পরিচিতি':'About','দুর্গোৎসব ২০২৬':'Durga Puja 2026','ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি':'Ishwarmani Kutir Puja Celebration Committee','🙏 আমাদের পরিচালনা':'🙏 Our Committee','পূজার আয়োজন ও পরিচালনায় যুক্ত কমিটির সদস্যবৃন্দ':'Members involved in organizing and managing the Puja','গ্যালারি':'Gallery','কালীপূজা':'Kali Puja','বিগত বছরের প্রতিমা':'Past Idols','অবস্থান':'Location','🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements',
   'সবার জন্য উন্মুক্ত':'Open to Everyone','সাহা বাড়ি':'Saha Family Home','খড়মা • দেওয়ানগঞ্জ • জামালপুর':'Kharma • Dewanganj • Jamalpur','🛕 দর্শনার্থী তথ্য':'🛕 Visitor Information','আপনার নাম :':'Your Name:','আপনার নাম লিখুন':'Enter your name','দর্শনার্থী বা ভক্তবৃন্দ কোথা হতে মন্দির দর্শন করতে এসেছেন :':'Where are you visiting from?','জেলা :':'District:','জেলা নির্বাচন করুন':'Select district','উপজেলা :':'Upazila:','আগে জেলা নির্বাচন করুন':'Select a district first','মন্দির নিয়ে আপনার মতামত :':'Your feedback about the temple:','আপনার মতামত লিখুন...':'Write your feedback...','⭐ ১০ এর মধ্যে রেটিং :':'⭐ Rating out of 10:','মন্দিরের পরিবেশ, প্রতিমা, ব্যবহার, প্রসাদ ব্যবস্থাকে আপনি ১০ এর মধ্যে কত রেটিং করবেন?':'How would you rate the temple, idol, hospitality and prasad out of 10?','০/১০, ৯/১০, ১০/১০':'e.g. 8/10, 9/10, 10/10','🪔 প্রবেশ করুন':'🪔 Enter',
   '🛕 সাহা বাড়ি • খড়মা • দেওয়ানগঞ্জ • জামালপুর':'🛕 Saha Family Home • Kharma • Dewanganj • Jamalpur','ভক্তি • ঐতিহ্য • পারিবারিক পূজার স্মৃতি':'Devotion • Heritage • Family Puja Memories','মন্দির সম্পর্কে':'About the Temple','পূজার সময়সূচি':'Puja Schedule','⌄ নিচে দেখুন':'⌄ Scroll Down',
   '🛕 আমাদের মন্দির':'🛕 Our Temple','ঈশ্বরমনি কুঠির, সাহা বাড়ি':'Ishwarmani Kutir, Saha Family Home','🙏 মায়ের আশীর্বাদে':'🙏 With the Mother’s Blessings','শুভকামনা':'Best Wishes','মায়ের কৃপায় সকলের জীবন শান্তি, সমৃদ্ধি ও মঙ্গলময় হোক।':'May the Mother bless everyone with peace, prosperity and wellbeing.',
@@ -868,6 +918,7 @@ loadUploadedGallery();
   document.querySelectorAll('body *').forEach(el=>{
    if(el.children.length===0){const raw=(el.textContent||'').trim();if(!raw)return;if(!el.dataset.originalText)el.dataset.originalText=raw;const original=el.dataset.originalText;el.textContent=current==='en'?(translations[original]||original):original;}
   });
+  window.__ishwarmaniLanguage=current; if(typeof renderCommitteeMembers==='function'){const list=window.__committeeMembers||DEFAULT_COMMITTEE_MEMBERS;renderCommitteeMembers(list);}
   document.querySelectorAll('input[placeholder],textarea[placeholder],select[aria-label]').forEach(el=>{const key=el.getAttribute('placeholder')||el.getAttribute('aria-label');if(!el.dataset.originalPlaceholder)el.dataset.originalPlaceholder=key;if(current==='en')el.setAttribute(el.hasAttribute('placeholder')?'placeholder':'aria-label',attrTranslations[el.dataset.originalPlaceholder]||el.dataset.originalPlaceholder);else el.setAttribute(el.hasAttribute('placeholder')?'placeholder':'aria-label',el.dataset.originalPlaceholder)});
   document.querySelectorAll('.visitor-form select option').forEach(opt=>{if(!opt.dataset.originalText)opt.dataset.originalText=opt.textContent.trim();const original=opt.dataset.originalText;opt.textContent=current==='en'?(translations[original]||original):original;});
   document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(current==='en'&&historyEnglish[key])el.innerHTML=historyEnglish[key];else if(current==='bn'&&historyBangla[key])el.innerHTML=historyBangla[key];});

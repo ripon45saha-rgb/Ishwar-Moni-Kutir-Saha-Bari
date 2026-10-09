@@ -18,7 +18,7 @@ table{width:100%;border-collapse:collapse;min-width:850px;background:#fff}th,td{
 th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#fffaf1}.small{font-size:13px;color:#725b52}
 .empty{text-align:center;padding:35px;color:#765e55}@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr}.login{margin:4vh auto}}
 
-.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
+.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.committee-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px;margin:10px 0;padding:10px;background:#fffdf7;border:1px solid #ead7b0;border-radius:12px}.committee-editor-row input{width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;font:inherit}.committee-editor-row button{white-space:nowrap}@media(max-width:700px){.committee-editor-row{grid-template-columns:1fr}.committee-editor-row button{width:100%}}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
 </style>
 
 <style id="admin-professional-redesign">
@@ -88,6 +88,12 @@ body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:
  <div class="save-row"><button class="btn" onclick="saveWebsiteEditor()">💾 Save & Publish</button><button class="btn secondary" onclick="loadWebsiteEditor()">↻ Reload</button><span id="editorStatus" class="small"></span></div>
 </div>
 
+<div class="editor-card" id="committeeEditorCard">
+ <div class="top"><div><h2>🙏 ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</h2><div class="small">এখান থেকে সদস্যদের পদবি ও নাম যোগ, সম্পাদনা, মুছে ফেলা এবং Save & Publish করতে পারবেন।</div></div></div>
+ <div id="committeeEditorRows"></div>
+ <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">＋ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">💾 কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">↻ Reload</button><span id="committeeEditorStatus" class="small"></span></div>
+</div>
+
 <div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের Gallery-তে যোগ হবে।</div></div></div>
 <label>Gallery বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
 <option value="gallery">স্মৃতিপটে মন্দির প্রাঙ্গন ও আসন্ন শারদীয় দুর্গোৎসবের বিশেষ কিছু মুহুর্ত</option>
@@ -117,7 +123,7 @@ let email=document.getElementById("email").value.trim(),password=document.getEle
 if(!email||!password)return showMsg("Email ও password দিন।");
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}catch(e){showMsg(e.message)}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -202,7 +208,7 @@ async function saveStaticPhotos(){const st=document.getElementById('staticPhotoS
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadStaticPhotos()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos()}
 
 let websiteContentCache={};
 const defaultNav=[
@@ -243,6 +249,49 @@ async function loadWebsiteEditor(){
   st.textContent='✅ Editor ready';
  }catch(e){st.textContent='❌ '+e.message;}
 }
+const DEFAULT_COMMITTEE_MEMBERS_ADMIN = [
+ {role:'সভাপতি',name:'শ্রী বিমল সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী রবিন্দ্রনাথ সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী সুধন সাহা'},
+ {role:'সাধারণ সম্পাদক',name:'শ্রী মতিলাল সাহা'},
+ {role:'যুগ্ম সম্পাদক',name:'শ্রী রিপন সাহা'},
+ {role:'সহ সাধারণ সম্পাদক',name:'শ্রী সোভন সাহা'},
+ {role:'অর্থ সম্পাদক',name:'শ্রী লিটন সাহা'},
+ {role:'সহ অর্থ সম্পাদক',name:'শ্রী বিশ্বনাথ সাহা'},
+ {role:'মন্দির সংস্কার ও উন্নয়ন বিষয়ক সম্পাদক',name:'শ্রী রনজিৎ কুমার সাহা'},
+ {role:'মহিলা বিষয়ক সম্পাদিকা',name:'মুক্তি রানি সাহা'},
+ {role:'সহ মহিলা বিষয়ক সম্পাদিকা',name:'লিপি রানি সাহা'},
+ {role:'পূজা ও ধর্ম বিষয়ক সম্পাদিকা',name:'আন্না রানি সাহা'},
+ {role:'সদস্য',name:'পপি রানি সাহা'},
+ {role:'সদস্য',name:'লিপি সাহা'}
+];
+function addCommitteeRow(role='',name=''){
+ const box=document.getElementById('committeeEditorRows');if(!box)return;
+ const row=document.createElement('div');row.className='committee-editor-row';
+ const roleInput=document.createElement('input');roleInput.className='committee-role-input';roleInput.placeholder='পদবি';roleInput.value=role;
+ const nameInput=document.createElement('input');nameInput.className='committee-name-input';nameInput.placeholder='সদস্যের নাম';nameInput.value=name;
+ const del=document.createElement('button');del.className='btn secondary';del.type='button';del.textContent='🗑️ Delete';del.onclick=()=>row.remove();
+ row.append(roleInput,nameInput,del);box.appendChild(row);
+}
+async function loadCommitteeEditor(){
+ const st=document.getElementById('committeeEditorStatus');if(!st)return;st.textContent='কমিটির তথ্য লোড হচ্ছে...';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.committee',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+  const d=await r.json();if(!r.ok)throw Error(d.message||'কমিটির তথ্য লোড হয়নি');
+  const members=d[0]&&d[0].content&&Array.isArray(d[0].content.members)?d[0].content.members:DEFAULT_COMMITTEE_MEMBERS_ADMIN;
+  const box=document.getElementById('committeeEditorRows');box.innerHTML='';members.forEach(m=>addCommitteeRow(m.role||'',m.name||''));st.textContent='✅ কমিটির তথ্য লোড হয়েছে';
+ }catch(e){st.textContent='❌ '+e.message;}
+}
+async function saveCommittee(){
+ const st=document.getElementById('committeeEditorStatus');st.textContent='Saving...';
+ try{
+  const members=[...document.querySelectorAll('#committeeEditorRows .committee-editor-row')].map(r=>({role:r.querySelector('.committee-role-input').value.trim(),name:r.querySelector('.committee-name-input').value.trim()})).filter(x=>x.role&&x.name);
+  if(!members.length)throw Error('কমপক্ষে একজন সদস্য রাখুন।');
+  await upsertWebsiteSection('committee',{members});
+  st.innerHTML='<span class="ok">✅ কমিটির তথ্য Save & Publish হয়েছে</span>';
+ }catch(e){st.textContent='❌ Save হয়নি: '+e.message;}
+}
+
 async function upsertWebsiteSection(section,content){
  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?on_conflict=section',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({section,content,updated_at:new Date().toISOString()})});
  if(!r.ok)throw Error(await r.text());
