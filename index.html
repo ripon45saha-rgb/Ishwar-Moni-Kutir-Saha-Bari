@@ -706,8 +706,12 @@ function updateMahashasthiCountdown(){
  if(!box)return;
  const diff=target-now;
  if(diff<=0){
-   box.querySelector('.countdown-title').textContent='🪔 মহাষষ্ঠী শুরু হয়েছে';
-   box.querySelector('.countdown-sub').textContent='২৮শে আশ্বিন • ১৬ই অক্টোবর ২০২৬ • সকাল ৯:০০টা';
+   const configuredTitle=window.__editableCountdownLabel||'🪔 পূজার নির্ধারিত সময় শুরু হয়েছে';
+   const configuredSub=window.__editableCountdownSub||'মা দুর্গার আশীর্বাদ সবার উপর বর্ষিত হোক';
+   const titleEl=box.querySelector('.countdown-title');
+   const subEl=box.querySelector('.countdown-sub');
+   if(titleEl)titleEl.textContent=configuredTitle;
+   if(subEl)subEl.textContent=configuredSub;
    ['cdDays','cdHours','cdMinutes','cdSeconds'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='০';});
    return;
  }
@@ -769,9 +773,10 @@ async function loadWebsiteContent(){
   const u=data.utsav||{}; set('contentUtsavTitle',u.title); set('contentUtsavText',u.text);
   const f=data.footer||{}; set('contentFooterTitle',f.title); set('contentFooterAddress',f.address);
   const c=data.countdown||{};
-  if(c.target){ window.__editableCountdownTarget=c.target; updateMahashasthiCountdown(); }
-  if(c.label){ const e=document.querySelector('#countdownBox .countdown-title'); if(e)e.textContent=c.label; }
-  if(c.sub){ const e=document.querySelector('#countdownBox .countdown-sub'); if(e)e.textContent=c.sub; }
+  if(c.target){ window.__editableCountdownTarget=c.target; }
+  if(c.label){ window.__editableCountdownLabel=c.label; const e=document.querySelector('#countdownBox .countdown-title'); if(e)e.textContent=c.label; }
+  if(c.sub){ window.__editableCountdownSub=c.sub; const e=document.querySelector('#countdownBox .countdown-sub'); if(e)e.textContent=c.sub; }
+  updateMahashasthiCountdown();
   const t=data.timeline;
   if(t && Array.isArray(t.events) && t.events.length){
    const tl=document.getElementById('contentTimeline');
