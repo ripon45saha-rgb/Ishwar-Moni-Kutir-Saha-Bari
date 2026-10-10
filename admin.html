@@ -170,7 +170,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
  <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি Upload করুন</button> <span id="uploadStatus" class="small"></span>
 </div>
 
-<div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">নির্দিষ্ট ছবির ক্যাপশন বদলান, দেখানো/লুকানো নিয়ন্ত্রণ করুন। লুকালে ওয়েবসাইটে আর দেখা যাবে না। নতুন ছবি যোগ/মুছতে উপরের Upload এবং নিচের আপলোড করা ছবি অংশ ব্যবহার করুন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
+<div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">এখানে আগে থেকে থাকা ২০২৬ সালের ছবির ক্যাপশন ও দেখানো/লুকানো নিয়ন্ত্রণ করুন। পুরোনো বছরের ছবিগুলো সরানো হয়েছে। নতুন ছবি যোগ/মুছতে উপরের Upload এবং নিচের আপলোড করা ছবি অংশ ব্যবহার করুন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
 <div class="card" id="visitorSection"><div class="top"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
@@ -326,8 +326,7 @@ async function deletePhoto(id,path,rowBtn){
 }
 const STATIC_PHOTOS=[
  ['gallery-1','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ১','gallery'],['gallery-2','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ২','gallery'],['gallery-3','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ৩','gallery'],['durga2026-1','শারদীয় দুর্গোৎসব ২০২৬ — পূর্ণাঙ্গ প্রতিমা','gallery'],['durga2026-2','শারদীয় দুর্গোৎসব ২০২৬ — মা দুর্গার ছবি','gallery'],
- ['past-2010','দুর্গাপুজা ২০১০','past'],['past-unknown-a','দুর্গাপুজা ২০**','past'],['past-unknown-b','দুর্গাপুজা ২০**','past'],['past-2017','দুর্গাপুজা ২০১৭','past'],['past-2019','দুর্গাপুজা ২০১৯','past'],['past-2020','দুর্গাপুজা ২০২০','past'],['past-2021','দুর্গাপুজা ২০২১','past'],['past-2022','দুর্গাপুজা ২০২২*','past'],['past-2023','দুর্গাপুজা ২০২৩','past'],['past-2024','দুর্গাপুজা ২০২৪','past'],['past-2025','দুর্গাপুজা ২০২৫','past'],
- ['shyama-2024','শ্যামা পুজা ২০২৪','shyama'],['shyama-2025','শ্যামা পুজা ২০২৫','shyama'],['lokkhi-2024','কোজাগরী লক্ষ্মী পুজা ২০২৪','lokkhi']
+
 ];
 async function loadStaticPhotos(){
  const el=document.getElementById('staticPhotoList');if(!el)return;
@@ -378,6 +377,8 @@ async function saveStaticPhotos(){
   const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
   const rows=await r.json();if(!r.ok)throw Error(rows.message||rows.details||'আগের সেটিং লোড হয়নি');
   const content=(rows[0]&&rows[0].content)||{};
+  // Remove old hard-coded past/Shyama/Lokkhi photo settings from the legacy static list.
+  ['past-2010','past-unknown-a','past-unknown-b','past-2017','past-2019','past-2020','past-2021','past-2022','past-2023','past-2024','past-2025','shyama-2024','shyama-2025','lokkhi-2024'].forEach(k=>{delete content[k];delete content[k+'-caption'];});
   document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);
   document.querySelectorAll('.static-photo-caption-input').forEach(x=>content[x.dataset.key+'-caption']=x.value);
   await upsertWebsiteSection('staticPhotos',content);
