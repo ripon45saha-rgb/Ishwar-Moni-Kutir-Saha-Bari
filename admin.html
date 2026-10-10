@@ -23,12 +23,12 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 
 /* Separate admin pages: show only the selected workspace after login */
 body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
-body[data-admin-view="clicks"] #visitorInsights,body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
-body[data-admin-view="editor"] #visitorInsights,body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
-body[data-admin-view="committee"] #visitorInsights,body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
-body[data-admin-view="gallery"] #visitorInsights,body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
+body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
+body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
+body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
+body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
 body[data-admin-view="gallery"] #visitorSection{display:none!important}
-body[data-admin-view="visitors"] #visitorInsights,body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
+body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
 body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
 .admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
 .page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
@@ -103,6 +103,18 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
 </div>
+
+<section class="card" id="storageDashboard" style="margin:18px 0">
+ <div class="top"><div><h2>💾 Storage Usage Dashboard</h2><div class="small">Supabase Storage-এর bucket ও ফাইলের হিসাব</div></div><button class="btn secondary" id="storageRefreshBtn" onclick="loadStorageDashboard()">↻ Refresh</button></div>
+ <div class="stats">
+  <div class="stat">মোট Bucket<b id="storageBucketCount">—</b></div>
+  <div class="stat">দেখা ফাইল<b id="storageFileCount">—</b></div>
+  <div class="stat">ফাইলের মোট সাইজ<b id="storageTotalSize">—</b></div>
+ </div>
+ <div id="storageStatus" class="small" role="status" style="margin:12px 0">Storage তথ্য লোড হয়নি।</div>
+ <div class="table-wrap"><table style="min-width:580px"><thead><tr><th>Bucket</th><th>ফাইল সংখ্যা</th><th>মোট সাইজ</th><th>অবস্থা</th></tr></thead><tbody id="storageRows"><tr><td colspan="4" class="empty">Refresh চাপুন।</td></tr></tbody></table></div>
+ <p class="small" style="margin-top:12px">নোট: এটি তালিকাভুক্ত ফাইলের size metadata যোগ করে হিসাব করে; এটি Supabase-এর বিলিং/কোটা মিটারের বিকল্প নয়। ফাইল তালিকার অনুমতি না থাকলে এখানে error দেখাবে।</p>
+</section>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
 <div class="top"><div><h2>🔱 মহালয়ার চণ্ডীপাঠ ক্লিক রিপোর্ট</h2><div class="small">কে ক্লিক করেছে—দর্শনার্থী ফর্মে দেওয়া নাম থাকলে দেখাবে; নাম না থাকলে অজানা দেখাবে।</div></div><button class="btn secondary" onclick="loadChandipathClicks()">↻ রিপোর্ট Refresh</button></div>
@@ -187,37 +199,43 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadStorageDashboard()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+
+function formatStorageBytes(n){n=Number(n)||0;if(n<1024)return n+' B';const units=['KB','MB','GB','TB'];let i=-1;do{n/=1024;i++}while(n>=1024&&i<units.length-1);return n.toFixed(2)+' '+units[i]}
+async function loadStorageDashboard(){
+ const status=document.getElementById('storageStatus'),body=document.getElementById('storageRows'),btn=document.getElementById('storageRefreshBtn');
+ if(!status||!body)return;status.textContent='Supabase Storage থেকে তথ্য আনা হচ্ছে…';if(btn)btn.disabled=true;
+ try{
+  const br=await fetch(SUPABASE_URL+'/storage/v1/bucket',{headers:h()});
+  const buckets=await br.json();if(!br.ok)throw Error(buckets.message||buckets.error||'Bucket list access হয়নি ('+br.status+')');
+  if(!Array.isArray(buckets))throw Error('Bucket list-এর ফরম্যাট ঠিক নেই।');
+  let totalFiles=0,totalBytes=0,failed=0,html='';
+  for(const bucket of buckets){
+   try{
+    const r=await fetch(SUPABASE_URL+'/storage/v1/object/list/'+encodeURIComponent(bucket.name),{method:'POST',headers:{...h(),'Content-Type':'application/json'},body:JSON.stringify({prefix:'',limit:1000,offset:0,sortBy:{column:'name',order:'asc'}})});
+    const data=await r.json();if(!r.ok)throw Error(data.message||data.error||'HTTP '+r.status);
+    const files=Array.isArray(data)?data:[];let count=0,bytes=0;
+    for(const f of files){if(f.id||f.metadata||f.name){count++;const size=Number(f.metadata&& (f.metadata.size??f.metadata['content-length']))||Number(f.size)||0;bytes+=size;}}
+    totalFiles+=count;totalBytes+=bytes;
+    html+=`<tr><td>${esc(bucket.name)}</td><td>${count}</td><td>${formatStorageBytes(bytes)}</td><td><span class="ok">লোড হয়েছে</span></td></tr>`;
+   }catch(e){failed++;html+=`<tr><td>${esc(bucket.name)}</td><td>—</td><td>—</td><td>অ্যাক্সেস হয়নি</td></tr>`;}
+  }
+  document.getElementById('storageBucketCount').textContent=buckets.length;
+  document.getElementById('storageFileCount').textContent=totalFiles;
+  document.getElementById('storageTotalSize').textContent=formatStorageBytes(totalBytes);
+  body.innerHTML=html||'<tr><td colspan="4" class="empty">কোনো Storage bucket পাওয়া যায়নি।</td></tr>';
+  status.textContent=failed?`${buckets.length}টি bucket পাওয়া গেছে; ${failed}টির ফাইল তালিকা পড়া যায়নি। অনুমতি বা RLS/Storage policy পরীক্ষা করুন।`:`${buckets.length}টি bucket-এর ফাইল তালিকা পরীক্ষা করা হয়েছে। প্রতি bucket-এ সর্বোচ্চ ১০০০টি root-level object দেখা হয়েছে; nested folder সম্পূর্ণ হিসাব নাও হতে পারে।`;
+ }catch(e){document.getElementById('storageBucketCount').textContent='—';document.getElementById('storageFileCount').textContent='—';document.getElementById('storageTotalSize').textContent='—';body.innerHTML='<tr><td colspan="4" class="empty">Storage তথ্য পাওয়া যায়নি।</td></tr>';status.textContent='Storage লোড হয়নি: '+e.message+'. Supabase Storage permissions পরীক্ষা করুন।'}
+ finally{if(btn)btn.disabled=false;}
+}
+
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
 if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
-function updateStats(){
- document.getElementById("total").textContent=visitors.length;
- let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x>=0&&x<=10);
- document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";
- let day=new Date().toLocaleDateString("en-CA");
- document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length;
- const rated=document.getElementById("ratedCount"), high=document.getElementById("highRatingCount"), breakdown=document.getElementById("ratingBreakdown");
- if(rated)rated.textContent=n.length;
- if(high)high.textContent=n.filter(x=>x>=9).length;
- if(breakdown){
-   const buckets=[["০–৪",0],["৫–৬",0],["৭–৮",0],["৯–১০",0]];
-   n.forEach(x=>{if(x<5)buckets[0][1]++;else if(x<7)buckets[1][1]++;else if(x<9)buckets[2][1]++;else buckets[3][1]++;});
-   breakdown.textContent="রেটিং বণ্টন: "+buckets.map(([label,count])=>label+" = "+count+" জন").join("  •  ");
- }
-}
-function exportVisitorsCSV(){
- if(!visitors.length){alert("ডাউনলোড করার মতো দর্শনার্থীর তথ্য নেই।");return;}
- const cols=[["name","নাম"],["district","জেলা"],["upazila","উপজেলা"],["opinion","মতামত"],["rating","রেটিং"],["created_at","সময়"]];
- const quote=v=>'"'+String(v??"").replace(/"/g,'""').replace(/\r?\n/g," ")+'"';
- const csv="\uFEFF"+[cols.map(c=>quote(c[1])).join(","),...visitors.map(v=>cols.map(c=>quote(c[0]==="created_at"&&v[c[0]]?new Date(v[c[0]]).toLocaleString("bn-BD"):v[c[0]])).join(","))].join("\r\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="ishwarmani-visitors.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-}
+function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
 async function loadChandipathClicks(){
@@ -319,7 +337,7 @@ async function saveStaticPhotos(){const st=document.getElementById('staticPhotoS
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadStorageDashboard()}
 
 let websiteContentCache={};
 const defaultNav=[
