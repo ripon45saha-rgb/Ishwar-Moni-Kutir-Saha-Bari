@@ -241,10 +241,44 @@ async function uploadPhoto(){
 }
 async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json(); if(!r.ok)throw Error(d.message||'Load failed');
- if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
- el.innerHTML=d.map(x=>{const ep=encodeURIComponent(String(x.path||''));let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');return `<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(display)}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" data-photo-id="${Number(x.id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">Delete</button></div>`}).join('');
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();
+  if(!r.ok)throw Error(d.message||'Load failed');
+  if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
+  const sectionNames={gallery:'শারদীয় দুর্গোৎসব ২০২৬',past:'বিগত বছরের প্রতিমা',shyama:'শ্যামা পূজা',lokkhi:'কোজাগরী লক্ষ্মী পূজা',memory2025:'২০২৫ সালের স্মৃতি'};
+  el.innerHTML=d.map(x=>{
+   let cap=String(x.caption||''),m=cap.match(/^YEAR:(\d{4})\|(.*)$/),year=m?m[1]:'',caption=m?m[2]:cap;
+   const safeId=Number(x.id),past=x.section==='past';
+   return `<div style="display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid #eee1c7;align-items:start">
+    <img src="${esc(x.public_url)}" alt="ছবির preview" style="width:76px;height:76px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0">
+    <div style="min-width:0">
+     <b>${esc(sectionNames[x.section]||x.section)}</b><div class="small" style="margin:3px 0 8px">ছবির ক্যাপশন ও সাল এখান থেকে পরিবর্তন করতে পারবেন।</div>
+     ${past?`<label for="photoYearEdit${safeId}">প্রতিমার সাল</label><input id="photoYearEdit${safeId}" type="number" min="1900" max="2100" value="${esc(year)}" placeholder="যেমন ২০২৪" style="width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;margin-bottom:8px">`:''}
+     <label for="photoCaptionEdit${safeId}">ক্যাপশন / বিবরণ</label><input id="photoCaptionEdit${safeId}" type="text" value="${esc(caption)}" placeholder="ছবির ক্যাপশন লিখুন" style="width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;margin-bottom:9px">
+     <div class="save-row"><button class="btn" type="button" onclick="savePhotoCaption(${safeId},'${x.section}')">💾 ক্যাপশন Save</button><button class="btn secondary" type="button" data-photo-id="${safeId}" data-photo-path="${encodeURIComponent(String(x.path||''))}" onclick="deletePhotoFromButton(this)">🗑️ Delete</button><span id="photoEditStatus${safeId}" class="small"></span></div>
+    </div>
+   </div>`;
+  }).join('');
  }catch(e){el.textContent='Error: '+e.message;}
+}
+async function savePhotoCaption(id,section){
+ const status=document.getElementById('photoEditStatus'+id), capInput=document.getElementById('photoCaptionEdit'+id);
+ if(!status||!capInput)return;
+ const captionText=capInput.value.trim(); let caption=captionText;
+ if(section==='past'){
+  const yearInput=document.getElementById('photoYearEdit'+id), raw=yearInput?yearInput.value.trim():'';
+  const year=Number(raw.replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)));
+  if(!Number.isInteger(year)||year<1900||year>2100){status.textContent='সঠিক সাল লিখুন (১৯০০–২১০০)।';return;}
+  caption='YEAR:'+year+'|'+captionText;
+ }
+ status.textContent='Save হচ্ছে…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({caption})});
+  const d=await r.json().catch(()=>[]);
+  if(!r.ok)throw Error(d.message||'ক্যাপশন Save হয়নি');
+  if(Array.isArray(d)&&d.length===0)throw Error('কোনো রেকর্ড আপডেট হয়নি। Supabase UPDATE policy পরীক্ষা করুন।');
+  status.textContent='✅ ক্যাপশন আপডেট হয়েছে';
+ }catch(e){status.textContent='❌ '+e.message;}
 }
 async function deletePhotoFromButton(btn){
  const id=Number(btn.dataset.photoId);
