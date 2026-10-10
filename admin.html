@@ -213,7 +213,7 @@ function exportVisitorsCSV(){
  if(!visitors.length){alert("ডাউনলোড করার মতো দর্শনার্থীর তথ্য নেই।");return;}
  const cols=[["name","নাম"],["district","জেলা"],["upazila","উপজেলা"],["opinion","মতামত"],["rating","রেটিং"],["created_at","সময়"]];
  const quote=v=>'"'+String(v??"").replace(/"/g,'""').replace(/\r?\n/g," ")+'"';
- const csv="\uFEFF"+[cols.map(c=>quote(c[1])).join(","),...visitors.map(v=>cols.map(c=>quote(c[0]==="created_at"&&v[c[0]]?new Date(v[c[0]]).toLocaleString("bn-BD"):v[c[0]]).join(","))].join("\r\n");
+ const csv="\uFEFF"+[cols.map(c=>quote(c[1])).join(","),...visitors.map(v=>cols.map(c=>quote(c[0]==="created_at"&&v[c[0]]?new Date(v[c[0]]).toLocaleString("bn-BD"):v[c[0]])).join(","))].join("\r\n");
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
  const url=URL.createObjectURL(blob),a=document.createElement("a");
  a.href=url;a.download="ishwarmani-visitors.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
