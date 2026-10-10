@@ -346,6 +346,8 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 </style>
 
 <style id="uploaded-photo-year-label">.uploaded-photo-caption{margin:0;padding:10px 12px 14px;text-align:center;font-weight:800;color:#6f1118;font-size:16px;line-height:1.6;background:#fffaf1;border-top:1px solid #ead7b0}.uploaded-photo{overflow:hidden}</style>
+
+<style>.static-photo-caption{margin:8px 0 16px;text-align:center;color:#6f1118;font-weight:700;font-size:15px;line-height:1.5}.gallery-grid img[data-static-photo]{display:block}</style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -792,9 +794,17 @@ loadWebsiteContent();
 async function loadStaticPhotoVisibility(){
  try{
   const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
-  if(!r.ok)return; const rows=await r.json(); const hidden=(rows[0]&&rows[0].content)||{};
-  document.querySelectorAll('img[data-static-photo]').forEach(img=>{if(hidden[img.dataset.staticPhoto]===false){const wrap=img.closest('.gallery-grid > div')||img; wrap.style.display='none';}});
- }catch(e){console.warn('Static photo visibility load failed',e)}
+  if(!r.ok)return; const rows=await r.json(); const settings=(rows[0]&&rows[0].content)||{};
+  document.querySelectorAll('img[data-static-photo]').forEach(img=>{
+   const key=img.dataset.staticPhoto;
+   if(settings[key]===false){img.style.display='none';const cap=img.nextElementSibling;if(cap&&cap.classList.contains('static-photo-caption'))cap.style.display='none';return;}
+   if(key.startsWith('past-')){
+    const text=String(settings[key+'-caption']||'').trim();let cap=img.nextElementSibling;
+    if(!cap||!cap.classList.contains('static-photo-caption')){cap=document.createElement('p');cap.className='static-photo-caption';img.insertAdjacentElement('afterend',cap);}
+    cap.textContent=text;cap.style.display=text?'block':'none';
+   }
+  });
+ }catch(e){console.warn('Static photo visibility/caption load failed',e)}
 }
 loadStaticPhotoVisibility();
 
