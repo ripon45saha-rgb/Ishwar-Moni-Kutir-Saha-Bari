@@ -8,13 +8,14 @@
 <style>
 :root{--ink:#211f1e;--muted:#77716e;--red:#b91f32;--cream:#fffaf7;--line:#eee5e0;--white:#fff}
 *{box-sizing:border-box}
-body{margin:0;background:#f7f4f1;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Nirmala UI",sans-serif}
-header{padding:26px 18px 18px;text-align:center;background:var(--cream);border-bottom:1px solid var(--line)}
-.kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:800}
-h1{font-size:clamp(24px,5vw,36px);margin:8px 0 6px;line-height:1.3}
-header p{margin:0;color:var(--muted);font-size:14px}
-main{width:min(1080px,100%);margin:auto;padding:18px;display:grid;grid-template-columns:minmax(0, .9fr) minmax(0,1.1fr);gap:18px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 28px #31231a08}
+body{margin:0;background:#f5f2ef;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Nirmala UI",sans-serif}
+header{padding:30px 18px 22px;text-align:left;background:linear-gradient(120deg,#fffaf7,#f9e9e6);border-bottom:1px solid var(--line)}
+header>div,header h1,header p{width:min(1080px,100%);margin-left:auto;margin-right:auto}
+.kicker{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);font-weight:800}
+h1{font-size:clamp(27px,5vw,40px);margin-top:10px;margin-bottom:7px;line-height:1.3;letter-spacing:-.03em}
+header p{margin-top:0;color:var(--muted);font-size:14px}
+main{width:min(1120px,100%);margin:auto;padding:22px 18px;display:grid;grid-template-columns:minmax(0, .9fr) minmax(0,1.1fr);gap:20px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 35px #31231a0a}
 .panel h2{font-size:18px;margin:0 0 14px}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
 .tab{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 8px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
@@ -48,6 +49,9 @@ footer{text-align:center;padding:4px 18px 24px;color:#827a75;font-size:12px}
       <button class="tab active" id="cardTab" type="button" role="tab" aria-selected="true">Greeting Card</button>
       <button class="tab" id="storyTab" type="button" role="tab" aria-selected="false">Social Media Story</button>
     </div>
+    <label for="photo">নিজের ছবি যোগ করুন</label>
+    <input id="photo" type="file" accept="image/*">
+    <p class="hint">ছবি আপনার ব্রাউজারেই থাকবে; সার্ভারে আপলোড হবে না। Story-তে ছবি আরও বড় করে দেখানো হবে।</p>
     <label for="headline">শিরোনাম</label>
     <input id="headline" maxlength="55" value="শুভ শারদীয়া ২০২৬" placeholder="যেমন: শুভ শারদীয়া">
     <label for="message">শুভেচ্ছার লেখা</label>
@@ -82,8 +86,23 @@ footer{text-align:center;padding:4px 18px 24px;color:#827a75;font-size:12px}
   const message = document.getElementById('message');
   const sender = document.getElementById('sender');
   const theme = document.getElementById('theme');
+  const photoInput = document.getElementById('photo');
   const status = document.getElementById('status');
   let mode = 'card';
+  let uploadedImage = null;
+  let uploadedImageUrl = null;
+
+  photoInput.addEventListener('change', () => {
+    const file = photoInput.files && photoInput.files[0];
+    if (!file) { uploadedImage = null; draw(); return; }
+    if (!file.type.startsWith('image/')) { status.textContent = 'একটি ছবি ফাইল নির্বাচন করুন।'; return; }
+    if (uploadedImageUrl) URL.revokeObjectURL(uploadedImageUrl);
+    uploadedImageUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { uploadedImage = img; status.textContent = 'ছবি যোগ হয়েছে।'; draw(); };
+    img.onerror = () => { uploadedImage = null; status.textContent = 'ছবিটি খোলা যায়নি। অন্য ছবি দিন।'; draw(); };
+    img.src = uploadedImageUrl;
+  });
 
   const palettes = {
     red: {bg:'#fffaf7', ink:'#25201f', accent:'#b91f32', soft:'#f7e8e5', line:'#e6b6b5'},
@@ -144,16 +163,45 @@ footer{text-align:center;padding:4px 18px 24px;color:#827a75;font-size:12px}
     // small accent line
     ctx.fillStyle=p.accent;roundRect(ctx,W/2-65,top+164,130,6,3);ctx.fill();
 
+    // User photo area: rounded rectangle, clipped image crop or placeholder
+    const photoX = mode==='card' ? 255 : 205;
+    const photoY = top + 205;
+    const photoW = W - photoX*2;
+    const photoH = mode==='card' ? 300 : 510;
+    const photoR = 26;
+    ctx.save();
+    roundRect(ctx,photoX,photoY,photoW,photoH,photoR);
+    ctx.fillStyle=p.soft;ctx.fill();
+    ctx.save();
+    roundRect(ctx,photoX,photoY,photoW,photoH,photoR);ctx.clip();
+    if(uploadedImage){
+      const scale=Math.max(photoW/uploadedImage.width,photoH/uploadedImage.height);
+      const sw=photoW/scale, sh=photoH/scale;
+      const sx=(uploadedImage.width-sw)/2, sy=(uploadedImage.height-sh)/2;
+      ctx.drawImage(uploadedImage,sx,sy,sw,sh,photoX,photoY,photoW,photoH);
+    }else{
+      ctx.fillStyle=p.accent;ctx.globalAlpha=.13;
+      ctx.beginPath();ctx.arc(W/2,photoY+photoH/2,Math.min(photoW,photoH)*.25,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+      ctx.fillStyle=p.accent;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.font='700 34px system-ui, "Noto Sans Bengali", sans-serif';
+      ctx.fillText('আপনার ছবি এখানে',W/2,photoY+photoH/2);
+      ctx.font='500 22px system-ui, sans-serif';ctx.fillStyle=p.ink;ctx.globalAlpha=.65;
+      ctx.fillText('ADD YOUR PHOTO',W/2,photoY+photoH/2+48);ctx.globalAlpha=1;
+    }
+    ctx.restore();
+    ctx.strokeStyle=p.line;ctx.lineWidth=4;roundRect(ctx,photoX,photoY,photoW,photoH,photoR);ctx.stroke();
+    ctx.restore();
+
     // Message area
     const msg=(message.value||'').trim();
-    const msgY=top+235;
-    const msgFont=mode==='card'?39:43;
-    const lines=wrapLines(msg,W-250,`500 ${msgFont}px system-ui, "Noto Sans Bengali", sans-serif`).slice(0,mode==='card'?6:7);
+    const msgY=photoY+photoH+(mode==='card'?58:65);
+    const msgFont=mode==='card'?34:37;
+    const lines=wrapLines(msg,W-250,`500 ${msgFont}px system-ui, "Noto Sans Bengali", sans-serif`).slice(0,mode==='card'?4:5);
     ctx.fillStyle=p.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`500 ${msgFont}px system-ui, "Noto Sans Bengali", sans-serif`;
     lines.forEach((line,i)=>ctx.fillText(line,W/2,msgY+i*(msgFont+22)));
 
     // Decorative divider
-    const dividerY=msgY+lines.length*(msgFont+22)+40;
+    const dividerY=Math.min(msgY+lines.length*(msgFont+22)+34,H-(mode==='card'?330:390));
     ctx.strokeStyle=p.line;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W*.28,dividerY);ctx.lineTo(W*.72,dividerY);ctx.stroke();
     flower(W/2,dividerY,0.42);
 
@@ -165,8 +213,10 @@ footer{text-align:center;padding:4px 18px 24px;color:#827a75;font-size:12px}
       ctx.fillStyle=p.ink;ctx.font='700 42px system-ui, "Noto Sans Bengali", sans-serif';
       ctx.fillText(senderText,W/2,footerY);
     }
+    // Persistent watermark/branding at the bottom of every exported design
+    ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillStyle=p.accent;ctx.font='700 27px system-ui, "Noto Sans Bengali", sans-serif';
-    ctx.fillText('ঈশ্বরমনি কুঠির',W/2,H-135);
+    ctx.fillText('ঈশ্বরমনি কুঠির,সাহা বাড়ি',W/2,H-135);
     ctx.fillStyle=p.ink;ctx.globalAlpha=.65;ctx.font='500 20px system-ui, sans-serif';
     ctx.fillText('SHARODIYA • 2026',W/2,H-95);ctx.globalAlpha=1;
   }
