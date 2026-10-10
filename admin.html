@@ -331,15 +331,59 @@ const STATIC_PHOTOS=[
 ];
 async function loadStaticPhotos(){
  const el=document.getElementById('staticPhotoList');if(!el)return;
+ el.innerHTML='ছবির তালিকা লোড হচ্ছে…';
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();
-  if(!r.ok)throw Error(d.message||'Load failed');const state=(d[0]&&d[0].content)||{};
-  el.innerHTML=STATIC_PHOTOS.map(([key,label,group])=>{const cap=state[key+'-caption']!==undefined?state[key+'-caption']:label;const groupName={gallery:'শারদীয় দুর্গোৎসব ২০২৬',past:'বিগত বছরের পূজা',shyama:'শ্যামাপূজা',lokkhi:'কোজাগরী লক্ষ্মীপূজা'}[group]||group;
-   return `<div style="padding:12px 0;border-bottom:1px solid #eee1c7"><div style="font-size:12px;color:#8b6b52;font-weight:800;margin-bottom:5px">${esc(groupName)}</div><label style="display:flex;align-items:center;gap:10px;margin:0 0 8px"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state[key]===false?'':'checked'} style="width:auto"><span>ওয়েবসাইটে ছবি দেখাবেন</span></label><label for="staticCaption-${key}" style="font-size:13px;margin:6px 0">ছবির ক্যাপশন</label><input id="staticCaption-${key}" class="static-photo-caption-input" data-key="${key}" type="text" value="${esc(cap)}" placeholder="ছবির ক্যাপশন লিখুন" style="width:100%;padding:10px;border:1px solid #d9c49c;border-radius:9px"></div>`;
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+  const d=await r.json();if(!r.ok)throw Error(d.message||d.details||'Load failed');
+  const state=(d[0]&&d[0].content)||{};
+  el.innerHTML=STATIC_PHOTOS.map(([key,label,group])=>{
+   const cap=state[key+'-caption']!==undefined?state[key+'-caption']:label;
+   const visible=state[key]!==false;
+   const groupName={gallery:'শারদীয় দুর্গোৎসব ২০২৬',past:'বিগত বছরের প্রতিমা',shyama:'শ্যামা পূজা',lokkhi:'কোজাগরী লক্ষ্মী পূজা'}[group]||group;
+   return `<div class="static-photo-admin-row" data-static-row="${esc(key)}" style="padding:14px 0;border-bottom:1px solid #eee1c7">
+    <div style="font-size:12px;color:#8b6b52;font-weight:800;margin-bottom:5px">${esc(groupName)}</div>
+    <div style="font-weight:800;margin-bottom:8px">${esc(label)}</div>
+    <label style="display:flex;align-items:center;gap:10px;margin:0 0 8px"><input type="checkbox" class="static-photo-toggle" data-key="${esc(key)}" ${visible?'checked':''} style="width:auto"><span>ওয়েবসাইটে ছবিটি দেখাবেন</span></label>
+    <label for="staticCaption-${esc(key)}" style="font-size:13px;margin:6px 0">ছবির ক্যাপশন</label>
+    <input id="staticCaption-${esc(key)}" class="static-photo-caption-input" data-key="${esc(key)}" type="text" value="${esc(cap)}" placeholder="ছবির ক্যাপশন লিখুন" style="width:100%;padding:10px;border:1px solid #d9c49c;border-radius:9px">
+    <div class="save-row" style="margin-top:9px">
+      <button class="btn secondary" type="button" onclick="hideStaticPhoto('${esc(key)}')">🗑️ ওয়েবসাইট থেকে সরান</button>
+      <button class="btn secondary" type="button" onclick="restoreStaticPhoto('${esc(key)}')">↩️ আবার দেখান</button>
+      <span class="small">${visible?'ছবিটি বর্তমানে ওয়েবসাইটে দেখানো হচ্ছে':'ছবিটি লুকানো আছে'}</span>
+    </div>
+   </div>`;
   }).join('');
- }catch(e){el.textContent='❌ Load হয়নি: '+e.message}
+ }catch(e){el.textContent='❌ ছবি লোড হয়নি: '+e.message+' — website_content টেবিলের SELECT permission এবং Supabase RLS পরীক্ষা করুন।'}
 }
-async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Save হচ্ছে…';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);document.querySelectorAll('.static-photo-caption-input').forEach(x=>content[x.dataset.key+'-caption']=x.value.trim());await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ ক্যাপশন ও ছবি দেখানোর সেটিং Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
+function hideStaticPhoto(key){
+ const box=document.querySelector('.static-photo-toggle[data-key="'+CSS.escape(key)+'"]');
+ if(!box)return;
+ if(!confirm('এই ছবিটি ওয়েবসাইট থেকে সরিয়ে দেবেন? পরিবর্তন কার্যকর করতে নিচের “পরিবর্তন Save করুন” চাপুন।'))return;
+ box.checked=false;
+ const row=document.querySelector('[data-static-row="'+CSS.escape(key)+'"]');
+ if(row){const note=row.querySelector('.small');if(note)note.textContent='ছবিটি সরানোর জন্য চিহ্নিত—Save করুন';}
+}
+function restoreStaticPhoto(key){
+ const box=document.querySelector('.static-photo-toggle[data-key="'+CSS.escape(key)+'"]');
+ if(!box)return;
+ box.checked=true;
+ const row=document.querySelector('[data-static-row="'+CSS.escape(key)+'"]');
+ if(row){const note=row.querySelector('.small');if(note)note.textContent='ছবিটি আবার দেখানোর জন্য চিহ্নিত—Save করুন';}
+}
+async function saveStaticPhotos(){
+ const st=document.getElementById('staticPhotoStatus');if(!st)return;
+ st.textContent='ক্যাপশন ও ছবির সেটিং Save হচ্ছে…';
+ try{
+  // Keep other staticPhotos settings intact instead of overwriting unknown keys.
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+  const rows=await r.json();if(!r.ok)throw Error(rows.message||rows.details||'আগের সেটিং লোড হয়নি');
+  const content=(rows[0]&&rows[0].content)||{};
+  document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);
+  document.querySelectorAll('.static-photo-caption-input').forEach(x=>content[x.dataset.key+'-caption']=x.value);
+  await upsertWebsiteSection('staticPhotos',content);
+  st.innerHTML='<span class="ok">✅ ক্যাপশন ও ছবির দেখানো/লুকানো সেটিং Save হয়েছে। ওয়েবসাইটে নতুন করে Refresh করুন।</span>';
+ }catch(e){st.textContent='❌ Save হয়নি: '+e.message+' — website_content টেবিলের INSERT/UPDATE policy ও access পরীক্ষা করুন।'}
+}
 
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
@@ -350,7 +394,7 @@ let websiteContentCache={};
 const defaultNav=[
  {label:'পরিচিতি',href:'#about'},
  {label:'শারদীয় দুর্গোৎসব ২০২৬',href:'#gallery'},
- {label:'শারদীয় দুর্গোৎসব ২০২৬',href:'#gallery'},
+ {label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'},
  {label:'কালীপূজা',href:'#kali-puja'},
  {label:'বিগত বছরের প্রতিমা',href:'#past'},
  {label:'🍚 প্রসাদ ব্যবস্থাপনা',href:'#prasadSection'},
