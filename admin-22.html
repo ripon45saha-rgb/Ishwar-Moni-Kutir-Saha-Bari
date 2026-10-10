@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ঈশ্বরমনি কুঠির — 🏠 Overview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#fff8eb;color:#32100e}
+.wrap{max-width:1200px;margin:auto;padding:20px}.card{background:white;border:1px solid #ead7b0;border-radius:18px;padding:20px;box-shadow:0 8px 30px rgba(70,25,10,.08)}
+.login{max-width:430px;margin:8vh auto}h1{margin:0 0 8px;color:#7a1717}h2{margin-top:0}
+label{display:block;font-weight:700;margin:14px 0 7px}input{width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff}
+.btn{border:0;border-radius:10px;padding:12px 18px;background:#7a1717;color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e9d7b0;color:#42110f}
+.msg{margin-top:12px;padding:10px;border-radius:10px;display:none}.err{background:#ffe2e2;color:#8a1010}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.stat{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px}
+.stat b{display:block;font-size:30px;color:#7a1717;margin-top:5px}.table-wrap{overflow:auto;border-radius:14px;border:1px solid #ead7b0}
+table{width:100%;border-collapse:collapse;min-width:850px;background:#fff}th,td{padding:12px;border-bottom:1px solid #eee1c7;text-align:left;vertical-align:top}
+th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#fffaf1}.small{font-size:13px;color:#725b52}
+.empty{text-align:center;padding:35px;color:#765e55}@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr}.login{margin:4vh auto}}
+
+.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.editor-card{background:#fff;border:1px solid #ead7b0;border-radius:16px;padding:18px;margin-bottom:18px}.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:10px;background:#fff;font:inherit}.editor-card textarea{min-height:110px;resize:vertical}.editor-help{font-size:12px;color:#725b52;margin-top:6px}.save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ok{color:#176b32;font-weight:700}.editor-nav-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}.committee-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px;margin:10px 0;padding:10px;background:#fffdf7;border:1px solid #ead7b0;border-radius:12px}.committee-editor-row input{width:100%;padding:11px;border:1px solid #d9c49c;border-radius:9px;font:inherit}.committee-editor-row button{white-space:nowrap}@media(max-width:700px){.committee-editor-row{grid-template-columns:1fr}.committee-editor-row button{width:100%}}.editor-nav-row input{margin:0}@media(max-width:700px){.editor-grid{grid-template-columns:1fr}.editor-nav-row{grid-template-columns:1fr}.editor-nav-row button{width:100%}}
+.admin-navbar{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:10px;margin:0 0 18px;background:rgba(255,248,233,.96);backdrop-filter:blur(10px);border:1px solid #ead7b0;border-radius:16px;box-shadow:0 8px 22px rgba(70,25,10,.08)}.admin-navbar a{white-space:nowrap;text-decoration:none;background:#fff;border:1px solid #ead7b0;color:#6f1118;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:800}.admin-navbar a:hover,.admin-navbar a:focus{background:#6f1118;color:white}.admin-section-active{outline:2px solid #d6a84f;outline-offset:2px;scroll-margin-top:90px}@media(max-width:700px){.admin-navbar{margin:0 0 12px;padding:8px}.admin-navbar a{padding:9px 11px}}
+
+/* Separate admin pages: show only the selected workspace after login */
+body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
+body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
+body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
+body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
+body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
+body[data-admin-view="gallery"] #visitorSection{display:none!important}
+body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
+body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
+.admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
+.page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
+</style>
+
+<style id="admin-professional-redesign">
+:root{--adm-maroon:#6f1118;--adm-deep:#25070a;--adm-gold:#d6a84f;--adm-cream:#fff8e9}
+body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:"Noto Sans Bengali",Arial,sans-serif}.wrap{max-width:1240px;padding:22px 18px 45px}
+#dashboard>.top{background:linear-gradient(135deg,#31070c,#74151c);color:#fff;border-radius:24px;padding:22px 24px;box-shadow:0 18px 45px rgba(60,5,10,.2);border:1px solid rgba(214,168,79,.35)}
+#dashboard>.top h1{color:#ffe7ad;margin:0}.card,.editor-card{border-radius:20px!important;box-shadow:0 12px 34px rgba(70,25,10,.08)!important;border-color:#ead7b0!important}.stats{grid-template-columns:repeat(3,1fr);gap:16px}.stat{border-radius:18px;background:linear-gradient(135deg,#fff,#fff8e9);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:rgba(214,168,79,.12)}.stat b{font-size:34px}.editor-card{background:linear-gradient(180deg,#fff,#fffaf1)!important}.editor-card h2,.card h2{color:var(--adm-maroon)}.btn{background:linear-gradient(135deg,#7d171d,#5f0d13);box-shadow:0 6px 14px rgba(95,13,19,.15)}.btn.secondary{background:#f0dfb8;color:#4b1512;box-shadow:none}.table-wrap{box-shadow:0 8px 22px rgba(70,25,10,.06)}th{background:linear-gradient(90deg,#6f1118,#851b22)}
+@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr 1fr}.stat b{font-size:28px}#dashboard>.top{padding:18px 16px;border-radius:20px}}
+@media(max-width:460px){.stats{grid-template-columns:1fr}.top{align-items:flex-start}.top>div{width:100%}.top .btn{margin-top:4px}}
+</style>
+
+<style id="professional-admin-v2">
+#dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+
+<style id="professional-login-entry">
+body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:radial-gradient(ellipse at 12% 10%,rgba(214,168,79,.18),transparent 35%),linear-gradient(135deg,#1e0609 0%,#4c0d13 48%,#26070b 100%);}
+.login-shell{width:min(100%,980px);min-height:590px;margin:5vh auto;display:grid;grid-template-columns: .92fr 1.08fr;overflow:hidden;border-radius:28px;background:#fffdf8;border:1px solid rgba(220,180,95,.6);box-shadow:0 30px 90px rgba(0,0,0,.32);}
+.login-art{position:relative;overflow:hidden;padding:54px 42px;color:#fff5dc;background:radial-gradient(circle at 50% 42%,rgba(214,168,79,.18),transparent 30%),linear-gradient(155deg,#7a171e,#35080d 75%);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;isolation:isolate}
+.login-art:before,.login-art:after{content:"";position:absolute;border:1px solid rgba(229,190,105,.25);border-radius:50%;width:390px;height:390px;z-index:-1;left:-160px;bottom:-210px}.login-art:after{width:280px;height:280px;left:auto;right:-150px;top:-120px;bottom:auto}
+.login-brand-mark{width:70px;height:70px;display:grid;place-items:center;border:1px solid rgba(232,195,112,.8);border-radius:50%;font-size:39px;color:#f3d48b;margin-bottom:30px;box-shadow:0 0 0 8px rgba(214,168,79,.07),0 0 34px rgba(214,168,79,.12)}
+.login-kicker,.login-art-note,.login-eyebrow{letter-spacing:2.4px;font-size:10px;font-weight:800}.login-art h1{font-size:clamp(28px,3vw,39px);line-height:1.35;color:#ffe3a0;margin:15px 0 12px}.login-art-lead{font-size:15px;line-height:1.9;color:#f5e8d6;max-width:300px;margin:0}.login-art-rule{display:flex;align-items:center;gap:12px;width:100%;max-width:230px;margin:28px 0 22px;color:#e7bf6b}.login-art-rule:before,.login-art-rule:after{content:"";height:1px;background:rgba(231,191,107,.5);flex:1}.login-art-note{color:#f2d18a}.login-art-foot{font-size:12px;color:#e8d1c0;margin-top:8px}.login-art-mandala{position:absolute;right:18px;bottom:2px;font-size:155px;color:rgba(235,198,117,.07);line-height:1;pointer-events:none}
+.login-form-side{padding:52px clamp(26px,5vw,60px) 28px;display:flex;flex-direction:column;justify-content:center}.login-form-head{margin-bottom:25px}.login-lock{display:grid;place-items:center;width:45px;height:45px;border-radius:14px;background:#fff2d5;color:#77161d;font-size:24px;margin-bottom:18px}.login-eyebrow{color:#a67b2b}.login-form-head h2{font-size:27px;color:#451015;margin:8px 0}.login-form-head p{color:#82716b;font-size:13px;margin:0;line-height:1.7}.login-form-side label{font-size:13px;color:#4a2825;margin:18px 0 8px}.login-input-wrap{display:flex;align-items:center;gap:10px;border:1px solid #e7d9c1;border-radius:13px;background:#fff;padding:0 13px;color:#9a7a56;transition:.2s}.login-input-wrap:focus-within{border-color:#b98b37;box-shadow:0 0 0 4px rgba(214,168,79,.14)}.login-input-wrap input{border:0!important;box-shadow:none!important;outline:none!important;background:transparent;padding:15px 0;min-width:0;color:#32100e;font:inherit}.login-input-wrap input::placeholder{color:#b3a49b}.password-toggle{border:0;background:#fff4df;color:#7b171d;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}.login-submit{width:100%;margin-top:24px;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-radius:13px;font-size:14px;letter-spacing:.1px}.login-submit:disabled{opacity:.65;cursor:wait;transform:none}.login-security-note{display:flex;gap:9px;align-items:flex-start;margin-top:25px;padding:13px;border:1px solid #f0e3ca;border-radius:12px;background:#fffaf0;color:#8b766a;font-size:11px;line-height:1.7}.login-security-note span:first-child{color:#b58938;font-size:16px}.login-copyright{text-align:center;margin-top:25px;color:#b1a39a;font-size:10px;letter-spacing:1.3px}.login-mobile-brand{display:none}.login-shell .msg{font-size:13px;line-height:1.7}.login-shell .msg.err{border:1px solid #f1b9b9}
+@media(max-width:720px){body:has(#loginBox:not([style*="display: none"])){background:linear-gradient(160deg,#4b0b11,#210609)}.login-shell{grid-template-columns:1fr;min-height:0;margin:14px auto;border-radius:22px;width:100%}.login-art{display:none}.login-form-side{padding:27px 23px 23px}.login-mobile-brand{display:flex;align-items:center;gap:12px;margin-bottom:31px}.login-mobile-brand>span{display:grid;place-items:center;width:47px;height:47px;border-radius:15px;background:#70151b;color:#f6d78d;font-size:25px}.login-mobile-brand b{display:block;color:#4a1115;font-size:16px}.login-mobile-brand small{display:block;color:#a07c41;font-size:9px;letter-spacing:1.7px;margin-top:3px}.login-form-head{margin-bottom:20px}.login-lock{display:none}.login-form-head h2{font-size:24px}.login-copyright{margin-top:20px}}
+</style>
+
+</head>
+<body data-admin-view="overview">
+<div class="wrap">
+<section id="loginBox" class="login-shell">
+  <div class="login-art">
+    <div class="login-brand-mark" aria-hidden="true">ॐ</div>
+    <div class="login-kicker">ISHWARMONI KUTIR · OFFICIAL</div>
+    <h1>ঈশ্বরমনি কুঠির</h1>
+    <p class="login-art-lead">ঐতিহ্য, ভক্তি ও পরিবারের পূজার স্মৃতি—এক জায়গায়।</p>
+    <div class="login-art-rule"><span>✦</span></div>
+    <div class="login-art-note">ADMINISTRATION PORTAL</div>
+    <p class="login-art-foot">শুধুমাত্র অনুমোদিত প্রশাসকের জন্য</p>
+    <div class="login-art-mandala" aria-hidden="true">✺</div>
+  </div>
+  <div class="login-form-side">
+    <div class="login-mobile-brand"><span>ॐ</span><div><b>ঈশ্বরমনি কুঠির</b><small>OFFICIAL ADMIN</small></div></div>
+    <div class="login-form-head"><span class="login-lock">♙</span><div class="login-eyebrow">SECURE ACCESS</div><h2>অ্যাডমিন লগইন</h2><p>আপনার অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p></div>
+    <form id="adminLoginForm" onsubmit="event.preventDefault();login()">
+      <label for="email">ইমেইল ঠিকানা</label>
+      <div class="login-input-wrap"><span aria-hidden="true">✉</span><input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required></div>
+      <label for="password">পাসওয়ার্ড</label>
+      <div class="login-input-wrap"><span aria-hidden="true">●</span><input id="password" type="password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড" required><button type="button" class="password-toggle" id="togglePassword" aria-label="পাসওয়ার্ড দেখুন" onclick="toggleAdminPassword()">দেখুন</button></div>
+      <button class="btn login-submit" id="loginButton" type="submit"><span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span></button>
+      <div id="loginMsg" class="msg err" role="alert" aria-live="polite"></div>
+    </form>
+    <div class="login-security-note"><span>♢</span><span>আপনার লগইন তথ্য গোপন রাখুন। শেয়ার করা ডিভাইসে কাজ শেষে Logout করুন।</span></div>
+    <div class="login-copyright">© ঈশ্বরমনি কুঠির · ADMIN PANEL</div>
+  </div>
+</section>
+<section id="dashboard" style="display:none">
+<nav class="admin-navbar" aria-label="Admin sections">
+<a href="admin.html" aria-current="page">🏠 Overview</a>
+<a href="chandipath-clicks.html">🔱 চণ্ডীপাঠ ক্লিক</a>
+<a href="website-editor.html">🛠️ Website Editor</a>
+<a href="committee.html">🙏 পূজা কমিটি</a>
+<a href="gallery.html">📸 Gallery</a>
+<a href="visitors.html">👥 দর্শনার্থী</a>
+</nav>
+<div id="overview">
+<div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
+<div><button class="btn secondary" onclick="loadVisitors()">↻ Refresh</button> <button class="btn" onclick="logout()">Logout</button></div></div>
+<div class="stats">
+<div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
+</div>
+</div>
+
+<div class="card" id="clickAnalytics" style="margin-bottom:18px">
+<div class="top"><div><h2>🔱 মহালয়ার চণ্ডীপাঠ ক্লিক রিপোর্ট</h2><div class="small">কে ক্লিক করেছে—দর্শনার্থী ফর্মে দেওয়া নাম থাকলে দেখাবে; নাম না থাকলে অজানা দেখাবে।</div></div><button class="btn secondary" onclick="loadChandipathClicks()">↻ রিপোর্ট Refresh</button></div>
+<div class="stats"><div class="stat">মোট ক্লিক<b id="cpTotal">—</b></div><div class="stat">আজকের ক্লিক<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ক্লিক<b id="cpWeek">—</b></div></div>
+<div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
+</div>
+
+<div id="editorSection" class="editor-card">
+ <div class="top"><div><h2>🛠️ Website Visual Editor</h2><div class="small">এখান থেকেই মোবাইলে ওয়েবসাইটের লেখা, Navbar, Countdown, Timeline ও Footer বদলে Save & Publish করতে পারবেন।</div></div></div>
+ <div class="editor-grid">
+  <div>
+   <label>🏠 পরিচিতির শিরোনাম</label><input id="edAboutTitle" type="text">
+   <label>পরিচিতির লেখা</label><textarea id="edAboutText"></textarea>
+   <label>🌺 দুর্গোৎসবের শিরোনাম</label><input id="edUtsavTitle" type="text">
+   <label>দুর্গোৎসবের লেখা</label><textarea id="edUtsavText"></textarea>
+  </div>
+  <div>
+   <label>🪔 পূজার Countdown-এর লক্ষ্য তারিখ ও সময়</label><input id="edCountdown" type="datetime-local">
+   <label>Countdown শিরোনাম</label><input id="edCountdownLabel" type="text">
+   <label>Countdown-এর নিচের লেখা</label><input id="edCountdownSub" type="text">
+   <label>📅 পূজার সময়সূচি (এক লাইনে একটি অনুষ্ঠান)</label><textarea id="edTimeline" placeholder="তারিখ | অনুষ্ঠানের নাম | বিবরণ"></textarea>
+   <div class="editor-help">উদাহরণ: ২৮ আশ্বিন | মহা ষষ্ঠী | সকাল ৯টা থেকে বোধন। এখানে তারিখ, অনুষ্ঠানের নাম ও সময়/বিবরণ লিখুন। নিচের Save & Publish চাপলে Countdown ও সময়সূচি দুটোই ওয়েবসাইটে আপডেট হবে।</div>
+  </div>
+ </div>
+ <div>
+  <label>🧭 Navbar Menu</label><div id="edNavRows"></div>
+  <button class="btn secondary" type="button" onclick="addNavRow()">＋ Menu যোগ করুন</button>
+ </div>
+ <div class="editor-grid" style="margin-top:10px">
+  <div>
+   <label>Footer-এর নাম</label><input id="edFooterTitle" type="text">
+   <label>Footer-এর ঠিকানা</label><input id="edFooterAddress" type="text">
+  </div>
+  <div>
+   <label>🍚 প্রসাদের নাম</label><input id="edPrasadTitle" type="text">
+   <label>কী কী থাকবে</label><textarea id="edPrasadItems"></textarea>
+   <label>বিতরণের সময়</label><input id="edPrasadTime" type="text">
+   <label>বিতরণের স্থান</label><input id="edPrasadLocation" type="text">
+   <label>অতিরিক্ত ঘোষণা</label><textarea id="edPrasadNote"></textarea>
+   <label style="display:flex;align-items:center;gap:8px;font-weight:700"><input id="edPrasadActive" type="checkbox" style="width:auto"> প্রসাদ তথ্য প্রকাশ করুন</label>
+  </div>
+ </div>
+ <div class="save-row"><button class="btn" onclick="saveWebsiteEditor()">💾 Save & Publish</button><button class="btn secondary" onclick="loadWebsiteEditor()">↻ Reload</button><span id="editorStatus" class="small"></span></div>
+</div>
+
+<div class="editor-card" id="committeeEditorCard">
+ <div class="top"><div><h2>🙏 ঈশ্বরমনি কুঠির দুর্গাপূজা উদযাপন কমিটি</h2><div class="small">এখান থেকে সদস্যদের পদবি ও নাম যোগ, সম্পাদনা, মুছে ফেলা এবং Save & Publish করতে পারবেন।</div></div></div>
+ <div id="committeeEditorRows"></div>
+ <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">＋ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">💾 কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">↻ Reload</button><span id="committeeEditorStatus" class="small"></span></div>
+</div>
+
+<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 গ্যালারিতে ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের গ্যালারিতে যোগ হবে।</div></div></div>
+<label>গ্যালারির বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
+<option value="gallery">শারদীয় দুর্গোৎসব ২০২৬</option>
+<option value="past">বিগত বছরের প্রতিমা</option>
+<option value="shyama">শ্যামা পূজা</option>
+<option value="lokkhi">কোজাগরী লক্ষ্মী পূজা</option>
+</select>
+<label>ছবি</label><input id="photoFile" type="file" accept="image/*">
+<label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: সাহা বাড়ির দুর্গাপূজার প্রতিমা">
+<label>প্রতিমার সাল (শুধু ‘বিগত বছরের প্রতিমা’ বিভাগের জন্য)</label><input id="photoYear" type="number" min="1900" max="2100" placeholder="যেমন: ২০২৪ বা 2024">
+<div class="editor-help">‘বিগত বছরের প্রতিমা’ নির্বাচন করলে সাল লিখুন। ওয়েবসাইটে ছবির নিচে “শারদীয় দুর্গোৎসব ২০২৪” দেখাবে। অন্য বিভাগে সাল ফাঁকা রাখতে পারেন।</div>
+ <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি Upload করুন</button> <span id="uploadStatus" class="small"></span>
+</div>
+
+<div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
+<div class="card" style="margin-bottom:18px"><h2>🗑️ আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
+<div class="card" id="visitorSection"><div class="top"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
+<div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
+<tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
+</section></div>
+<script>
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co', SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+let accessToken=sessionStorage.getItem("ishwarmani_admin_token")||"", visitors=[];
+function h(){return {"apikey":SUPABASE_KEY,"Authorization":"Bearer "+accessToken}}
+function showMsg(t){let e=document.getElementById("loginMsg");e.textContent=t;e.style.display="block"}
+function toggleAdminPassword(){const p=document.getElementById("password"),b=document.getElementById("togglePassword");if(!p||!b)return;const visible=p.type==="password";p.type=visible?"text":"password";b.textContent=visible?"লুকান":"দেখুন";b.setAttribute("aria-label",visible?"পাসওয়ার্ড লুকান":"পাসওয়ার্ড দেখুন")}
+async function login(){
+let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার্ড দিন।");
+const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
+try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
+if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+async function loadVisitors(){
+document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
+try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
+if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
+catch(e){document.getElementById("status").textContent="Error: "+e.message}}
+function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
+function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
+async function loadChandipathClicks(){
+ const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
+ if(!status||!body)return; status.textContent='ক্লিক রিপোর্ট লোড হচ্ছে…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&order=clicked_at.desc&limit=500',{headers:h()});
+  const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
+  const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
+  const stamp=x=>new Date(x.clicked_at||x.created_at||0);
+  document.getElementById('cpTotal').textContent=rows.length;
+  document.getElementById('cpToday').textContent=rows.filter(x=>stamp(x)>=start).length;
+  document.getElementById('cpWeek').textContent=rows.filter(x=>stamp(x)>=week).length;
+  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'অজানা/তথ্য দেননি')}</td><td>${esc(x.district||'—')}</td><td>${esc(x.upazila||'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">এখনো কোনো ক্লিক রেকর্ড নেই। SQL চালানো হয়েছে কি না দেখুন।</td></tr>';
+  status.textContent=`${rows.length}টি ক্লিক রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ৫০০টি দেখানো হচ্ছে।`;
+ }catch(e){status.textContent='ক্লিক রিপোর্ট লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="5" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
+}
+function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
+
+async function uploadPhoto(){
+ const file=document.getElementById('photoFile').files[0], section=document.getElementById('photoSection').value, rawCaption=document.getElementById('photoCaption').value.trim(), yearRaw=document.getElementById('photoYear').value.trim(), st=document.getElementById('uploadStatus');
+ let caption=rawCaption;
+ if(section==='past'){
+  if(!yearRaw){st.textContent='বিগত বছরের প্রতিমার জন্য সাল লিখুন।';return;}
+  const year=Number(yearRaw.replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)));
+  if(!Number.isInteger(year)||year<1900||year>2100){st.textContent='সঠিক সাল লিখুন (১৯০০–২১০০)।';return;}
+  caption='YEAR:'+year+'|'+rawCaption;
+ }
+ if(!file){st.textContent='আগে একটি ছবি নির্বাচন করুন।';return;}
+ if(!file.type.startsWith('image/')){st.textContent='শুধু ছবি upload করা যাবে।';return;}
+ if(file.size>8*1024*1024){st.textContent='ছবির সাইজ সর্বোচ্চ ৮ MB রাখুন।';return;}
+ st.textContent='Upload হচ্ছে...';
+ const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+ const path=section+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+ try{
+  let r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+encodeURIComponent(path).replace(/%2F/g,'/'),{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken,'Content-Type':file.type,'x-upsert':'false'},body:file});
+  if(!r.ok) throw Error(await r.text());
+  const publicUrl=SUPABASE_URL+'/storage/v1/object/public/Gallery/'+path;
+  r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({section,path,public_url:publicUrl,caption})});
+  if(!r.ok) throw Error(await r.text());
+  st.textContent='✅ ছবি যোগ হয়েছে।'; document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';document.getElementById('photoYear').value='';loadPhotos();
+ }catch(e){st.textContent='❌ Upload হয়নি: '+e.message;}
+}
+async function loadPhotos(){
+ const el=document.getElementById('photoList'); if(!el)return;
+ try{const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json(); if(!r.ok)throw Error(d.message||'Load failed');
+ if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
+ el.innerHTML=d.map(x=>{const ep=encodeURIComponent(String(x.path||''));let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');return `<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(display)}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" data-photo-id="${Number(x.id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">Delete</button></div>`}).join('');
+ }catch(e){el.textContent='Error: '+e.message;}
+}
+async function deletePhotoFromButton(btn){
+ const id=Number(btn.dataset.photoId);
+ const path=decodeURIComponent(btn.dataset.photoPath||'');
+ if(!id || !path){alert('❌ ছবির তথ্য পাওয়া যায়নি।');return;}
+ await deletePhoto(id,path,btn);
+}
+async function deletePhoto(id,path,rowBtn){
+ if(!confirm('এই ছবিটি মুছে ফেলবেন?'))return;
+ if(rowBtn){rowBtn.disabled=true;rowBtn.textContent='Deleting...';}
+ try{
+  // ১) Website থেকে নিশ্চিতভাবে সরানোর জন্য hidden list-এ path যোগ করি।
+  // Database DELETE policy না থাকলেও website-এ ছবিটি আর দেখাবে না।
+  let rr=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:h()});
+  let rows=await rr.json();
+  if(!rr.ok)throw Error(rows.message||'Delete settings load failed');
+  let hidden=(rows[0]&&rows[0].content)||{};
+  hidden[String(id)]={id:Number(id),path:String(path)};
+  await upsertWebsiteSection('deletedUploadedPhotos',hidden);
+
+  // ২) Database record delete করার চেষ্টা। সফল হলে list থেকেও permanently বাদ যাবে।
+  let r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h(),'Prefer':'return=representation'}});
+  let dbDeleted=false;
+  if(r.ok){
+   const deletedRows=await r.json().catch(()=>[]);
+   dbDeleted=Array.isArray(deletedRows)?deletedRows.length>0:true;
+  }
+
+  // ৩) Storage file delete করার চেষ্টা।
+  let storageOk=true;
+  try{
+   const safePath=String(path).split('/').map(encodeURIComponent).join('/');
+   r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+safePath,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+   storageOk=r.ok;
+  }catch(e){storageOk=false;}
+
+  await loadPhotos();
+  if(dbDeleted && storageOk) alert('✅ ছবি সম্পূর্ণভাবে মুছে ফেলা হয়েছে।');
+  else if(dbDeleted) alert('✅ Website ও Database থেকে ছবি মুছে গেছে।\n\n⚠️ Storage file delete হয়নি।');
+  else alert('✅ Website থেকে ছবি সরানো হয়েছে।\n\nDatabase/Storage permission থাকলে পরের ধাপে file-টিও delete হবে।');
+ }catch(e){
+  if(rowBtn){rowBtn.disabled=false;rowBtn.textContent='Delete';}
+  alert('❌ Delete হয়নি।\n\n'+e.message);
+ }
+}
+const STATIC_PHOTOS=[['gallery-1','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ১'],['gallery-2','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ২'],['gallery-3','শারদীয় দুর্গোৎসব ২০২৬ — ছবি ৩'],['durga2026-1','শারদীয় দুর্গোৎসব ২০২৬ — পূর্ণাঙ্গ প্রতিমা'],['durga2026-2','শারদীয় দুর্গোৎসব ২০২৬ — মা দুর্গার ছবি'],['past-1','বিগত বছরের প্রতিমা — ছবি ১'],['past-2','বিগত বছরের প্রতিমা — ছবি ২'],['past-3','বিগত বছরের প্রতিমা — ছবি ৩'],['past-4','বিগত বছরের প্রতিমা — ছবি ৪'],['past-5','বিগত বছরের প্রতিমা — ছবি ৫'],['past-6','বিগত বছরের প্রতিমা — ছবি ৬'],['past-7','বিগত বছরের প্রতিমা — ছবি ৭'],['past-8','বিগত বছরের প্রতিমা — ছবি ৮'],['past-9','বিগত বছরের প্রতিমা — ছবি ৯'],['kali-puja-1','শ্যামা পূজা — ছবি ১'],['kali-puja-2','শ্যামা পূজা — ছবি ২']];
+async function loadStaticPhotos(){const el=document.getElementById('staticPhotoList');if(!el)return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();if(!r.ok)throw Error(d.message||'Load failed');const state=(d[0]&&d[0].content)||{};el.innerHTML=STATIC_PHOTOS.map(([key,label])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee1c7"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state[key]===false?'':'checked'} style="width:auto"><span>${label}</span></label>`).join('')}catch(e){el.textContent='❌ Load হয়নি: '+e.message}}
+async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
+
+function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
+
+
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}
+
+let websiteContentCache={};
+const defaultNav=[
+ {label:'পরিচিতি',href:'#about'},
+ {label:'দুর্গোৎসব ২০২৬',href:'#utsav'},
+ {label:'গ্যালারি',href:'#gallery'},
+ {label:'কালীপূজা',href:'#kali-puja'},
+ {label:'বিগত বছরের প্রতিমা',href:'#past'},
+ {label:'🍚 প্রসাদ ব্যবস্থাপনা',href:'#prasadSection'},
+ {label:'অবস্থান',href:'#location'}
+];
+function addNavRow(label='',href=''){
+ const box=document.getElementById('edNavRows'); if(!box)return;
+ const row=document.createElement('div');row.className='editor-nav-row';
+ row.innerHTML='<input class="nav-label" type="text" placeholder="Menu নাম"><input class="nav-href" type="text" placeholder="#section-id"><button class="btn secondary" type="button">🗑️</button>';
+ row.querySelector('.nav-label').value=label;row.querySelector('.nav-href').value=href;
+ row.querySelector('button').onclick=()=>row.remove();box.appendChild(row);
+}
+function localDateTimeValue(iso){
+ const d=new Date(iso||'2026-10-16T09:00:00+06:00');
+ const pad=n=>String(n).padStart(2,'0');
+ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+async function loadWebsiteEditor(){
+ const st=document.getElementById('editorStatus'); if(!st)return; st.textContent='Editor data লোড হচ্ছে...';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}), rows=await r.json();
+  if(!r.ok)throw Error(rows.message||'Website content table পাওয়া যায়নি।');
+  websiteContentCache={}; rows.forEach(x=>websiteContentCache[x.section]=x.content||{});
+  const a=websiteContentCache.about||{}; document.getElementById('edAboutTitle').value=a.title||'ঈশ্বরমনি কুঠির, সাহা বাড়ি'; document.getElementById('edAboutText').value=a.text||'ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।';
+  const u=websiteContentCache.utsav||{}; document.getElementById('edUtsavTitle').value=u.title||'দুর্গোৎসব ২০২৬'; document.getElementById('edUtsavText').value=u.text||'ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।';
+  const c=websiteContentCache.countdown||{}; document.getElementById('edCountdown').value=localDateTimeValue(c.target); document.getElementById('edCountdownLabel').value=c.label||'🪔 মহাষষ্ঠী শুরু হতে বাকি'; document.getElementById('edCountdownSub').value=c.sub||'২৮শে আশ্বিন • ১৬ই অক্টোবর ২০২৬ • সকাল ৯:০০টা';
+  const t=websiteContentCache.timeline||{}; const events=t.events||[
+   {date:'২২ আশ্বিন',title:'মহালয়া',text:'মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।'},{date:'২৮ আশ্বিন',title:'মহা ষষ্ঠী',text:'এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।'},{date:'২৯ ও ৩০ আশ্বিন',title:'মহা সপ্তমী',text:'মহা সপ্তমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।'},{date:'১ কার্তিক',title:'মহা অষ্টমী',text:'মহা অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।'},{date:'২ কার্তিক',title:'মহা নবমী',text:'মহা নবমীর পূজা ও সন্ধ্যারতি।'},{date:'৩ কার্তিক',title:'বিজয়া দশমী',text:'দশমীর পূজা ও বিজয়ার আয়োজন।'}]; document.getElementById('edTimeline').value=events.map(e=>`${e.date||''} | ${e.title||''} | ${e.text||''}`).join('\n');
+  const f=websiteContentCache.footer||{}; document.getElementById('edFooterTitle').value=f.title||'ঈশ্বরমনি কুঠির, সাহা বাড়ি'; document.getElementById('edFooterAddress').value=f.address||'খড়মা, দেওয়ানগঞ্জ, জামালপুর';
+  const n=websiteContentCache.navbar||{}; const nav=n.items&&n.items.length?n.items:defaultNav; document.getElementById('edNavRows').innerHTML=''; nav.forEach(x=>addNavRow(x.label,x.href));
+  const p=websiteContentCache.prasad||{}; document.getElementById('edPrasadTitle').value=p.title||'';document.getElementById('edPrasadItems').value=p.items||'';document.getElementById('edPrasadTime').value=p.time||'';document.getElementById('edPrasadLocation').value=p.location||'';document.getElementById('edPrasadNote').value=p.note||'';document.getElementById('edPrasadActive').checked=p.active===true;
+  st.textContent='✅ Editor ready';
+ }catch(e){st.textContent='❌ '+e.message;}
+}
+const DEFAULT_COMMITTEE_MEMBERS_ADMIN = [
+ {role:'সভাপতি',name:'শ্রী বিমল সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী রবিন্দ্রনাথ সাহা'},
+ {role:'সহ সভাপতি',name:'শ্রী সুধন সাহা'},
+ {role:'সাধারণ সম্পাদক',name:'শ্রী মতিলাল সাহা'},
+ {role:'যুগ্ম সম্পাদক',name:'শ্রী রিপন সাহা'},
+ {role:'সহ সাধারণ সম্পাদক',name:'শ্রী সোভন সাহা'},
+ {role:'অর্থ সম্পাদক',name:'শ্রী লিটন সাহা'},
+ {role:'সহ অর্থ সম্পাদক',name:'শ্রী বিশ্বনাথ সাহা'},
+ {role:'মন্দির সংস্কার ও উন্নয়ন বিষয়ক সম্পাদক',name:'শ্রী রনজিৎ কুমার সাহা'},
+ {role:'মহিলা বিষয়ক সম্পাদিকা',name:'মুক্তি রানি সাহা'},
+ {role:'সহ মহিলা বিষয়ক সম্পাদিকা',name:'লিপি রানি সাহা'},
+ {role:'পূজা ও ধর্ম বিষয়ক সম্পাদিকা',name:'আন্না রানি সাহা'},
+ {role:'সদস্য',name:'পপি রানি সাহা'},
+ {role:'সদস্য',name:'লিপি সাহা'}
+];
+function addCommitteeRow(role='',name=''){
+ const box=document.getElementById('committeeEditorRows');if(!box)return;
+ const row=document.createElement('div');row.className='committee-editor-row';
+ const roleInput=document.createElement('input');roleInput.className='committee-role-input';roleInput.placeholder='পদবি';roleInput.value=role;
+ const nameInput=document.createElement('input');nameInput.className='committee-name-input';nameInput.placeholder='সদস্যের নাম';nameInput.value=name;
+ const del=document.createElement('button');del.className='btn secondary';del.type='button';del.textContent='🗑️ Delete';del.onclick=()=>row.remove();
+ row.append(roleInput,nameInput,del);box.appendChild(row);
+}
+async function loadCommitteeEditor(){
+ const st=document.getElementById('committeeEditorStatus');if(!st)return;st.textContent='কমিটির তথ্য লোড হচ্ছে...';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.committee',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}});
+  const d=await r.json();if(!r.ok)throw Error(d.message||'কমিটির তথ্য লোড হয়নি');
+  const members=d[0]&&d[0].content&&Array.isArray(d[0].content.members)?d[0].content.members:DEFAULT_COMMITTEE_MEMBERS_ADMIN;
+  const box=document.getElementById('committeeEditorRows');box.innerHTML='';members.forEach(m=>addCommitteeRow(m.role||'',m.name||''));st.textContent='✅ কমিটির তথ্য লোড হয়েছে';
+ }catch(e){st.textContent='❌ '+e.message;}
+}
+async function saveCommittee(){
+ const st=document.getElementById('committeeEditorStatus');st.textContent='Saving...';
+ try{
+  const members=[...document.querySelectorAll('#committeeEditorRows .committee-editor-row')].map(r=>({role:r.querySelector('.committee-role-input').value.trim(),name:r.querySelector('.committee-name-input').value.trim()})).filter(x=>x.role&&x.name);
+  if(!members.length)throw Error('কমপক্ষে একজন সদস্য রাখুন।');
+  await upsertWebsiteSection('committee',{members});
+  st.innerHTML='<span class="ok">✅ কমিটির তথ্য Save & Publish হয়েছে</span>';
+ }catch(e){st.textContent='❌ Save হয়নি: '+e.message;}
+}
+
+async function upsertWebsiteSection(section,content){
+ const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?on_conflict=section',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({section,content,updated_at:new Date().toISOString()})});
+ if(!r.ok)throw Error(await r.text());
+}
+async function saveWebsiteEditor(){
+ const st=document.getElementById('editorStatus'); st.textContent='Saving...';
+ try{
+  const nav=[...document.querySelectorAll('#edNavRows .editor-nav-row')].map(r=>({label:r.querySelector('.nav-label').value.trim(),href:r.querySelector('.nav-href').value.trim()})).filter(x=>x.label&&x.href);
+  const events=document.getElementById('edTimeline').value.split(/\n+/).map(line=>line.split('|').map(x=>x.trim())).filter(x=>x.length>=3&&x[0]&&x[1]).map(x=>({date:x[0],title:x[1],text:x.slice(2).join(' | ')}));
+  const targetLocal=document.getElementById('edCountdown').value; const target=targetLocal?new Date(targetLocal).toISOString():'2026-10-16T03:00:00.000Z';
+  await Promise.all([
+   upsertWebsiteSection('navbar',{items:nav}),
+   upsertWebsiteSection('about',{title:document.getElementById('edAboutTitle').value.trim(),text:document.getElementById('edAboutText').value.trim()}),
+   upsertWebsiteSection('utsav',{title:document.getElementById('edUtsavTitle').value.trim(),text:document.getElementById('edUtsavText').value.trim()}),
+   upsertWebsiteSection('countdown',{target,label:document.getElementById('edCountdownLabel').value.trim(),sub:document.getElementById('edCountdownSub').value.trim()}),
+   upsertWebsiteSection('timeline',{events}),
+   upsertWebsiteSection('footer',{title:document.getElementById('edFooterTitle').value.trim(),address:document.getElementById('edFooterAddress').value.trim()}),
+   upsertWebsiteSection('prasad',{title:document.getElementById('edPrasadTitle').value.trim(),items:document.getElementById('edPrasadItems').value.trim(),time:document.getElementById('edPrasadTime').value.trim(),location:document.getElementById('edPrasadLocation').value.trim(),note:document.getElementById('edPrasadNote').value.trim(),active:document.getElementById('edPrasadActive').checked})
+  ]);
+  // Keep the existing prasad_info feature in sync too.
+  const p={title:document.getElementById('edPrasadTitle').value.trim()||'আজকের প্রসাদ',items:document.getElementById('edPrasadItems').value.trim(),time:document.getElementById('edPrasadTime').value.trim(),location:document.getElementById('edPrasadLocation').value.trim(),note:document.getElementById('edPrasadNote').value.trim(),active:document.getElementById('edPrasadActive').checked};
+  let pr=await fetch(SUPABASE_URL+'/rest/v1/prasad_info?select=id&order=updated_at.desc&limit=1',{headers:h()}); let pd=await pr.json();
+  if(pd&&pd.length){await fetch(SUPABASE_URL+'/rest/v1/prasad_info?id=eq.'+pd[0].id,{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({...p,updated_at:new Date().toISOString()})});}
+  else {await fetch(SUPABASE_URL+'/rest/v1/prasad_info',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(p)});}
+  st.innerHTML='<span class="ok">✅ Save & Publish সফল হয়েছে</span>';
+ }catch(e){st.textContent='❌ Save হয়নি: '+e.message;}
+}
+</script>
+</body></html>
