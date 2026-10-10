@@ -345,6 +345,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 @media(max-width:620px){.committee-grid{grid-template-columns:1fr;gap:10px}.committee-person{padding:14px}.committee-name{font-size:16px}}
 </style>
 
+<style id="uploaded-photo-year-label">.uploaded-photo-caption{margin:0;padding:10px 12px 14px;text-align:center;font-weight:800;color:#6f1118;font-size:16px;line-height:1.6;background:#fffaf1;border-top:1px solid #ead7b0}.uploaded-photo{overflow:hidden}</style>
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -807,7 +808,9 @@ async function loadUploadedGallery(){
   const hiddenRows=hiddenRes.ok?await hiddenRes.json():[];
   const hidden=(hiddenRows[0]&&hiddenRows[0].content)||{};
   const map={gallery:'gallery',past:'past',shyama:'kali-puja',lokkhi:'lokkhi-puja',memory2025:'memory2025'};
-  items.forEach(x=>{if(hidden[String(x.id)])return; const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.dataset.uploadedId=x.id; div.innerHTML=`<img src="${String(x.public_url).replace(/"/g,'&quot;')}" alt="${String(x.caption||'মন্দিরের ছবি').replace(/"/g,'&quot;')}" onclick="openImg(this.src)">`; grid.appendChild(div);});
+  const visibleItems=items.filter(x=>!hidden[String(x.id)]);
+  visibleItems.sort((a,b)=>{if(a.section==='past'&&b.section==='past'){const ya=(String(a.caption||'').match(/^YEAR:(\d{4})\|/)||[])[1]||'0';const yb=(String(b.caption||'').match(/^YEAR:(\d{4})\|/)||[])[1]||'0';return Number(yb)-Number(ya)||new Date(a.created_at)-new Date(b.created_at)}return new Date(a.created_at)-new Date(b.created_at)});
+  visibleItems.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.dataset.uploadedId=x.id; let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let title=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):cap;const safeUrl=String(x.public_url).replace(/"/g,'&quot;');const safeTitle=String(title||'মন্দিরের ছবি').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');div.innerHTML=`<img src="${safeUrl}" alt="${safeTitle}" onclick="openImg(this.src)">${title?`<p class="uploaded-photo-caption">${safeTitle}</p>`:''}`; grid.appendChild(div);});
  }catch(e){console.warn('Uploaded gallery load failed',e)}
 }
 loadUploadedGallery();
