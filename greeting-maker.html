@@ -3,259 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fffaf7">
-<title>শুভেচ্ছা ও Story Maker | ঈশ্বরমনি কুঠির</title>
+<meta name="theme-color" content="#74151c">
+<title>শারদীয়া শুভেচ্ছা কার্ড মেকার | ঈশ্বরমনি কুঠির</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&family=Tiro+Bangla&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#211f1e;--muted:#77716e;--red:#b91f32;--cream:#fffaf7;--line:#eee5e0;--white:#fff}
-*{box-sizing:border-box}
-body{margin:0;background:#f5f2ef;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Nirmala UI",sans-serif}
-header{padding:30px 18px 22px;text-align:left;background:linear-gradient(120deg,#fffaf7,#f9e9e6);border-bottom:1px solid var(--line)}
-header>div,header h1,header p{width:min(1080px,100%);margin-left:auto;margin-right:auto}
-.kicker{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);font-weight:800}
-h1{font-size:clamp(27px,5vw,40px);margin-top:10px;margin-bottom:7px;line-height:1.3;letter-spacing:-.03em}
-header p{margin-top:0;color:var(--muted);font-size:14px}
-main{width:min(1120px,100%);margin:auto;padding:22px 18px;display:grid;grid-template-columns:minmax(0, .9fr) minmax(0,1.1fr);gap:20px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 35px #31231a0a}
-.panel h2{font-size:18px;margin:0 0 14px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
-.tab{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 8px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
-.tab.active{background:#fff1f0;color:var(--red);border-color:#efbfc4}
-label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px}
-input,textarea,select{width:100%;font:inherit;border:1px solid #e6ddd8;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}
-input:focus,textarea:focus,select:focus{border-color:#c94b59;box-shadow:0 0 0 3px #b91f3210}
-textarea{resize:vertical;min-height:86px}
-.hint{font-size:12px;color:var(--muted);margin:6px 0 0;line-height:1.5}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
-button.action{border:0;border-radius:12px;padding:12px 15px;font:inherit;font-weight:750;cursor:pointer}
-.primary{background:var(--red);color:white}.secondary{background:#f4efec;color:#342c29}
-button:active{transform:translateY(1px)}
-.preview-wrap{background:#f3eeeb;border-radius:15px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:420px}
-canvas{display:block;max-width:100%;height:auto;max-height:76vh;border-radius:8px;box-shadow:0 8px 25px #211f1e12;background:#fff}
-.preview-note{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0}
-footer{text-align:center;padding:4px 18px 24px;color:#827a75;font-size:12px}
-@media(max-width:780px){main{grid-template-columns:1fr;padding:12px}.panel{padding:15px}.preview-wrap{min-height:280px}canvas{max-height:none;width:min(100%,430px)}}
+:root{--red:#74151c;--deep:#32070c;--gold:#e3bd70;--cream:#fff4d9;--ink:#391116}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8e9,#f5e5c7);color:var(--ink);font-family:"Noto Serif Bengali",serif}
+header{background:linear-gradient(120deg,#31070b,#76141d);color:#ffe7ad;padding:18px 16px;text-align:center;border-bottom:2px solid #d7ae5c}
+header a{color:inherit;text-decoration:none}header h1{font-size:clamp(20px,4vw,30px);margin:0}header p{margin:5px 0 0;font-size:13px;color:#f6dfad}
+main{max-width:1120px;margin:auto;padding:22px 14px 44px}.intro{text-align:center;margin:0 auto 22px;max-width:760px}.intro h2{margin:0;color:#70121a;font-size:clamp(25px,5vw,38px)}.intro p{line-height:1.8;color:#74554b}
+.layout{display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:20px;align-items:start}.panel{background:#fffdf8;border:1px solid #e6cf9c;border-radius:20px;padding:18px;box-shadow:0 12px 32px #5b1b1112}.panel h3{margin:0 0 12px;color:#70121a}
+label{display:block;font-weight:700;margin:13px 0 6px;font-size:14px}input,select{width:100%;padding:12px;border:1px solid #d9c49c;border-radius:11px;font:inherit;background:white;color:#35151a}input[type=file]{padding:9px;font-size:13px}.hint{font-size:12px;color:#806a60;line-height:1.7;margin:7px 0}.btn{border:0;border-radius:12px;padding:12px 15px;background:linear-gradient(135deg,#8b1b24,#5c0c13);color:white;font:700 15px inherit;cursor:pointer;width:100%;margin-top:12px;box-shadow:0 7px 17px #5c0c1322}.btn.alt{background:#f3e3bd;color:#521015;box-shadow:none;border:1px solid #dfc17e}.btn:disabled{opacity:.6;cursor:wait}
+.preview-wrap{min-width:0}.preview-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.preview-head h3{margin:0;color:#70121a}.badge{font-size:12px;background:#f2e0b4;color:#68141b;border-radius:999px;padding:6px 10px;font-weight:800}.preview{width:100%;display:flex;justify-content:center;align-items:flex-start;background:#ead9b6;border-radius:18px;padding:12px;overflow:hidden}.preview canvas{display:block;width:min(100%,470px);height:auto;box-shadow:0 12px 35px #4b130e2b;border-radius:5px;background:#9a171e}.preview.story canvas{width:min(100%,340px)}.watermark-note{font-size:12px;color:#7a6155;margin-top:10px;line-height:1.7}.error{color:#a40f20;font-size:13px;min-height:20px;margin-top:8px}.privacy{background:#fff6df;border:1px solid #e6d09b;border-radius:12px;padding:11px;font-size:12px;line-height:1.75;color:#684f3e;margin-top:14px}
+footer{text-align:center;padding:22px;color:#7a6254;font-size:12px}@media(max-width:800px){.layout{grid-template-columns:1fr}.preview{padding:8px}.preview canvas{width:min(100%,440px)}.preview.story canvas{width:min(100%,330px)}}
 </style>
 </head>
 <body>
-<header>
-  <div class="kicker">ঈশ্বরমনি কুঠির</div>
-  <h1>শুভেচ্ছা তৈরি করুন</h1>
-  <p>নিজের লেখা দিয়ে পূজার কার্ড বানান, ডাউনলোড করুন, শেয়ার করুন।</p>
-</header>
+<header><a href="index.html">🪔 <b>ঈশ্বরমনি কুঠির</b></a><p>সাহা বাড়ি · শারদীয়া শুভেচ্ছা কার্ড মেকার</p></header>
 <main>
+ <div class="intro"><h2>নিজের শারদীয়া শুভেচ্ছা কার্ড বানান</h2><p>নাম দেওয়া বাধ্যতামূলক। নিজের ছবি চাইলে যোগ করুন। প্রতিবার নতুন শুভেচ্ছাবার্তা আসবে।</p></div>
+ <div class="layout">
   <section class="panel">
-    <h2>আপনার ডিজাইন</h2>
-    <div class="tabs" role="tablist" aria-label="ডিজাইন নির্বাচন">
-      <button class="tab active" id="cardTab" type="button" role="tab" aria-selected="true">Greeting Card</button>
-      <button class="tab" id="storyTab" type="button" role="tab" aria-selected="false">Social Media Story</button>
-    </div>
-    <label for="photo">নিজের ছবি যোগ করুন</label>
-    <input id="photo" type="file" accept="image/*">
-    <p class="hint">ছবি আপনার ব্রাউজারেই থাকবে; সার্ভারে আপলোড হবে না। Story-তে ছবি আরও বড় করে দেখানো হবে।</p>
-    <label for="headline">শিরোনাম</label>
-    <input id="headline" maxlength="55" value="শুভ শারদীয়া ২০২৬" placeholder="যেমন: শুভ শারদীয়া">
-    <label for="message">শুভেচ্ছার লেখা</label>
-    <textarea id="message" maxlength="220" placeholder="আপনার শুভেচ্ছা লিখুন">মা দুর্গার আশীর্বাদে সবার জীবন ভরে উঠুক আনন্দ, শান্তি ও ভালোবাসায়।</textarea>
-    <label for="sender">আপনার নাম (ঐচ্ছিক)</label>
-    <input id="sender" maxlength="45" placeholder="যেমন: রাকেশ">
-    <label for="theme">রঙের থিম</label>
-    <select id="theme">
-      <option value="red">Minimal Red</option>
-      <option value="green">Sage Green</option>
-      <option value="dark">Midnight</option>
-    </select>
-    <p class="hint">লেখা বদলালে Preview নিজে থেকেই আপডেট হবে। কুঠিরের নাম নিচে ছোট করে থাকবে।</p>
-    <div class="actions">
-      <button class="action primary" id="downloadBtn" type="button">PNG ডাউনলোড</button>
-      <button class="action secondary" id="shareBtn" type="button">শেয়ার করুন</button>
-    </div>
-    <p class="hint" id="status" aria-live="polite"></p>
+   <h3>✦ আপনার কার্ড সাজান</h3>
+   <label for="personName">আপনার নাম <span style="color:#b00">*</span></label>
+   <input id="personName" maxlength="60" placeholder="আপনার নাম লিখুন" required>
+   <label for="photoInput">নিজের ছবি (ঐচ্ছিক)</label>
+   <input id="photoInput" type="file" accept="image/*">
+   <p class="hint">ছবি না দিলেও কার্ড তৈরি হবে। ছবি আপনার ব্রাউজারেই প্রসেস হবে; সার্ভারে আপলোড করা হবে না।</p>
+   <label for="format">কার্ডের ফরম্যাট</label>
+   <select id="format"><option value="story">Story — Vertical 9:16</option><option value="post">Greeting Card / Post — Landscape</option></select>
+   <button class="btn alt" id="newGreeting" type="button">🔄 আরেকটি শুভেচ্ছাবার্তা</button>
+   <button class="btn" id="downloadBtn" type="button">⬇️ কার্ড PNG ডাউনলোড</button>
+   <div id="message" class="error" role="status" aria-live="polite"></div>
+   <div class="privacy">ডাউনলোড শুরু করার পর আপনার দেওয়া নাম, কার্ডের ফরম্যাট ও সময় ঈশ্বরমনি কুঠিরের অ্যাডমিন রিপোর্টে দেখা যাবে। ছবি সংরক্ষণ করা হবে না।</div>
   </section>
-  <section class="panel">
-    <h2>লাইভ Preview</h2>
-    <div class="preview-wrap"><canvas id="preview" width="1080" height="1350" aria-label="শুভেচ্ছা কার্ডের প্রিভিউ"></canvas></div>
-    <p class="preview-note">ডাউনলোড করা PNG Facebook, Instagram Story ও WhatsApp-এ পোস্ট করতে পারবেন।</p>
+  <section class="preview-wrap">
+   <div class="preview-head"><h3>কার্ডের প্রিভিউ</h3><span class="badge" id="formatBadge">STORY · 9:16</span></div>
+   <div class="preview story" id="preview"><canvas id="card" width="720" height="1280" aria-label="Greeting card preview"></canvas></div>
+   <p class="watermark-note">ওয়াটারমার্ক: <b>ঈশ্বরমনি কুঠির, সাহা বাড়ি</b> — কার্ডের নিচে হালকা opacity-তে থাকবে।</p>
   </section>
+ </div>
 </main>
-<footer>ঈশ্বরমনি কুঠির • শুভ শারদীয়া ২০২৬</footer>
+<footer>© ঈশ্বরমনি কুঠির, সাহা বাড়ি · শুভ শারদীয়া</footer>
 <script>
-(() => {
-  const canvas = document.getElementById('preview');
-  const ctx = canvas.getContext('2d');
-  const headline = document.getElementById('headline');
-  const message = document.getElementById('message');
-  const sender = document.getElementById('sender');
-  const theme = document.getElementById('theme');
-  const photoInput = document.getElementById('photo');
-  const status = document.getElementById('status');
-  let mode = 'card';
-  let uploadedImage = null;
-  let uploadedImageUrl = null;
-
-  photoInput.addEventListener('change', () => {
-    const file = photoInput.files && photoInput.files[0];
-    if (!file) { uploadedImage = null; draw(); return; }
-    if (!file.type.startsWith('image/')) { status.textContent = 'একটি ছবি ফাইল নির্বাচন করুন।'; return; }
-    if (uploadedImageUrl) URL.revokeObjectURL(uploadedImageUrl);
-    uploadedImageUrl = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => { uploadedImage = img; status.textContent = 'ছবি যোগ হয়েছে।'; draw(); };
-    img.onerror = () => { uploadedImage = null; status.textContent = 'ছবিটি খোলা যায়নি। অন্য ছবি দিন।'; draw(); };
-    img.src = uploadedImageUrl;
-  });
-
-  const palettes = {
-    red: {bg:'#fffaf7', ink:'#25201f', accent:'#b91f32', soft:'#f7e8e5', line:'#e6b6b5'},
-    green:{bg:'#f8faf5', ink:'#25312b', accent:'#557763', soft:'#e8eee6', line:'#c5d4c7'},
-    dark:{bg:'#171719', ink:'#fff7ef', accent:'#e65a62', soft:'#29292e', line:'#5b3a40'}
-  };
-
-  function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
-  function fitText(text, maxWidth, fontSize, weight='700'){
-    let size=fontSize;
-    do { ctx.font = `${weight} ${size}px system-ui, "Noto Sans Bengali", sans-serif`; if(ctx.measureText(text).width<=maxWidth) break; size-=2; } while(size>24);
-    return size;
-  }
-  function wrapLines(text,maxWidth,font){
-    ctx.font=font;
-    const words=(text||'').split(/\s+/).filter(Boolean);
-    const lines=[]; let line='';
-    for(const word of words){
-      const test=line?line+' '+word:word;
-      if(ctx.measureText(test).width>maxWidth && line){lines.push(line);line=word;}else line=test;
-    }
-    if(line) lines.push(line);
-    return lines;
-  }
-  function draw(){
-    const p=palettes[theme.value];
-    const W=1080,H=mode==='card'?1350:1920;
-    canvas.width=W;canvas.height=H;
-    ctx.fillStyle=p.bg;ctx.fillRect(0,0,W,H);
-    const margin=mode==='card'?66:72;
-    // Minimal double frame
-    ctx.strokeStyle=p.line;ctx.lineWidth=3;
-    roundRect(ctx,margin,margin,W-margin*2,H-margin*2,34);ctx.stroke();
-    ctx.strokeStyle=p.accent;ctx.lineWidth=5;
-    roundRect(ctx,margin+17,margin+17,W-(margin+17)*2,H-(margin+17)*2,28);ctx.stroke();
-
-    // Small decorative corner motifs
-    function flower(x,y,scale){
-      ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.fillStyle=p.accent;
-      for(let i=0;i<8;i++){ctx.save();ctx.rotate(i*Math.PI/4);ctx.beginPath();ctx.ellipse(0,-23,8,20,0,0,Math.PI*2);ctx.fill();ctx.restore();}
-      ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fillStyle=p.bg;ctx.fill();ctx.restore();
-    }
-    flower(margin+70,margin+72,0.75);flower(W-margin-70,margin+72,0.75);
-    // Center emblem: abstract lotus/tilak, not a logo
-    const top=mode==='card'?205:265;
-    ctx.save();ctx.translate(W/2,top);
-    ctx.fillStyle=p.accent;
-    for(let i=-2;i<=2;i++){ctx.save();ctx.rotate(i*.28);ctx.beginPath();ctx.ellipse(0,-29,14,31,0,0,Math.PI*2);ctx.fill();ctx.restore();}
-    ctx.fillStyle=p.bg;ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.restore();
-
-    // headline
-    const head=(headline.value||'শুভ শারদীয়া').trim();
-    let fs=fitText(head, W-190, mode==='card'?78:90,'800');
-    ctx.font=`800 ${fs}px system-ui, "Noto Sans Bengali", sans-serif`;
-    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=p.ink;
-    ctx.fillText(head,W/2,top+115);
-
-    // small accent line
-    ctx.fillStyle=p.accent;roundRect(ctx,W/2-65,top+164,130,6,3);ctx.fill();
-
-    // User photo area: rounded rectangle, clipped image crop or placeholder
-    const photoX = mode==='card' ? 255 : 205;
-    const photoY = top + 205;
-    const photoW = W - photoX*2;
-    const photoH = mode==='card' ? 300 : 510;
-    const photoR = 26;
-    ctx.save();
-    roundRect(ctx,photoX,photoY,photoW,photoH,photoR);
-    ctx.fillStyle=p.soft;ctx.fill();
-    ctx.save();
-    roundRect(ctx,photoX,photoY,photoW,photoH,photoR);ctx.clip();
-    if(uploadedImage){
-      const scale=Math.max(photoW/uploadedImage.width,photoH/uploadedImage.height);
-      const sw=photoW/scale, sh=photoH/scale;
-      const sx=(uploadedImage.width-sw)/2, sy=(uploadedImage.height-sh)/2;
-      ctx.drawImage(uploadedImage,sx,sy,sw,sh,photoX,photoY,photoW,photoH);
-    }else{
-      ctx.fillStyle=p.accent;ctx.globalAlpha=.13;
-      ctx.beginPath();ctx.arc(W/2,photoY+photoH/2,Math.min(photoW,photoH)*.25,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-      ctx.fillStyle=p.accent;ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.font='700 34px system-ui, "Noto Sans Bengali", sans-serif';
-      ctx.fillText('আপনার ছবি এখানে',W/2,photoY+photoH/2);
-      ctx.font='500 22px system-ui, sans-serif';ctx.fillStyle=p.ink;ctx.globalAlpha=.65;
-      ctx.fillText('ADD YOUR PHOTO',W/2,photoY+photoH/2+48);ctx.globalAlpha=1;
-    }
-    ctx.restore();
-    ctx.strokeStyle=p.line;ctx.lineWidth=4;roundRect(ctx,photoX,photoY,photoW,photoH,photoR);ctx.stroke();
-    ctx.restore();
-
-    // Message area
-    const msg=(message.value||'').trim();
-    const msgY=photoY+photoH+(mode==='card'?58:65);
-    const msgFont=mode==='card'?34:37;
-    const lines=wrapLines(msg,W-250,`500 ${msgFont}px system-ui, "Noto Sans Bengali", sans-serif`).slice(0,mode==='card'?4:5);
-    ctx.fillStyle=p.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`500 ${msgFont}px system-ui, "Noto Sans Bengali", sans-serif`;
-    lines.forEach((line,i)=>ctx.fillText(line,W/2,msgY+i*(msgFont+22)));
-
-    // Decorative divider
-    const dividerY=Math.min(msgY+lines.length*(msgFont+22)+34,H-(mode==='card'?330:390));
-    ctx.strokeStyle=p.line;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W*.28,dividerY);ctx.lineTo(W*.72,dividerY);ctx.stroke();
-    flower(W/2,dividerY,0.42);
-
-    // Wish footer / sender
-    const senderText=(sender.value||'').trim();
-    const footerY=H-(mode==='card'?260:310);
-    if(senderText){
-      ctx.fillStyle=p.accent;ctx.font='700 30px system-ui, "Noto Sans Bengali", sans-serif';ctx.fillText('শুভেচ্ছান্তে',W/2,footerY-58);
-      ctx.fillStyle=p.ink;ctx.font='700 42px system-ui, "Noto Sans Bengali", sans-serif';
-      ctx.fillText(senderText,W/2,footerY);
-    }
-    // Persistent watermark/branding at the bottom of every exported design
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillStyle=p.accent;ctx.font='700 27px system-ui, "Noto Sans Bengali", sans-serif';
-    ctx.fillText('ঈশ্বরমনি কুঠির,সাহা বাড়ি',W/2,H-135);
-    ctx.fillStyle=p.ink;ctx.globalAlpha=.65;ctx.font='500 20px system-ui, sans-serif';
-    ctx.fillText('SHARODIYA • 2026',W/2,H-95);ctx.globalAlpha=1;
-  }
-
-  function setMode(next){
-    mode=next;
-    document.getElementById('cardTab').classList.toggle('active',mode==='card');
-    document.getElementById('storyTab').classList.toggle('active',mode==='story');
-    document.getElementById('cardTab').setAttribute('aria-selected',String(mode==='card'));
-    document.getElementById('storyTab').setAttribute('aria-selected',String(mode==='story'));
-    draw();
-  }
-  document.getElementById('cardTab').addEventListener('click',()=>setMode('card'));
-  document.getElementById('storyTab').addEventListener('click',()=>setMode('story'));
-  [headline,message,sender,theme].forEach(el=>el.addEventListener('input',draw));
-
-  function makeFile(){
-    return new Promise(resolve=>canvas.toBlob(blob=>resolve(blob),'image/png'));
-  }
-  document.getElementById('downloadBtn').addEventListener('click',async()=>{
-    const blob=await makeFile(); if(!blob){status.textContent='ছবি তৈরি করা যায়নি। আবার চেষ্টা করুন।';return;}
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');
-    a.href=url;a.download=mode==='card'?'ishwarmoni-greeting-card.png':'ishwarmoni-social-story.png';
-    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-    status.textContent='PNG ডাউনলোড শুরু হয়েছে।';
-  });
-  document.getElementById('shareBtn').addEventListener('click',async()=>{
-    const blob=await makeFile();if(!blob){status.textContent='ছবি তৈরি করা যায়নি।';return;}
-    const file=new File([blob],mode==='card'?'ishwarmoni-greeting-card.png':'ishwarmoni-social-story.png',{type:'image/png'});
-    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-      try{await navigator.share({title:headline.value||'শুভ শারদীয়া',text:message.value||'ঈশ্বরমনি কুঠিরের শুভেচ্ছা',files:[file]});status.textContent='শেয়ার মেনু খোলা হয়েছে।';}
-      catch(e){if(e.name!=='AbortError')status.textContent='শেয়ার করা যায়নি। PNG ডাউনলোড করে পোস্ট করুন।';}
-    } else {
-      const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ishwarmoni-share.png';a.click();URL.revokeObjectURL(url);
-      status.textContent='এই ব্রাউজারে সরাসরি ছবি শেয়ার নেই। PNG ডাউনলোড হয়েছে—সেটি Instagram/Facebook-এ পোস্ট করুন।';
-    }
-  });
-  draw();
-})();
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+const greetings=[
+'মায়ের আগমনে আনন্দে ভরে উঠুক তোমার প্রতিটি দিন। শারদীয়ার আন্তরিক শুভেচ্ছা।',
+'শারদীয়ার আলোয় মুছে যাক সব দুঃখ, জীবন ভরে উঠুক সুখ ও শান্তিতে।',
+'মা দুর্গার আশীর্বাদে তোমার পরিবারে আসুক শান্তি, সুস্বাস্থ্য ও সমৃদ্ধি।',
+'কাশফুলের দোলায়, শিউলির সুবাসে—আনন্দময় হোক তোমার শারদীয়া।',
+'ঢাকের তালে, আলোর মেলায়, আপনজনের ভালোবাসায় ভরে উঠুক তোমার পূজা।',
+'মায়ের আশীর্বাদে সকল বাধা দূর হোক, নতুন আশায় শুরু হোক প্রতিটি দিন।',
+'শরতের নীল আকাশের মতো নির্মল হোক মন, শুভ হোক তোমার দুর্গোৎসব।',
+'পূজার আনন্দ ছড়িয়ে পড়ুক সবার মাঝে, ভালো থাকুক তুমি ও তোমার পরিবার।',
+'শুভ শারদীয়ায় হৃদয় ভরে উঠুক ভালোবাসা, আনন্দ আর নতুন স্বপ্নে।',
+'মা দুর্গা তোমার জীবনে বয়ে আনুন সাহস, সাফল্য ও অফুরন্ত আনন্দ।',
+'শিউলি ফুলের সুবাস আর ঢাকের শব্দে মধুর হোক তোমার পূজার প্রতিটি মুহূর্ত।',
+'অশুভের বিনাশ হোক, শুভ শক্তির জয় হোক—তোমাকে জানাই শারদীয়ার প্রীতি ও শুভেচ্ছা।'
+];
+let greetingIndex=Math.floor(Math.random()*greetings.length), photo=null;
+const canvas=document.getElementById('card'),ctx=canvas.getContext('2d');
+const $=id=>document.getElementById(id);
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function fitText(text,x,y,maxWidth,lineHeight,maxLines=5){
+ const words=text.split(/\s+/);let line='',lines=[];
+ for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}
+ if(line)lines.push(line);lines.slice(0,maxLines).forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
+}
+function drawMotif(x,y,size,color){ctx.save();ctx.translate(x,y);ctx.strokeStyle=color;ctx.lineWidth=Math.max(1,size*.018);ctx.beginPath();for(let i=0;i<8;i++){ctx.save();ctx.rotate(i*Math.PI/4);ctx.ellipse(0,-size*.29,size*.09,size*.23,0,0,Math.PI*2);ctx.restore()}ctx.stroke();ctx.beginPath();ctx.arc(0,0,size*.12,0,Math.PI*2);ctx.stroke();ctx.restore()}
+function draw(){
+ const mode=$('format').value,story=mode==='story';canvas.width=story?720:1200;canvas.height=story?1280:900;
+ const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
+ // rich textured-looking red background
+ const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,'#a92127');grad.addColorStop(.5,'#7d1019');grad.addColorStop(1,'#4b0911');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ // subtle flecks
+ for(let i=0;i<800;i++){let x=(i*97%w),y=(i*193%h);ctx.fillStyle=i%2?'rgba(255,221,151,.045)':'rgba(20,0,0,.05)';ctx.fillRect(x,y,2,2)}
+ // ornate double border
+ ctx.strokeStyle='#e6c47a';ctx.lineWidth=5;ctx.strokeRect(20,20,w-40,h-40);ctx.lineWidth=1.5;ctx.strokeRect(34,34,w-68,h-68);
+ // side folk pattern rail
+ ctx.fillStyle='rgba(236,199,121,.16)';ctx.fillRect(42,42,story?58:64,h-84);
+ ctx.strokeStyle='#f0d391';ctx.lineWidth=2;
+ for(let y=65;y<h-70;y+=story?72:68){ctx.strokeRect(51,y,story?40:45,story?47:43);ctx.beginPath();ctx.moveTo(59,y+10);ctx.lineTo(82,y+10);ctx.lineTo(82,y+34);ctx.lineTo(60,y+34);ctx.stroke();ctx.beginPath();ctx.arc(70,y+22,7,0,Math.PI*2);ctx.stroke()}
+ const centerX=story?w*.58:w*.57;
+ // circular Durga-inspired medallion illustration
+ const faceR=story?112:135, fx=story?centerX:w*.28, fy=story?h*.18:h*.34;
+ ctx.fillStyle='#21090d';ctx.beginPath();ctx.arc(fx,fy,faceR+30,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#f3d58f';ctx.lineWidth=7;ctx.beginPath();ctx.arc(fx,fy,faceR+22,0,Math.PI*2);ctx.stroke();
+ drawMotif(fx,fy,faceR*2.05,'#f3d58f');
+ // hair and face
+ ctx.fillStyle='#13080a';ctx.beginPath();ctx.arc(fx,fy-5,faceR*.88,Math.PI,Math.PI*2);ctx.lineTo(fx+faceR*.8,fy+faceR*.6);ctx.lineTo(fx-faceR*.8,fy+faceR*.6);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#efbd3d';ctx.beginPath();ctx.ellipse(fx,fy+7,faceR*.69,faceR*.78,0,0,Math.PI*2);ctx.fill();
+ // forehead third eye
+ ctx.fillStyle='#7d1019';ctx.beginPath();ctx.ellipse(fx,fy-faceR*.35,faceR*.16,faceR*.23,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#fff1cf';ctx.beginPath();ctx.ellipse(fx,fy-faceR*.35,faceR*.09,faceR*.15,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#171014';ctx.beginPath();ctx.arc(fx,fy-faceR*.35,faceR*.045,0,Math.PI*2);ctx.fill();
+ // expressive eyes
+ for(const side of [-1,1]){ctx.fillStyle='#1b0b0c';ctx.beginPath();ctx.ellipse(fx+side*faceR*.31,fy+faceR*.03,faceR*.27,faceR*.15,side*.12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff4dc';ctx.beginPath();ctx.ellipse(fx+side*faceR*.31,fy+faceR*.04,faceR*.22,faceR*.105,side*.12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1a0b0c';ctx.beginPath();ctx.arc(fx+side*faceR*.31,fy+faceR*.04,faceR*.07,0,Math.PI*2);ctx.fill()}
+ ctx.strokeStyle='#7a1618';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(fx-faceR*.2,fy+faceR*.42);ctx.quadraticCurveTo(fx,fy+faceR*.55,fx+faceR*.2,fy+faceR*.42);ctx.stroke();
+ // layout text positions
+ const titleY=story?h*.43:h*.28;
+ ctx.textAlign='center';ctx.fillStyle='#f8dfa0';ctx.font=`800 ${story?28:32}px "Noto Serif Bengali",serif`;ctx.fillText('দুর্গাপূজা ২০২৬',centerX,story?h*.31:h*.12);
+ ctx.fillStyle='#f9e4ae';ctx.font=`800 ${story?58:76}px "Tiro Bangla","Noto Serif Bengali",serif`;ctx.fillText('শুভ শারদীয়া',centerX,titleY);
+ // ornamental divider
+ ctx.strokeStyle='#eac779';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(centerX-(story?120:170),titleY+22);ctx.lineTo(centerX+(story?120:170),titleY+22);ctx.stroke();drawMotif(centerX,titleY+22,26,'#f0d391');
+ ctx.fillStyle='#fff1d3';ctx.font=`500 ${story?24:27}px "Noto Serif Bengali",serif`;
+ const msg=greetings[greetingIndex];
+ if(story){fitText(msg,centerX,titleY+75,w*.65,36,5)}else{fitText(msg,centerX,titleY+70,w*.55,39,4)}
+ // photo optional / initial avatar
+ const pr=story?57:62, px=story?centerX:w*.76, py=story?h*.78:h*.69;
+ ctx.save();ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);ctx.clip();
+ if(photo){const ratio=Math.max(pr*2/photo.width,pr*2/photo.height),dw=photo.width*ratio,dh=photo.height*ratio;ctx.drawImage(photo,px-dw/2,py-dh/2,dw,dh)}
+ else{ctx.fillStyle='#f9e8bd';ctx.fillRect(px-pr,py-pr,pr*2,pr*2);ctx.fillStyle='#7d1019';ctx.font=`700 ${story?35:40}px "Noto Serif Bengali",serif`;ctx.textAlign='center';ctx.fillText('আপনি',px,py+12)}
+ ctx.restore();ctx.strokeStyle='#f0d18a';ctx.lineWidth=4;ctx.beginPath();ctx.arc(px,py,pr+3,0,Math.PI*2);ctx.stroke();
+ ctx.fillStyle='#fff0c5';ctx.font=`700 ${story?28:30}px "Noto Serif Bengali",serif`;ctx.textAlign='center';const name=$('personName').value.trim();ctx.fillText(name||'আপনার নাম',px,py+pr+40);
+ // floral accents / gold dots
+ for(let i=0;i<16;i++){let ax=story?100+i*34:w*.14+i*(w*.72/15), ay=story?h*.9:h*.88;ctx.fillStyle=i%2?'#e9c777':'#f9e8bd';ctx.beginPath();ctx.arc(ax,ay,4+(i%3),0,Math.PI*2);ctx.fill()}
+ // watermark: intentionally low opacity
+ ctx.save();ctx.globalAlpha=.24;ctx.fillStyle='#fff0c9';ctx.font=`600 ${story?17:19}px "Noto Serif Bengali",serif`;ctx.textAlign='right';ctx.fillText('ঈশ্বরমনি কুঠির, সাহা বাড়ি',w-48,h-48);ctx.restore();
+ ctx.textAlign='center';ctx.fillStyle='rgba(255,233,183,.75)';ctx.font=`500 ${story?15:16}px "Noto Serif Bengali",serif`;ctx.fillText('শারদীয়ার শুভেচ্ছা',centerX,h-45);
+}
+function setGreeting(){let n=Math.floor(Math.random()*(greetings.length-1));if(n>=greetingIndex)n++;greetingIndex=n;draw()}
+$('personName').addEventListener('input',draw);
+$('format').addEventListener('change',()=>{const story=$('format').value==='story';$('preview').classList.toggle('story',story);$('formatBadge').textContent=story?'STORY · 9:16':'GREETING CARD · LANDSCAPE';draw()});
+$('photoInput').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f){photo=null;draw();return}if(!f.type.startsWith('image/')){$('message').textContent='একটি ছবি ফাইল নির্বাচন করুন।';return}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{photo=img;draw()};img.onerror=()=>{$('message').textContent='ছবিটি খোলা যাচ্ছে না। অন্য ছবি দিন।'};img.src=reader.result};reader.readAsDataURL(f)});
+$('newGreeting').addEventListener('click',setGreeting);
+async function recordDownload(name,format){
+ const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visitor_name:name,district:'Greeting Card',upazila:format,clicked_at:new Date().toISOString()})});
+ if(!r.ok){let msg='রেকর্ড জমা হয়নি';try{const d=await r.json();msg=d.message||d.details||msg}catch{}throw new Error(msg)}
+}
+$('downloadBtn').addEventListener('click',async()=>{
+ const name=$('personName').value.trim(),format=$('format').value,btn=$('downloadBtn');
+ if(!name){$('message').textContent='কার্ড ডাউনলোডের আগে আপনার নাম লিখুন।';$('personName').focus();return}
+ if(name.length>60){$('message').textContent='নাম ৬০ অক্ষরের মধ্যে রাখুন।';return}
+ $('message').textContent='কার্ড প্রস্তুত হচ্ছে…';btn.disabled=true;
+ try{
+  if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG তৈরি করা যায়নি।')),'image/png'));
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(format==='story'?'ishwarmoni-story-':'ishwarmoni-greeting-')+name.replace(/[^\p{L}\p{N}\-_ ]/gu,'').trim().replace(/\s+/g,'-')+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+  // Browser cannot confirm the user's file manager completed saving; record after PNG download is initiated.
+  await recordDownload(name,format);
+  $('message').textContent='✅ কার্ড ডাউনলোড শুরু হয়েছে। আপনার নাম অ্যাডমিন রিপোর্টে জমা হয়েছে।';
+ }catch(e){$('message').textContent='⚠️ কার্ড ডাউনলোড হয়েছে কি না দেখুন। রেকর্ড জমা নাও হতে পারে: '+e.message}
+ finally{btn.disabled=false}
+});
+document.fonts&&document.fonts.ready?document.fonts.ready.then(draw):draw();
 </script>
 </body>
 </html>
