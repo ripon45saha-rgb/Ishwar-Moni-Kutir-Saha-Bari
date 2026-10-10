@@ -346,6 +346,16 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 </style>
 
 <style id="uploaded-photo-year-label">.uploaded-photo-caption{margin:0;padding:10px 12px 14px;text-align:center;font-weight:800;color:#6f1118;font-size:16px;line-height:1.6;background:#fffaf1;border-top:1px solid #ead7b0}.uploaded-photo{overflow:hidden}</style>
+
+<!-- PWA: installable app metadata -->
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<meta name="theme-color" content="#26050a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ঈশ্বরমনি কুঠির">
+
 </head>
 <body>
 <nav class="nav"><div class="navin">
@@ -917,5 +927,17 @@ async function trackChandipathClick(event){
   }
 }
 </script>
+
+<!-- PWA: service worker registration -->
+<script id="pwa-service-worker">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (err) {
+      console.error('PWA service worker registration failed:', err);
+    });
+  });
+}
+</script>
+
 </body>
 </html>
