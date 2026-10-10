@@ -363,7 +363,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="greeting-maker.html">🎨 শারদীয়া কার্ড মেকার</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 <script>
@@ -736,7 +736,7 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}if(!items.some(x=>x.href==='greeting-maker.html')){items.push({label:'🎨 শারদীয়া কার্ড মেকার',href:'greeting-maker.html'});}
+   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
    links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};
