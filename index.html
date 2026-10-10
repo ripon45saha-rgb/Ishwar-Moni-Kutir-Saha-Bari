@@ -930,9 +930,9 @@ async function trackChandipathClick(event){
 
 <!-- PWA: service worker registration -->
 <script id="pwa-service-worker">
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/sw.js').catch(function (err) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function (err) {
       console.error('PWA service worker registration failed:', err);
     });
   });
