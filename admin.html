@@ -23,12 +23,12 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 
 /* Separate admin pages: show only the selected workspace after login */
 body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
-body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
-body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
-body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
-body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
+body[data-admin-view="clicks"] #visitorInsights,body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
+body[data-admin-view="editor"] #visitorInsights,body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
+body[data-admin-view="committee"] #visitorInsights,body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
+body[data-admin-view="gallery"] #visitorInsights,body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
 body[data-admin-view="gallery"] #visitorSection{display:none!important}
-body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
+body[data-admin-view="visitors"] #visitorInsights,body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
 body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
 .admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
 .page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
@@ -194,7 +194,30 @@ try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.
 if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
-function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
+function updateStats(){
+ document.getElementById("total").textContent=visitors.length;
+ let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x>=0&&x<=10);
+ document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";
+ let day=new Date().toLocaleDateString("en-CA");
+ document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length;
+ const rated=document.getElementById("ratedCount"), high=document.getElementById("highRatingCount"), breakdown=document.getElementById("ratingBreakdown");
+ if(rated)rated.textContent=n.length;
+ if(high)high.textContent=n.filter(x=>x>=9).length;
+ if(breakdown){
+   const buckets=[["০–৪",0],["৫–৬",0],["৭–৮",0],["৯–১০",0]];
+   n.forEach(x=>{if(x<5)buckets[0][1]++;else if(x<7)buckets[1][1]++;else if(x<9)buckets[2][1]++;else buckets[3][1]++;});
+   breakdown.textContent="রেটিং বণ্টন: "+buckets.map(([label,count])=>label+" = "+count+" জন").join("  •  ");
+ }
+}
+function exportVisitorsCSV(){
+ if(!visitors.length){alert("ডাউনলোড করার মতো দর্শনার্থীর তথ্য নেই।");return;}
+ const cols=[["name","নাম"],["district","জেলা"],["upazila","উপজেলা"],["opinion","মতামত"],["rating","রেটিং"],["created_at","সময়"]];
+ const quote=v=>'"'+String(v??"").replace(/"/g,'""').replace(/\r?\n/g," ")+'"';
+ const csv="\uFEFF"+[cols.map(c=>quote(c[1])).join(","),...visitors.map(v=>cols.map(c=>quote(c[0]==="created_at"&&v[c[0]]?new Date(v[c[0]]).toLocaleString("bn-BD"):v[c[0]]).join(","))].join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="ishwarmani-visitors.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
 async function loadChandipathClicks(){
