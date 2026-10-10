@@ -247,7 +247,7 @@ async function loadPhotos(){
   if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
   const sectionNames={gallery:'শারদীয় দুর্গোৎসব ২০২৬',past:'বিগত বছরের প্রতিমা',shyama:'শ্যামা পূজা',lokkhi:'কোজাগরী লক্ষ্মী পূজা',memory2025:'২০২৫ সালের স্মৃতি'};
   el.innerHTML=d.map(x=>{
-   let cap=String(x.caption||''),m=cap.match(/^YEAR:(\d{4})\|(.*)$/),year=m?m[1]:'',caption=m?m[2]:cap;
+   let cap=String(x.caption||''),m=cap.match(/^YEAR:(\d{4})\|(.*)$/),year=m?m[1]:'',caption=m?m[2]:cap; if(x.section==='past'){const normalized=caption.trim().replace(/\s+/g,' ');if(/দুর্গাপুজা\s*২০\*\*/.test(normalized)||/দুর্গা\s*পুজা\s*২০\*\*/.test(normalized))caption='দুর্গা পুজা';else if(/দুর্গাপুজা\s*২০২২\*/.test(normalized)||/দুর্গাপুজা\s*২০২২/.test(normalized))caption='দুর্গাপুজা ২০২২';}
    const safeId=Number(x.id),past=x.section==='past';
    return `<div style="display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid #eee1c7;align-items:start">
     <img src="${esc(x.public_url)}" alt="ছবির preview" style="width:76px;height:76px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0">
