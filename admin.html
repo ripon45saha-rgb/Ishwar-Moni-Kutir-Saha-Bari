@@ -110,10 +110,10 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
 <div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 <div style="height:1px;background:#ead7b0;margin:24px 0"></div>
-<div class="top"><div><h2>🎨 শারদীয়া শুভেচ্ছা কার্ড ডাউনলোড</h2><div class="small">একই chandipath_clicks টেবিলে নতুন রেকর্ড হিসেবে নাম, ফরম্যাট ও সময় রাখা হচ্ছে।</div></div><button class="btn secondary" onclick="loadGreetingCardLogs()">↻ কার্ড রিপোর্ট Refresh</button></div>
+<div class="top"><div><h2>🎨 শারদীয়া শুভেচ্ছা কার্ড ডাউনলোড রিপোর্ট</h2><div class="small">চণ্ডীপাঠ ক্লিক রিপোর্ট থেকে আলাদা শিরোনামে একই chandipath_clicks টেবিলের কার্ড ডাউনলোড রেকর্ড।</div></div><button class="btn secondary" onclick="loadGreetingCardLogs()">↻ কার্ড রিপোর্ট Refresh</button></div>
 <div class="stats"><div class="stat">মোট ডাউনলোড<b id="gcTotal">—</b></div><div class="stat">আজকের ডাউনলোড<b id="gcToday">—</b></div><div class="stat">Story / Post<b id="gcFormats">—</b></div></div>
 <div id="gcStatus" class="small">কার্ড রিপোর্ট লোড হয়নি।</div>
-<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>ফরম্যাট</th><th>ডাউনলোডের সময়</th></tr></thead><tbody id="gcRows"><tr><td colspan="4" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>ডাউনলোড করেছে কি?</th><th>ফরম্যাট</th><th>তারিখ ও সময়</th></tr></thead><tbody id="gcRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -336,10 +336,10 @@ async function loadGreetingCardLogs(){
   document.getElementById('gcTotal').textContent=rows.length;
   document.getElementById('gcToday').textContent=rows.filter(x=>new Date(x.clicked_at||x.created_at)>=start).length;
   document.getElementById('gcFormats').textContent=rows.filter(x=>x.upazila==='story').length+' / '+rows.filter(x=>x.upazila==='post').length;
-  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'—')}</td><td>${fmt(x)}</td><td>${(x.clicked_at||x.created_at)?new Date(x.clicked_at||x.created_at).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">এখনও কোনো কার্ড ডাউনলোড রেকর্ড নেই।</td></tr>';
+  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'—')}</td><td><b style="color:#16803d">হ্যাঁ</b></td><td>${fmt(x)}</td><td>${(x.clicked_at||x.created_at)?new Date(x.clicked_at||x.created_at).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">এখনও কোনো কার্ড ডাউনলোড রেকর্ড নেই।</td></tr>';
   status.textContent='সর্বশেষ ১০০০টি রেকর্ড দেখানো হচ্ছে।';
  }catch(e){
-  body.innerHTML='<tr><td colspan="4" class="empty">রিপোর্ট লোড হয়নি। chandipath_clicks টেবিলে insert অনুমতি আছে কি না দেখুন।</td></tr>';
+  body.innerHTML='<tr><td colspan="5" class="empty">রিপোর্ট লোড হয়নি। chandipath_clicks টেবিলে insert অনুমতি আছে কি না দেখুন।</td></tr>';
   status.textContent='❌ '+e.message;
  }
 }
