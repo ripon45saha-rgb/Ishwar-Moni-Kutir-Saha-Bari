@@ -1027,13 +1027,13 @@ window.enableIshwarPush = async function(){
     let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
     const supabaseUrl='https://evkjwiicnzruijfthwpm.supabase.co';
     const publishableKey='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
-    const endpoint=sup.endpoint;
+    const endpoint=sub.endpoint;
     const payload={endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null};
     log('Saving subscription', {url:supabaseUrl+'/rest/v1/web_push_subscriptions', endpointHost:(()=>{try{return new URL(endpoint).host}catch(_){return 'invalid'}})(), hasSubscription:!!payload.subscription, hasPublishableKey:!!publishableKey});
-    const resp=await fetch(supabaseUrl+'/functions/v1/send-push',{
+    const resp=await fetch(supabaseUrl+'/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
       method:'POST',
-      headers:{'apikey':publishableKey,'Content-Type':'application/json'},
-      body:JSON.stringify({action:'subscribe', ...payload})
+      headers:{'apikey':publishableKey,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify(payload)
     });
     const responseText=await resp.text();
     if(!resp.ok){
