@@ -1007,13 +1007,13 @@ if ("serviceWorker" in navigator) {
 
 <script id="ishwar-web-push-client">
 // Replace this placeholder with the VAPID PUBLIC key generated for your project.
-window.ISHWAR_VAPID_PUBLIC_KEY = 'PASTE_VAPID_PUBLIC_KEY_HERE';
+window.ISHWAR_VAPID_PUBLIC_KEY = 'BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q';
 window.enableIshwarPush = async function(){
   const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.textContent=m;b.prepend(n)}};
   try{
     if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
     if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
-    if(window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
+    if(window.ISHWAR_VAPID_PUBLIC_KEY==='BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
     const permission=await Notification.requestPermission();
     if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
     const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
