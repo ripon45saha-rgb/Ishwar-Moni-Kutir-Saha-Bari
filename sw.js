@@ -6,6 +6,7 @@ self.addEventListener("install", (event) => {
       cache.add("/")
     )
   );
+
   self.skipWaiting();
 });
 
@@ -19,20 +20,31 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  // Only handle requests from this website.
+  if (new URL(event.request.url).origin !== self.location.origin) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request).catch(async () => {
       const cached = await caches.match(event.request);
+
       if (cached) return cached;
 
       if (event.request.mode === "navigate") {
-        return (await caches.match("/")) ||
-          new Response("ইন্টারনেট সংযোগ নেই।");
+        return (
+          (await caches.match("/")) ||
+          new Response("ইন্টারনেট সংযোগ নেই।", {
+            headers: { "Content-Type": "text/plain; charset=utf-8" }
+          })
+        );
       }
 
       return new Response("", { status: 503 });
@@ -40,29 +52,29 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-/* ঈশ্বরমনি কুঠির Web Push service worker */
+/* ঈশ্বরমনি কুঠির — Web Push Notification */
 
-self.addEventListener('push', (event) => {
+self.addEventListener("push", (event) => {
   let data = {};
 
   try {
     data = event.data ? event.data.json() : {};
   } catch (_) {
     data = {
-      body: event.data ? event.data.text() : ''
+      body: event.data ? event.data.text() : ""
     };
   }
 
-  const title = data.title || 'ঈশ্বরমনি কুঠির';
+  const title = data.title || "ঈশ্বরমনি কুঠির";
 
   const options = {
-    body: data.body || 'নতুন ঘোষণা প্রকাশিত হয়েছে।',
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
+    body: data.body || data.message || "নতুন ঘোষণা প্রকাশিত হয়েছে।",
+    icon: "/icons/icon-192.png",
+    badge: "/icons/icon-192.png",
     data: {
-      url: data.url || '/'
+      url: data.url || data.data?.url || "/"
     },
-    tag: data.tag || 'ishwarmani-announcement',
+    tag: data.tag || "ishwarmani-announcement",
     renotify: true
   };
 
@@ -71,37 +83,42 @@ self.addEventListener('push', (event) => {
   );
 });
 
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   const target = new URL(
-    event.notification.data?.url || '/',
+    event.notification.data?.url || "/",
     self.location.origin
-  ).href;
+  );
 
-  event.waitUntil((async () => {
-    const clientsList = await clients.matchAll({
-      type: 'window',
-      includeUncontrolled: true
-    });
+  // Prevent a notification from navigating to another website.
+  if (target.origin !== self.location.origin) return;
 
-    for (const client of clientsList) {
-      if (
-        client.url.startsWith(self.location.origin) &&
-        'focus' in client
-      ) {
-        await client.focus();
+  event.waitUntil(
+    (async () => {
+      const clientsList = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true
+      });
 
-        if ('navigate' in client && client.url !== target) {
-          await client.navigate(target);
+      for (const client of clientsList) {
+        if (
+          new URL(client.url).origin === self.location.origin &&
+          "focus" in client
+        ) {
+          await client.focus();
+
+          if ("navigate" in client && client.url !== target.href) {
+            await client.navigate(target.href);
+          }
+
+          return;
         }
-
-        return;
       }
-    }
 
-    if (clients.openWindow) {
-      await clients.openWindow(target);
-    }
-  })());
+      if (self.clients.openWindow) {
+        await self.clients.openWindow(target.href);
+      }
+    })()
+  );
 });
