@@ -1013,7 +1013,7 @@ window.enableIshwarPush = async function(){
   try{
     if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
     if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
-    if(window.ISHWAR_VAPID_PUBLIC_KEY==='BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
+    if(!window.ISHWAR_VAPID_PUBLIC_KEY || window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
     const permission=await Notification.requestPermission();
     if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
     const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
