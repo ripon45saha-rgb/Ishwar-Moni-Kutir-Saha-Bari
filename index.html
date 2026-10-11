@@ -991,6 +991,20 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 </script>
 
 
+<script id="ishwar-service-worker-registration">
+/* Register the site's service worker for offline support and push notifications. */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+      console.log("ঈশ্বরমনি কুঠির Service Worker registered");
+    } catch (error) {
+      console.error("Service Worker registration failed:", error);
+    }
+  });
+}
+</script>
+
 <script id="ishwar-web-push-client">
 // Replace this placeholder with the VAPID PUBLIC key generated for your project.
 window.ISHWAR_VAPID_PUBLIC_KEY = 'PASTE_VAPID_PUBLIC_KEY_HERE';
