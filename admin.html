@@ -90,12 +90,11 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <section id="dashboard" style="display:none">
 <nav class="admin-navbar" aria-label="Admin sections">
 <a href="admin.html" aria-current="page">🏠 Overview</a>
-<a href="chandipath-clicks.html">🔱 চণ্ডীপাঠ ক্লিক</a>
+<a href="chandipath-clicks.html">🎨 শুভেচ্ছা কার্ড ব্যবহার</a>
 <a href="website-editor.html">🛠️ Website Editor</a>
 <a href="committee.html">🙏 পূজা কমিটি</a>
 <a href="gallery.html">📸 Gallery</a>
 <a href="visitors.html">👥 দর্শনার্থী</a>
-<a href="notifications.html">🔔 Notifications</a>
 </nav>
 <div id="overview">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
@@ -106,10 +105,10 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
-<div class="top"><div><h2>🔱 মহালয়ার চণ্ডীপাঠ ক্লিক রিপোর্ট</h2><div class="small">কে ক্লিক করেছে—দর্শনার্থী ফর্মে দেওয়া নাম থাকলে দেখাবে; নাম না থাকলে অজানা দেখাবে।</div></div><button class="btn secondary" onclick="loadChandipathClicks()">↻ রিপোর্ট Refresh</button></div>
-<div class="stats"><div class="stat">মোট ক্লিক<b id="cpTotal">—</b></div><div class="stat">আজকের ক্লিক<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ক্লিক<b id="cpWeek">—</b></div></div>
+<div class="top"><div><h2>🎨 শুভেচ্ছা কার্ড ব্যবহারের রিপোর্ট</h2><div class="small">কার্ড তৈরি/ডাউনলোড/শেয়ার করার সময় সম্মতিসহ দেওয়া নাম ও কার্ডের তথ্য এখানে দেখা যাবে।</div></div><button class="btn secondary" onclick="loadGreetingCardUsage()">↻ রিপোর্ট Refresh</button></div>
+<div class="stats"><div class="stat">মোট ব্যবহার<b id="cpTotal">—</b></div><div class="stat">আজকের ব্যবহার<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ব্যবহার<b id="cpWeek">—</b></div></div>
 <div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
-<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>যাঁকে পাঠাবেন</th><th>কার্ড</th><th>কাজ</th><th>সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="6" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -188,7 +187,7 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadGreetingCardUsage()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -198,20 +197,20 @@ function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-�
 function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
-async function loadChandipathClicks(){
+async function loadGreetingCardUsage(){
  const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
- if(!status||!body)return; status.textContent='ক্লিক রিপোর্ট লোড হচ্ছে…';
+ if(!status||!body)return; status.textContent='কার্ড ব্যবহারের তথ্য লোড হচ্ছে…';
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&order=clicked_at.desc&limit=500',{headers:h()});
+  const r=await fetch(SUPABASE_URL+'/rest/v1/greeting_card_usage?select=id,creator_name,recipient_name,card_type,action,created_at&order=created_at.desc&limit=1000',{headers:h()});
   const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
   const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
-  const stamp=x=>new Date(x.clicked_at||x.created_at||0);
+  const stamp=x=>new Date(x.created_at||0);
   document.getElementById('cpTotal').textContent=rows.length;
   document.getElementById('cpToday').textContent=rows.filter(x=>stamp(x)>=start).length;
   document.getElementById('cpWeek').textContent=rows.filter(x=>stamp(x)>=week).length;
-  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'অজানা/তথ্য দেননি')}</td><td>${esc(x.district||'—')}</td><td>${esc(x.upazila||'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">এখনো কোনো ক্লিক রেকর্ড নেই। SQL চালানো হয়েছে কি না দেখুন।</td></tr>';
-  status.textContent=`${rows.length}টি ক্লিক রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ৫০০টি দেখানো হচ্ছে।`;
- }catch(e){status.textContent='ক্লিক রিপোর্ট লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="5" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
+  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.creator_name||'—')}</td><td>${esc(x.recipient_name||'—')}</td><td>${esc(({sharadiya:'শারদীয় শুভেচ্ছা',shashthi:'মহাষষ্ঠী',saptami:'মহাসপ্তমী',ashtami:'মহাষ্টমী',navami:'মহানবমী',dashami:'বিজয়া দশমী'})[x.card_type]||x.card_type||'—')}</td><td>${esc(x.action==='download'?'PNG ডাউনলোড':x.action==='share'?'শেয়ার':'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">এখনো কোনো কার্ড ব্যবহার রেকর্ড নেই। আগে SQL সেটআপ করুন।</td></tr>';
+  status.textContent=`${rows.length}টি কার্ড ব্যবহারের রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ১০০০টি দেখানো হচ্ছে।`;
+ }catch(e){status.textContent='কার্ড ব্যবহারের তথ্য লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="6" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
 }
 function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
 
@@ -297,7 +296,7 @@ async function saveStaticPhotos(){const st=document.getElementById('staticPhotoS
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadGreetingCardUsage()}
 
 let websiteContentCache={};
 const defaultNav=[

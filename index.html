@@ -556,15 +556,16 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
 </section>
 
 
-<section class="section" id="mahalaya">
+<section class="section" id="sharadiya-card">
   <div class="section-inner">
     <div class="section-heading">
-      <span class="eyebrow">শ্রবণ</span>
-      <h2>🔱 মহালয়ার চণ্ডীপাঠ</h2>
+      <span class="eyebrow">✨ নিজের মতো শুভেচ্ছা</span>
+      <h2>🌺 শারদীয় শুভেচ্ছা কার্ড তৈরি করুন</h2>
+      <p>শারদীয় শুভেচ্ছা, মহাষষ্ঠী, মহাসপ্তমী, মহাষ্টমী, মহানবমী ও বিজয়া দশমীর জন্য নিজের নাম ও ছবি দিয়ে সুন্দর কার্ড তৈরি করুন।</p>
     </div>
     <div class="audio-card" style="text-align:center;padding:28px 20px;">
-      <p style="margin:0 0 20px;color:#6b4b50;">মহালয়ার পবিত্র চণ্ডীপাঠ শুনতে আলাদা শ্রবণ পেজে প্রবেশ করুন।</p>
-      <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন" onclick="trackChandipathClick(event)">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
+      <p style="margin:0 0 20px;color:#6b4b50;">পছন্দের তিথি বেছে নিন, নিজের নাম ও ছবি যোগ করুন, প্রিভিউ দেখুন এবং PNG কার্ড ডাউনলোড করে শেয়ার করুন।</p>
+      <a href="shubhechha-card.html" class="btn" style="margin-top:0;">🎨 শারদীয় শুভেচ্ছা কার্ড তৈরি করুন</a>
     </div>
   </div>
 </section>
@@ -873,7 +874,7 @@ loadUploadedGallery();
   'শারদীয় দুর্গোৎসব ২০২৬':'Temple Grounds and Special Moments from the Upcoming Sharadiya Durga Puja',
   '🕰️ পূজার স্মৃতি':'🕰️ Puja Memories','বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।':'Memories of Durga Puja idols from previous years.',
   '🪔 কালীপূজা':'🪔 Kali Puja','শ্যামা পূজা':'Shyama Puja','ঈশ্বরমনি কুঠিরের কালীপূজার কিছু বিশেষ মুহূর্ত।':'Special moments from Kali Puja at Ishwarmani Kutir.',
-  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja','🔱 মহালয়ার চণ্ডীপাঠ':'🔱 Mahalaya Chandi Recitation','মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ':'Mahishasuramardini — Chandi Recitation','🎧 সরাসরি চণ্ডীপাঠ শুনুন':'🎧 Listen to Chandi Path','🔗 শ্রবণ পেজের লিংক কপি করুন':'🔗 Copy listening page link',
+  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja','🌺 শারদীয় শুভেচ্ছা কার্ড তৈরি করুন':'🌺 Create Sharadiya Greeting Card','মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ':'Mahishasuramardini — Chandi Recitation','🎨 শারদীয় শুভেচ্ছা কার্ড তৈরি করুন':'🎨 Create Sharadiya Greeting Card','🔗 শ্রবণ পেজের লিংক কপি করুন':'🔗 Copy listening page link',
   'আমাদের অবস্থান':'Our Location','খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ':'Kharma, Dewanganj, Jamalpur, Bangladesh','খড়মা, দেওয়ানগঞ্জ':'Kharma, Dewanganj','📍 Google Maps-এ দেখুন ↗':'📍 View on Google Maps ↗',
   '🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।':'Prasad details will be announced soon.','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে':'Prasad details will be announced soon.','🕐 বিতরণের সময়':'🕐 Distribution Time',
   'আমাদের সঙ্গে যোগাযোগ করুন':'Contact Us','যোগাযোগ':'Contact','খড়মা, দেওয়ানগঞ্জ, জামালপুর':'Kharma, Dewanganj, Jamalpur','© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল সংরক্ষিত':'© 2026 Ishwarmani Kutir • May all be blessed'
@@ -913,42 +914,6 @@ loadUploadedGallery();
 })();
 </script>
 
-
-<script id="chandi-share-helper">
-async function copyChandiLink(){
-  const url=new URL('chandipath.html',window.location.href).href;
-  const status=document.getElementById('chandiCopyStatus');
-  try{await navigator.clipboard.writeText(url); if(status) status.textContent='শ্রবণ পেজের লিংক কপি হয়েছে। এখন যেকাউকে পাঠাতে পারো।';}
-  catch(e){if(status) status.textContent='এই লিংকটি কপি করে শেয়ার করো: '+url; }
-}
-</script>
-
-<script id="chandipath-click-tracker">
-// Record the click before navigating away, so the browser does not cancel the request.
-let chandipathClickInProgress = false;
-async function trackChandipathClick(event){
-  const link = event.currentTarget;
-  if (!link || chandipathClickInProgress) { event.preventDefault(); return; }
-  event.preventDefault();
-  chandipathClickInProgress = true;
-  const destination = link.href;
-  const navigationFallback = setTimeout(() => { window.location.href = destination; }, 2500);
-  try {
-    const response = await fetch(SUPABASE_URL + '/rest/v1/chandipath_clicks', {
-      method: 'POST',
-      headers: {'apikey': SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
-      body: JSON.stringify((() => { let v={}; try { v=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}'); } catch(e) {} return {source:'homepage_mahalaya_button', visitor_name:v.name||'অজানা/তথ্য দেননি', district:v.district||null, upazila:v.upazila||null}; })()),
-      keepalive: true
-    });
-    if (!response.ok) console.error('Chandipath click tracking failed:', response.status, await response.text());
-  } catch (err) {
-    console.error('Chandipath click tracking failed:', err);
-  } finally {
-    clearTimeout(navigationFallback);
-    window.location.href = destination;
-  }
-}
-</script>
 
 <!-- PWA: service worker registration -->
 <script id="pwa-service-worker">
