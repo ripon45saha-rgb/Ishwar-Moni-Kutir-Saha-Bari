@@ -1023,12 +1023,21 @@ window.enableIshwarPush = async function(){
     if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey});
     let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
     const resp=await fetch('https://evkjwiicnzruijfthwpm.supabase.co/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
-      method:'POST',headers:{'apikey':'sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d','Content-Type':'application/json','Prefer':'resolution=ignore-duplicates,return=minimal'},
+      method:'POST',headers:{
+        'apikey':'sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d',
+        'Authorization':'Bearer sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d',
+        'Content-Type':'application/json',
+        'Prefer':'resolution=ignore-duplicates,return=minimal'
+      },
       body:JSON.stringify({endpoint:sub.endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null})
     });
     if(!resp.ok) throw new Error('Supabase subscription save failed: '+await resp.text());
     say('✅ এই ডিভাইসে নোটিফিকেশন চালু হয়েছে। নতুন ঘোষণা এলে নোটিফিকেশন পাবেন।');
-  }catch(e){console.error('Push subscription error',e);say('নোটিফিকেশন চালু হয়নি। সেটআপ ও Supabase SQL ঠিক আছে কি না পরীক্ষা করুন।');}
+  }catch(e){
+    console.error('Push subscription error',e);
+    const detail=String(e && e.message ? e.message : e).slice(0,260);
+    say('নোটিফিকেশন চালু হয়নি: '+detail);
+  }
 };
 </script>
 
