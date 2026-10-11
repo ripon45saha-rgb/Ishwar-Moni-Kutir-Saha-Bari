@@ -1,12 +1,16 @@
+/* ঈশ্বরমনি কুঠির — Offline Cache + Web Push Service Worker */
 const CACHE_NAME = "ishwarmani-kutir-v1";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      cache.add("/")
-    )
+    caches.open(CACHE_NAME).then(async (cache) => {
+      try {
+        await cache.add("/");
+      } catch (error) {
+        console.warn("Could not cache /:", error);
+      }
+    })
   );
-
   self.skipWaiting();
 });
 
@@ -15,44 +19,51 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== CACHE_NAME)
+          .filter(
+            (key) =>
+              key.startsWith("ishwarmani-kutir-") &&
+              key !== CACHE_NAME
+          )
           .map((key) => caches.delete(key))
       )
     )
   );
-
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
-  // Only handle requests from this website.
-  if (new URL(event.request.url).origin !== self.location.origin) {
-    return;
-  }
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(event.request).catch(async () => {
+    fetch(event.request).then((response) => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.put(event.request, copy))
+          .catch(() => {});
+      }
+      return response;
+    }).catch(async () => {
       const cached = await caches.match(event.request);
-
       if (cached) return cached;
 
       if (event.request.mode === "navigate") {
-        return (
-          (await caches.match("/")) ||
+        return (await caches.match("/")) ||
           new Response("ইন্টারনেট সংযোগ নেই।", {
-            headers: { "Content-Type": "text/plain; charset=utf-8" }
-          })
-        );
+            status: 503,
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8"
+            }
+          });
       }
 
       return new Response("", { status: 503 });
     })
   );
 });
-
-/* ঈশ্বরমনি কুঠির — Web Push Notification */
 
 self.addEventListener("push", (event) => {
   let data = {};
@@ -68,7 +79,8 @@ self.addEventListener("push", (event) => {
   const title = data.title || "ঈশ্বরমনি কুঠির";
 
   const options = {
-    body: data.body || data.message || "নতুন ঘোষণা প্রকাশিত হয়েছে।",
+    body: data.body || data.message ||
+      "নতুন ঘোষণা প্রকাশিত হয়েছে।",
     icon: "/icons/icon-192.png",
     badge: "/icons/icon-192.png",
     data: {
@@ -89,36 +101,30 @@ self.addEventListener("notificationclick", (event) => {
   const target = new URL(
     event.notification.data?.url || "/",
     self.location.origin
-  );
+  ).href;
 
-  // Prevent a notification from navigating to another website.
-  if (target.origin !== self.location.origin) return;
+  event.waitUntil((async () => {
+    const clientsList = await self.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true
+    });
 
-  event.waitUntil(
-    (async () => {
-      const clientsList = await self.clients.matchAll({
-        type: "window",
-        includeUncontrolled: true
-      });
+    for (const client of clientsList) {
+      if (
+        client.url.startsWith(self.location.origin) &&
+        "focus" in client
+      ) {
+        await client.focus();
 
-      for (const client of clientsList) {
-        if (
-          new URL(client.url).origin === self.location.origin &&
-          "focus" in client
-        ) {
-          await client.focus();
-
-          if ("navigate" in client && client.url !== target.href) {
-            await client.navigate(target.href);
-          }
-
-          return;
+        if ("navigate" in client && client.url !== target) {
+          await client.navigate(target);
         }
+        return;
       }
+    }
 
-      if (self.clients.openWindow) {
-        await self.clients.openWindow(target.href);
-      }
-    })()
-  );
+    if (self.clients.openWindow) {
+      await self.clients.openWindow(target);
+    }
+  })());
 });
