@@ -1006,28 +1006,18 @@ if ("serviceWorker" in navigator) {
 </script>
 
 <script id="ishwar-web-push-client">
-// Push subscription client with detailed diagnostics. Browser code must contain only public keys.
+// Push subscription client with detailed, safe diagnostics.
+// Only the public VAPID key and Supabase publishable key belong in browser code.
 window.ISHWAR_VAPID_PUBLIC_KEY = 'BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q';
 window.enableIshwarPush = async function(){
-  const say=(m)=>{
-    const b=document.getElementById('siteNotificationList');
-    if(b){const n=document.createElement('div');n.className='site-notification-empty';n.style.whiteSpace='pre-wrap';n.textContent=m;b.prepend(n)}
-  };
+  const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.style.whiteSpace='pre-wrap';n.textContent=m;b.prepend(n)}};
   const log=(...args)=>{try{console.log('[Ishwar Push]',...args)}catch(_){}};
   try{
-    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){
-      say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;
-    }
-    if(location.protocol!=='https:'&&location.hostname!=='localhost'){
-      say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;
-    }
-    if(!window.ISHWAR_VAPID_PUBLIC_KEY||window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){
-      say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;
-    }
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
+    if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
+    if(!window.ISHWAR_VAPID_PUBLIC_KEY || window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
     const permission=await Notification.requestPermission();
-    if(permission!=='granted'){
-      say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;
-    }
+    if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
     const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
     const key=window.ISHWAR_VAPID_PUBLIC_KEY;
     const padded=key.replace(/-/g,'+').replace(/_/g,'/');
@@ -1037,25 +1027,26 @@ window.enableIshwarPush = async function(){
     let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
     const supabaseUrl='https://evkjwiicnzruijfthwpm.supabase.co';
     const publishableKey='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
-    const payload={endpoint:sub.endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null};
-    log('Saving subscription',{url:supabaseUrl+'/rest/v1/web_push_subscriptions',endpointHost:(()=>{try{return new URL(payload.endpoint).host}catch(_){return 'invalid'}})(),hasSubscription:!!payload.subscription,hasPublishableKey:!!publishableKey});
-    const resp=await fetch(supabaseUrl+'/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
+    const endpoint=sup.endpoint;
+    const payload={endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null};
+    log('Saving subscription', {url:supabaseUrl+'/rest/v1/web_push_subscriptions', endpointHost:(()=>{try{return new URL(endpoint).host}catch(_){return 'invalid'}})(), hasSubscription:!!payload.subscription, hasPublishableKey:!!publishableKey});
+    const resp=await fetch(supabaseUrl+'/functions/v1/send-push',{
       method:'POST',
-      headers:{'apikey':publishableKey,'Content-Type':'application/json','Prefer':'resolution=ignore-duplicates,return=minimal'},
-      body:JSON.stringify(payload)
+      headers:{'apikey':publishableKey,'Content-Type':'application/json'},
+      body:JSON.stringify({action:'subscribe', ...payload})
     });
     const responseText=await resp.text();
     if(!resp.ok){
       let detail=responseText;
-      try{const parsed=JSON.parse(responseText);detail=parsed.message||parsed.error_description||parsed.error||responseText;if(parsed.code)detail+=' (code '+parsed.code+')';if(parsed.hint)detail+='; hint: '+parsed.hint;}catch(_){}
-      log('Subscription save failed',{status:resp.status,statusText:resp.statusText,body:responseText,contentType:resp.headers.get('content-type'),requestId:resp.headers.get('sb-request-id')||resp.headers.get('x-request-id')});
+      try{const parsed=JSON.parse(responseText);detail=parsed.message||parsed.error_description||parsed.error||responseText; if(parsed.code)detail+=' (code '+parsed.code+')'; if(parsed.hint)detail+='; hint: '+parsed.hint;}catch(_){}
+      log('Subscription save failed', {status:resp.status,statusText:resp.statusText,body:responseText,contentType:resp.headers.get('content-type')});
       throw new Error('Supabase HTTP '+resp.status+': '+detail);
     }
-    log('Subscription saved',{status:resp.status});
-    say('✅ এই ডিভাইসে নোটিফিকেশন সাবস্ক্রিপশন সেভ হয়েছে।');
+    log('Subscription saved', {status:resp.status});
+    say('✅ এই ডিভাইসে নোটিফিকেশন চালু হয়েছে। নতুন ঘোষণা এলে নোটিফিকেশন পাবেন।');
   }catch(e){
     console.error('[Ishwar Push] subscription error',e);
-    const detail=String(e&&e.message?e.message:e).slice(0,700);
+    const detail=String(e && e.message ? e.message : e).slice(0,700);
     say('নোটিফিকেশন চালু হয়নি: '+detail+'\n\nবিস্তারিত দেখতে Chrome-এর Console/Logs দেখুন।');
   }
 };
