@@ -90,7 +90,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <section id="dashboard" style="display:none">
 <nav class="admin-navbar" aria-label="Admin sections">
 <a href="admin.html" aria-current="page">🏠 Overview</a>
-<a href="chandipath-clicks.html">🎨 শুভেচ্ছা কার্ড ব্যবহার</a>
+<a href="chandipath-clicks.html">🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</a>
 <a href="website-editor.html">🛠️ Website Editor</a>
 <a href="committee.html">🙏 পূজা কমিটি</a>
 <a href="gallery.html">📸 Gallery</a>
@@ -105,7 +105,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
-<div class="top"><div><h2>🎨 শুভেচ্ছা কার্ড ব্যবহারের রিপোর্ট</h2><div class="small">কার্ড তৈরি/ডাউনলোড/শেয়ার করার সময় সম্মতিসহ দেওয়া নাম ও কার্ডের তথ্য এখানে দেখা যাবে।</div></div><button class="btn secondary" onclick="loadGreetingCardUsage()">↻ রিপোর্ট Refresh</button></div>
+<div class="top"><div><h2>🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</h2><div class="small">PNG ডাউনলোড বা শেয়ার করার সময় জমা হওয়া নাম, কার্ডের ধরন, কাজ এবং তারিখ-সময় এখানে দেখা যাবে।</div></div><button class="btn secondary" onclick="loadGreetingCardUsage()">↻ রিপোর্ট Refresh</button></div>
 <div class="stats"><div class="stat">মোট ব্যবহার<b id="cpTotal">—</b></div><div class="stat">আজকের ব্যবহার<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ব্যবহার<b id="cpWeek">—</b></div></div>
 <div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
 <div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>যাঁকে পাঠাবেন</th><th>কার্ড</th><th>কাজ</th><th>সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="6" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
