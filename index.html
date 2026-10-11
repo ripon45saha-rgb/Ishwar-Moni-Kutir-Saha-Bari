@@ -356,14 +356,27 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ঈশ্বরমনি কুঠির">
 
+
+<style id="smart-notification-center-styles">
+.site-notification-bell{position:relative;flex:0 0 auto;border:1px solid rgba(255,231,173,.42);background:rgba(255,255,255,.1);color:#ffe8a8;border-radius:13px;padding:9px 12px;font-size:20px;cursor:pointer;line-height:1}
+.site-notification-bell:hover{background:rgba(255,255,255,.2)}.site-notification-badge{position:absolute;right:-5px;top:-6px;min-width:19px;height:19px;padding:0 4px;border-radius:99px;background:#e53935;color:#fff;font:700 11px/19px Arial,sans-serif;text-align:center;border:2px solid #3d0710}
+.site-notification-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(20,3,7,.62);padding:14px;align-items:flex-start;justify-content:flex-end}.site-notification-overlay.open{display:flex}
+.site-notification-panel{width:min(440px,100%);max-height:min(82dvh,760px);overflow:auto;margin-top:70px;background:#fffaf0;border:1px solid #d9b96d;border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.32);color:#35151a}
+.site-notification-head{position:sticky;top:0;display:flex;align-items:center;gap:10px;padding:17px 18px;background:#6f1118;color:#fff3d2;border-radius:19px 19px 0 0;z-index:2}.site-notification-head h2{font-size:20px;margin:0}.site-notification-head button{margin-left:auto;background:transparent;color:#fff;border:0;font-size:27px;cursor:pointer}
+.site-notification-tools{display:flex;gap:8px;padding:12px 14px;border-bottom:1px solid #efdfb9}.site-notification-tools button{border:1px solid #e3cca0;background:#fff;color:#6f1118;border-radius:9px;padding:7px 10px;cursor:pointer;font:700 12px inherit}
+.site-notification-item{display:block;padding:15px 17px;border-bottom:1px solid #f0e3c6;color:inherit;text-decoration:none}.site-notification-item:hover{background:#fff2d4}.site-notification-item.unread{border-left:4px solid #b8862d;background:#fffdf7}.site-notification-item h3{font-size:16px;color:#71131b;margin:0 0 4px}.site-notification-item p{font-size:14px;line-height:1.65;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.site-notification-meta{display:flex;gap:8px;align-items:center;justify-content:space-between;color:#876c55;font:12px Arial,sans-serif;margin-bottom:5px}.site-notification-category{border-radius:999px;background:#f3e2b8;color:#6f1118;padding:3px 8px;font-weight:700}.site-notification-empty{padding:28px 18px;text-align:center;color:#80675a}
+@media(max-width:800px){.site-notification-bell{padding:8px 10px;margin-left:auto}.site-notification-panel{margin-top:58px}.site-notification-overlay{padding:8px}.site-notification-head h2{font-size:18px}}
+</style>
+
 </head>
 <body>
 <nav class="nav"><div class="navin">
   <div class="language-toggle" role="group" aria-label="Choose language"><button type="button" data-language="bn" class="active" aria-pressed="true">বাংলা</button><button type="button" data-language="en" aria-pressed="false">EN</button></div>
   <a class="brand" href="#home">🪔 ঈশ্বরমনি কুঠির</a>
   <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
+  <button id="siteNotificationBell" class="site-notification-bell" type="button" aria-label="নোটিফিকেশন খুলুন" onclick="openSiteNotifications()"><span aria-hidden="true">🔔</span><span id="siteNotificationBadge" class="site-notification-badge" hidden>0</span></button>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="greeting-maker.html">🎨 শারদীয়া কার্ড মেকার</a><a href="#location">অবস্থান</a>
   </div>
 </div></nav>
 <script>
@@ -736,7 +749,7 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
+   if(links){let items=nav.items.map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}if(!items.some(x=>x.href==='greeting-maker.html')){items.push({label:'🎨 শারদীয়া কার্ড মেকার',href:'greeting-maker.html'});}
    links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};
@@ -937,6 +950,35 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     });
   });
 }
+</script>
+
+
+<div id="siteNotificationOverlay" class="site-notification-overlay" role="dialog" aria-modal="true" aria-labelledby="siteNotificationTitle" onclick="if(event.target===this)closeSiteNotifications()">
+ <section class="site-notification-panel">
+  <div class="site-notification-head"><span aria-hidden="true">🔔</span><h2 id="siteNotificationTitle">নোটিফিকেশন</h2><button type="button" aria-label="বন্ধ করুন" onclick="closeSiteNotifications()">×</button></div>
+  <div class="site-notification-tools"><button type="button" onclick="markAllSiteNotificationsRead()">সব পড়া হয়েছে</button><button type="button" onclick="loadSiteNotifications(true)">↻ Refresh</button></div>
+  <div id="siteNotificationList" aria-live="polite"><div class="site-notification-empty">নোটিফিকেশন লোড হচ্ছে…</div></div>
+ </section>
+</div>
+<script id="smart-notification-center-script">
+(function(){
+ const TABLE='/rest/v1/site_notifications?select=id,title,message,category,target_url,created_at&is_published=eq.true&order=created_at.desc&limit=40';
+ const READ_KEY='ishwarmani_notification_read_v1'; let rows=[];
+ function readIds(){try{return JSON.parse(localStorage.getItem(READ_KEY)||'[]')}catch(e){return []}}
+ function saveRead(ids){try{localStorage.setItem(READ_KEY,JSON.stringify(ids))}catch(e){}}
+ function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function api(){return {apikey:window.SUPABASE_PUBLISHABLE_KEY||'sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d'}}
+ function updateBadge(){const badge=document.getElementById('siteNotificationBadge');if(!badge)return;const n=rows.filter(x=>!readIds().includes(String(x.id))).length;badge.textContent=n>99?'99+':String(n);badge.hidden=n===0}
+ function render(){const box=document.getElementById('siteNotificationList');if(!box)return;const read=readIds();if(!rows.length){box.innerHTML='<div class="site-notification-empty">এখনো কোনো নতুন নোটিফিকেশন নেই।</div>';updateBadge();return}
+ box.innerHTML=rows.map(n=>{const unread=!read.includes(String(n.id));const href=n.target_url&&(/^(https?:\/\/|\/|#)/i.test(n.target_url)||/^[a-z0-9_-]+\.html(?:[?#].*)?$/i.test(n.target_url))?n.target_url:'#';const tag=n.category||'ঘোষণা';const date=n.created_at?new Date(n.created_at).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'}):'';return `<a class="site-notification-item ${unread?'unread':''}" href="${safe(href)}" data-notification-id="${safe(n.id)}"><div class="site-notification-meta"><span class="site-notification-category">${safe(tag)}</span><span>${safe(date)}</span></div><h3>${safe(n.title)}</h3><p>${safe(n.message)}</p>${unread?'<div style="margin-top:6px;color:#8a5b13;font-size:11px;font-weight:800">● নতুন</div>':''}</a>`}).join('');
+ box.querySelectorAll('[data-notification-id]').forEach(a=>a.addEventListener('click',()=>{const id=a.dataset.notificationId;saveRead([...new Set([...readIds(),id])]);setTimeout(()=>{updateBadge();},0)}));updateBadge();}
+ window.loadSiteNotifications=async function(showLoading){const box=document.getElementById('siteNotificationList');if(showLoading&&box)box.innerHTML='<div class="site-notification-empty">লোড হচ্ছে…</div>';try{const url=(window.SUPABASE_URL||'https://evkjwiicnzruijfthwpm.supabase.co')+TABLE;const r=await fetch(url,{headers:api()});const d=await r.json();if(!r.ok)throw Error(d.message||'লোড করা যায়নি');rows=Array.isArray(d)?d:[];render()}catch(e){if(box)box.innerHTML='<div class="site-notification-empty">নোটিফিকেশন লোড হয়নি। পরে আবার চেষ্টা করুন।</div>';console.warn('Notification Center:',e.message)}};
+ window.openSiteNotifications=function(){const overlay=document.getElementById('siteNotificationOverlay');if(overlay)overlay.classList.add('open');window.loadSiteNotifications(false)};
+ window.closeSiteNotifications=function(){const overlay=document.getElementById('siteNotificationOverlay');if(overlay)overlay.classList.remove('open')};
+ window.markAllSiteNotificationsRead=function(){saveRead(rows.map(x=>String(x.id)));render()};
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')window.closeSiteNotifications()});
+ document.addEventListener('DOMContentLoaded',()=>{window.loadSiteNotifications(false);});
+})();
 </script>
 
 </body>
