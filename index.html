@@ -133,7 +133,16 @@ body.entered .welcome-language-toggle{display:none}
 .history-item[open] summary:after{content:'−'}
 .history-copy{padding:0 5px 22px;max-width:900px;color:#57484a;font-size:16px;line-height:1.95}
 .history-copy p+p{margin-top:10px}
-@media(max-width:600px){.language-toggle{right:60px;top:12px}.language-toggle button{padding:7px 8px}.mobile-menu-btn{right:10px!important}.history-item summary{padding:20px 2px}}
+@media(max-width:600px){
+  /* Mobile header: keep language, notification bell and menu in separate slots. */
+  body.entered .nav .language-toggle{position:fixed!important;left:10px!important;right:auto!important;top:12px!important;z-index:101!important;max-width:calc(100vw - 180px);}
+  body.entered .nav .language-toggle button{padding:7px 9px;font-size:12px;white-space:nowrap}
+  .site-notification-bell{position:fixed!important;right:68px!important;top:10px!important;z-index:102!important;width:48px;height:48px;display:flex;align-items:center;justify-content:center;padding:0!important;margin:0!important;border-radius:14px;font-size:22px;box-shadow:0 5px 16px rgba(0,0,0,.22)}
+  .site-notification-badge{right:-4px;top:-5px}
+  .mobile-menu-btn{position:fixed!important;right:10px!important;top:10px!important;z-index:103!important;width:48px;height:48px;display:flex;align-items:center;justify-content:center;padding:0!important;font-size:23px}
+  .navin{padding-top:64px!important;min-height:64px!important}
+  .history-item summary{padding:20px 2px}
+}
 
 </style>
 <style>
