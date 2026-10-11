@@ -90,7 +90,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <section id="dashboard" style="display:none">
 <nav class="admin-navbar" aria-label="Admin sections">
 <a href="admin.html" aria-current="page">🏠 Overview</a>
-<a href="chandipath-clicks.html">🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</a>
+<a href="#greetingCardUsage" onclick="document.getElementById('greetingCardUsage').scrollIntoView({behavior:'smooth'});return false;">🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</a>
 <a href="website-editor.html">🛠️ Website Editor</a>
 <a href="committee.html">🙏 পূজা কমিটি</a>
 <a href="gallery.html">📸 Gallery</a>
@@ -105,10 +105,10 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
-<div class="top"><div><h2>🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</h2><div class="small">PNG ডাউনলোড বা শেয়ার করার সময় জমা হওয়া নাম, কার্ডের ধরন, কাজ এবং তারিখ-সময় এখানে দেখা যাবে।</div></div><button class="btn secondary" onclick="loadGreetingCardUsage()">↻ রিপোর্ট Refresh</button></div>
+<div id="greetingCardUsage" class="top"><div><h2>🎨 শুভেচ্ছা কার্ড তৈরি তথ্য সংরক্ষণ</h2><div class="small">PNG ডাউনলোড বা শেয়ার করার সময় জমা হওয়া নাম, কার্ডের ধরন, কাজ এবং তারিখ-সময় এখানে দেখা যাবে।</div></div><button class="btn secondary" onclick="loadGreetingCardUsage()">↻ রিপোর্ট Refresh</button></div>
 <div class="stats"><div class="stat">মোট ব্যবহার<b id="cpTotal">—</b></div><div class="stat">আজকের ব্যবহার<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ব্যবহার<b id="cpWeek">—</b></div></div>
 <div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
-<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>যাঁকে পাঠাবেন</th><th>কার্ড</th><th>কাজ</th><th>সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="6" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>যাঁকে পাঠাবেন</th><th>কার্ড</th><th>কাজ</th><th>জেলা</th><th>উপজেলা</th><th>লগইন পরিচয়</th><th>সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="9" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -201,16 +201,19 @@ async function loadGreetingCardUsage(){
  const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
  if(!status||!body)return; status.textContent='কার্ড ব্যবহারের তথ্য লোড হচ্ছে…';
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/greeting_card_usage?select=id,creator_name,recipient_name,card_type,action,created_at&order=created_at.desc&limit=1000',{headers:h()});
+  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,source,visitor_name,district,upazila,clicked_at&order=clicked_at.desc&limit=1000',{headers:h()});
   const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
-  const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
-  const stamp=x=>new Date(x.created_at||0);
+  // Only show new greeting-card records; old Chandi Path clicks are hidden from this panel.
+  const rows=(Array.isArray(d)?d:[]).filter(x=>String(x.source||'').startsWith('greeting_card|'));
+  const parse=x=>{const a=String(x.source||'').split('|');let recipient='';try{recipient=decodeURIComponent(a.slice(3).join('|')||'')}catch(e){}return {card:a[1]||'—',action:a[2]||'—',recipient}};
+  const names={sharadiya:'শারদীয় শুভেচ্ছা',shashthi:'মহাষষ্ঠী',saptami:'মহাসপ্তমী',ashtami:'মহাষ্টমী',navami:'মহানবমী',dashami:'বিজয়া দশমী'};
+  const now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000), stamp=x=>new Date(x.clicked_at||0);
   document.getElementById('cpTotal').textContent=rows.length;
   document.getElementById('cpToday').textContent=rows.filter(x=>stamp(x)>=start).length;
   document.getElementById('cpWeek').textContent=rows.filter(x=>stamp(x)>=week).length;
-  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.creator_name||'—')}</td><td>${esc(x.recipient_name||'—')}</td><td>${esc(({sharadiya:'শারদীয় শুভেচ্ছা',shashthi:'মহাষষ্ঠী',saptami:'মহাসপ্তমী',ashtami:'মহাষ্টমী',navami:'মহানবমী',dashami:'বিজয়া দশমী'})[x.card_type]||x.card_type||'—')}</td><td>${esc(x.action==='download'?'PNG ডাউনলোড':x.action==='share'?'শেয়ার':'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">এখনো কোনো কার্ড ব্যবহার রেকর্ড নেই। আগে SQL সেটআপ করুন।</td></tr>';
-  status.textContent=`${rows.length}টি কার্ড ব্যবহারের রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ১০০০টি দেখানো হচ্ছে।`;
- }catch(e){status.textContent='কার্ড ব্যবহারের তথ্য লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="6" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
+  body.innerHTML=rows.length?rows.map((x,i)=>{const m=parse(x);return `<tr><td>${i+1}</td><td>${esc(x.visitor_name||'—')}</td><td>${esc(m.recipient||'—')}</td><td>${esc(names[m.card]||m.card)}</td><td>${esc(m.action==='download'?'PNG ডাউনলোড':m.action==='share'?'শেয়ার':m.action)}</td><td>${esc(x.district||'তথ্য নেই')}</td><td>${esc(x.upazila||'তথ্য নেই')}</td><td>লগইন তথ্য সংরক্ষিত নেই</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`}).join(''):'<tr><td colspan="9" class="empty">এখনো কোনো শুভেচ্ছা কার্ডের রেকর্ড নেই। পুরোনো চণ্ডীপাঠের রেকর্ড এখানে দেখানো হয় না।</td></tr>';
+  status.textContent=`${rows.length}টি শুভেচ্ছা কার্ডের রেকর্ড লোড হয়েছে। পুরোনো চণ্ডীপাঠের ক্লিক বাদ রাখা হয়েছে।`;
+ }catch(e){status.textContent='কার্ড ব্যবহারের তথ্য লোড হয়নি: '+e.message+' — Supabase লগইন/অনুমতি পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="9" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
 }
 function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
 
