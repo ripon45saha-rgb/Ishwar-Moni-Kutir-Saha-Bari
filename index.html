@@ -965,7 +965,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 <div id="siteNotificationOverlay" class="site-notification-overlay" role="dialog" aria-modal="true" aria-labelledby="siteNotificationTitle" onclick="if(event.target===this)closeSiteNotifications()">
  <section class="site-notification-panel">
   <div class="site-notification-head"><span aria-hidden="true">🔔</span><h2 id="siteNotificationTitle">নোটিফিকেশন</h2><button type="button" aria-label="বন্ধ করুন" onclick="closeSiteNotifications()">×</button></div>
-  <div class="site-notification-tools"><button type="button" onclick="markAllSiteNotificationsRead()">সব পড়া হয়েছে</button><button type="button" onclick="loadSiteNotifications(true)">↻ Refresh</button></div>
+  <div class="site-notification-tools"><button type="button" onclick="enableIshwarPush()">🔔 ফোনে নোটিফিকেশন চালু করুন</button><button type="button" onclick="markAllSiteNotificationsRead()">সব পড়া হয়েছে</button><button type="button" onclick="loadSiteNotifications(true)">↻ Refresh</button></div>
   <div id="siteNotificationList" aria-live="polite"><div class="site-notification-empty">নোটিফিকেশন লোড হচ্ছে…</div></div>
  </section>
 </div>
@@ -988,6 +988,34 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
  document.addEventListener('keydown',e=>{if(e.key==='Escape')window.closeSiteNotifications()});
  document.addEventListener('DOMContentLoaded',()=>{window.loadSiteNotifications(false);});
 })();
+</script>
+
+
+<script id="ishwar-web-push-client">
+// Replace this placeholder with the VAPID PUBLIC key generated for your project.
+window.ISHWAR_VAPID_PUBLIC_KEY = 'PASTE_VAPID_PUBLIC_KEY_HERE';
+window.enableIshwarPush = async function(){
+  const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.textContent=m;b.prepend(n)}};
+  try{
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
+    if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
+    if(window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
+    const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
+    const key=window.ISHWAR_VAPID_PUBLIC_KEY;
+    const applicationServerKey=Uint8Array.from(atob(key.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey});
+    let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
+    const resp=await fetch('https://evkjwiicnzruijfthwpm.supabase.co/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
+      method:'POST',headers:{'apikey':'sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d','Content-Type':'application/json','Prefer':'resolution=ignore-duplicates,return=minimal'},
+      body:JSON.stringify({endpoint:sub.endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null})
+    });
+    if(!resp.ok) throw new Error('Supabase subscription save failed: '+await resp.text());
+    say('✅ এই ডিভাইসে নোটিফিকেশন চালু হয়েছে। নতুন ঘোষণা এলে নোটিফিকেশন পাবেন।');
+  }catch(e){console.error('Push subscription error',e);say('নোটিফিকেশন চালু হয়নি। সেটআপ ও Supabase SQL ঠিক আছে কি না পরীক্ষা করুন।');}
+};
 </script>
 
 </body>
