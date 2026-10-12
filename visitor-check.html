@@ -30,7 +30,7 @@ button{border:0;border-radius:11px;padding:12px 16px;background:#74151c;color:wh
     <button class="full" type="submit">প্রবেশ করুন →</button>
     <div id="loginMsg" class="status" role="alert"></div>
   </form>
-  <div class="notice">নোট: নাম দিয়ে প্রবেশ করা শুধু একটি সাধারণ স্ক্রিন-গেট, নিরাপদ লগইন নয়। ব্যক্তিগত দর্শনার্থী তথ্য সবার জন্য প্রকাশ করতে চাইলে Supabase-এর Read Policy আলাদাভাবে নিরাপদভাবে সেট করতে হবে।</div>
+  <div class="notice">নোট: নাম দিয়ে প্রবেশ করা নিরাপদ পরিচয় যাচাই নয়। এই প্রবেশের নাম Admin Panel-এ লগ হবে। পুরোনো দর্শনার্থীর ব্যক্তিগত তথ্য শুধু অনুমোদিত Admin থেকে দেখা নিরাপদ।</div>
 </section>
 
 <section id="dashboard" class="hidden">
@@ -57,7 +57,7 @@ let visitors=[];
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function ratingNum(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>'০১২৩৪৫৬৭৮৯'.indexOf(c)).replace('/','');let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
-$('loginForm').addEventListener('submit',e=>{e.preventDefault();let name=$('visitorName').value.trim();if(!name){$('loginMsg').textContent='আপনার নাম লিখুন।';return}sessionStorage.setItem('ishwarmani_visitor_panel_name',name);openPanel(name)});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();let name=$('visitorName').value.trim();if(!name){$('loginMsg').textContent='আপনার নাম লিখুন।';return}const btn=$('loginForm').querySelector('button[type=submit]');btn.disabled=true;btn.textContent='প্রবেশ হচ্ছে…';try{const r=await fetch(SUPABASE_URL+'/rest/v1/visitor_panel_access_logs',{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({visitor_name:name})});if(!r.ok){const d=await r.json().catch(()=>({}));throw Error(d.message||('HTTP '+r.status))}sessionStorage.setItem('ishwarmani_visitor_panel_name',name);openPanel(name)}catch(err){$('loginMsg').textContent='প্রবেশ লগ সেভ হয়নি: '+err.message+'। Supabase SQL সেটআপ চালাতে হবে।';}finally{btn.disabled=false;btn.textContent='প্রবেশ করুন →'}});
 function openPanel(name){$('loggedName').textContent=name;$('login').classList.add('hidden');$('dashboard').classList.remove('hidden');loadVisitors()}
 function logout(){$('dashboard').classList.add('hidden');$('login').classList.remove('hidden');$('visitorName').value='';$('loginMsg').textContent='';sessionStorage.removeItem('ishwarmani_visitor_panel_name');visitors=[]}
 $('logoutBtn').addEventListener('click',logout);$('refreshBtn').addEventListener('click',loadVisitors);$('search').addEventListener('input',render);
