@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6f1118">
+<title>ঈশ্বরমনি কুঠির — দর্শনার্থী প্যানেল</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#32100e;background:linear-gradient(145deg,#25070a,#74151c 55%,#fff3d9);min-height:100vh}
+.wrap{max-width:1100px;margin:auto;padding:22px}.panel{background:#fffdf8;border:1px solid #e8d3a7;border-radius:22px;padding:22px;box-shadow:0 18px 55px #16030633}
+.login{max-width:460px;margin:8vh auto}.brand{color:#f4d58b;font-size:12px;font-weight:800;letter-spacing:2px}.login h1{color:#74151c;margin:10px 0}.muted{color:#806c62;font-size:13px;line-height:1.7}
+label{display:block;font-weight:700;margin:18px 0 8px}input{width:100%;padding:14px;border:1px solid #ddc99e;border-radius:12px;font:inherit;background:#fff}
+button{border:0;border-radius:11px;padding:12px 16px;background:#74151c;color:white;font-weight:800;cursor:pointer}button:disabled{opacity:.6}
+.full{width:100%;margin-top:18px}.notice{background:#fff5df;border:1px solid #ead7b0;border-radius:12px;padding:12px;font-size:12px;color:#765d4b;line-height:1.7;margin-top:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.stat{background:#fff7e7;border:1px solid #ead7b0;padding:16px;border-radius:15px}.stat b{display:block;font-size:28px;color:#74151c;margin-top:6px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.tools input{flex:1;min-width:180px}.table-wrap{overflow:auto;border:1px solid #ead7b0;border-radius:14px}table{width:100%;min-width:720px;border-collapse:collapse;background:#fff}th,td{padding:12px;border-bottom:1px solid #f0e4ce;text-align:left;vertical-align:top}th{background:#74151c;color:white}tr:hover td{background:#fffaf0}.status{font-size:13px;color:#765d52;margin:10px 0}.empty{text-align:center;padding:28px;color:#806c62}.hidden{display:none!important}
+@media(max-width:600px){.wrap{padding:12px}.panel{padding:16px}.stats{grid-template-columns:1fr}.login{margin:4vh auto}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section id="login" class="panel login">
+  <div style="font-size:42px;color:#74151c">ॐ</div>
+  <div class="brand">ISHWARMONI KUTIR</div>
+  <h1>দর্শনার্থী চেক প্যানেল</h1>
+  <p class="muted">নাম লিখে প্রবেশ করুন। এখানে দর্শনার্থীদের জমা দেওয়া তথ্য শুধু দেখা ও খোঁজা যাবে।</p>
+  <form id="loginForm">
+    <label for="visitorName">আপনার নাম</label>
+    <input id="visitorName" autocomplete="name" maxlength="80" placeholder="আপনার নাম লিখুন" required>
+    <button class="full" type="submit">প্রবেশ করুন →</button>
+    <div id="loginMsg" class="status" role="alert"></div>
+  </form>
+  <div class="notice">নোট: নাম দিয়ে প্রবেশ করা শুধু একটি সাধারণ স্ক্রিন-গেট, নিরাপদ লগইন নয়। ব্যক্তিগত দর্শনার্থী তথ্য সবার জন্য প্রকাশ করতে চাইলে Supabase-এর Read Policy আলাদাভাবে নিরাপদভাবে সেট করতে হবে।</div>
+</section>
+
+<section id="dashboard" class="hidden">
+  <div class="panel">
+    <div class="top">
+      <div><div class="brand" style="color:#9b762b">ISHWARMONI KUTIR · VISITOR DESK</div><h1 style="margin:8px 0;color:#74151c">👥 দর্শনার্থী তথ্য</h1><div class="muted">স্বাগতম, <b id="loggedName"></b> — এখানে শুধু তথ্য দেখা যাবে।</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="refreshBtn" type="button">↻ Refresh</button><button id="logoutBtn" type="button" style="background:#e9d7b0;color:#42110f">Logout</button></div>
+    </div>
+    <div class="stats">
+      <div class="stat">মোট দর্শনার্থী<b id="total">—</b></div>
+      <div class="stat">গড় Rating<b id="avg">—</b></div>
+      <div class="stat">আজকের দর্শনার্থী<b id="today">—</b></div>
+    </div>
+    <div class="tools"><input id="search" placeholder="নাম / জেলা / উপজেলা / মতামত খুঁজুন…" aria-label="দর্শনার্থী খুঁজুন"></div>
+    <div id="status" class="status">তথ্য লোড করা হচ্ছে…</div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead><tbody id="rows"><tr><td colspan="7" class="empty">তথ্য লোড হচ্ছে…</td></tr></tbody></table></div>
+  </div>
+</section>
+</main>
+<script>
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+let visitors=[];
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function ratingNum(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>'০১২৩৪৫৬৭৮৯'.indexOf(c)).replace('/','');let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();let name=$('visitorName').value.trim();if(!name){$('loginMsg').textContent='আপনার নাম লিখুন।';return}sessionStorage.setItem('ishwarmani_visitor_panel_name',name);openPanel(name)});
+function openPanel(name){$('loggedName').textContent=name;$('login').classList.add('hidden');$('dashboard').classList.remove('hidden');loadVisitors()}
+function logout(){$('dashboard').classList.add('hidden');$('login').classList.remove('hidden');$('visitorName').value='';$('loginMsg').textContent='';sessionStorage.removeItem('ishwarmani_visitor_panel_name');visitors=[]}
+$('logoutBtn').addEventListener('click',logout);$('refreshBtn').addEventListener('click',loadVisitors);$('search').addEventListener('input',render);
+async function loadVisitors(){
+ $('status').textContent='দর্শনার্থীর তথ্য লোড হচ্ছে…';$('rows').innerHTML='<tr><td colspan="7" class="empty">লোড হচ্ছে…</td></tr>';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/visitors?select=name,district,upazila,opinion,rating,created_at&order=created_at.desc&limit=2000',{headers:{apikey:SUPABASE_KEY}});
+  const d=await r.json();if(!r.ok)throw Error(d.message||d.hint||('HTTP '+r.status));
+  visitors=Array.isArray(d)?d:[];updateStats();render();$('status').textContent=visitors.length+'টি রেকর্ড পাওয়া গেছে।';
+ }catch(e){$('status').textContent='তথ্য লোড হয়নি: '+e.message+'। Supabase-এর visitors টেবিলের SELECT permission/RLS policy পরীক্ষা করতে হবে।';$('rows').innerHTML='<tr><td colspan="7" class="empty">ডেটা পাওয়া যায়নি।</td></tr>'}
+}
+function updateStats(){const vals=visitors.map(v=>ratingNum(v.rating)).filter(n=>n!==null&&n>=0&&n<=10);$('total').textContent=visitors.length;$('avg').textContent=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)+'/10':'—';const today=new Date();$('today').textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toDateString()===today.toDateString()).length}
+function render(){const q=$('search').value.toLowerCase().trim();const list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x??'').toLowerCase().includes(q)));$('rows').innerHTML=list.length?list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||'—')}</td><td><b>${esc(v.rating??'—')}</b></td><td>${v.created_at?esc(new Date(v.created_at).toLocaleString('bn-BD')):'—'}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>'}
+const savedName=sessionStorage.getItem('ishwarmani_visitor_panel_name');if(savedName)openPanel(savedName);
+</script>
+</body>
+</html>
