@@ -28,6 +28,7 @@
     .routecards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
     .routecard{border:1px solid var(--line);background:#fff;border-radius:17px;padding:18px;display:flex;flex-direction:column;align-items:flex-start}
     .routecard p{margin:5px 0 14px;color:var(--muted);font-size:14px;flex:1}.tag{display:inline-block;font-size:11px;font-weight:850;background:var(--soft);color:var(--green);padding:4px 8px;border-radius:99px;margin-bottom:9px}
+    .vehicle-note{font-size:13px;color:var(--muted);margin:8px 0 0}.routecard .btn{margin-top:auto}
     .route-steps{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:16px 0 0}
     .stop{border:1px solid #cfe2d4;background:#f7fbf8;color:var(--dark);border-radius:11px;padding:9px 12px;font-size:14px;font-weight:750}
     .arrow{color:var(--green);font-weight:900}
@@ -57,10 +58,13 @@
 
   <section class="panel" aria-labelledby="select-title">
     <h2 id="select-title">আপনার যাত্রার স্থান নির্বাচন করুন</h2>
-    <p class="muted">বাংলাদেশের ৬৪টি জেলা থেকে জেলা ও উপজেলা বেছে নিন। তারপর Google Maps-এ ঈশ্বরমনি কুঠির, সাহা বাড়ি যাওয়ার রুট খুলবে।</p>
+    <p class="muted">বাংলাদেশের ৬৪টি জেলা থেকে জেলা ও উপজেলা বেছে নিন। তারপর Google Maps-এ ঈশ্বরমনি কুঠির, সাহা বাড়ি যাওয়ার রুট খুলবে। নালিতাবাড়ী থেকে গেলে শেরপুর → ঝগড়ারচর বাজার → ইসলামপুর হয়ে রুট দেখাবে।</p>
     <div class="formgrid">
       <div><label for="district">জেলা সিলেক্ট করুন</label><select id="district"><option value="">জেলা লোড হচ্ছে…</option></select></div>
       <div><label for="upazila">উপজেলা সিলেক্ট করুন</label><select id="upazila" disabled><option value="">আগে জেলা নির্বাচন করুন</option></select></div>
+      <div><label for="vehicle">কোন যানবাহনে যাবেন?</label><select id="vehicle">
+        <option value="two-wheeler">মোটরবাইক</option><option value="transit">ট্রেন / গণপরিবহন</option><option value="driving">অটো-রিকশা</option><option value="driving">রিকশা</option><option value="driving">মিনিবাস</option><option value="driving">প্রাইভেট কার</option><option value="walking">হেঁটে</option><option value="bicycling">সাইকেল</option>
+      </select><p class="vehicle-note">অটো-রিকশা, রিকশা ও মিনিবাসের জন্য Google Maps-এর সাধারণ সড়ক-রুট দেখানো হবে; এসব যানবাহনের আলাদা রুট সব জায়গায় থাকে না।</p></div>
     </div>
     <div class="btnrow">
       <button id="directions" class="btn primary" type="button">🧭 আমার রুট দেখান</button>
@@ -70,8 +74,9 @@
     <div id="selectedRoute" hidden>
       <h3 style="margin-top:22px">আপনার যাত্রার রুট</h3>
       <div id="routeSteps" class="route-steps"></div>
-      <div class="btnrow">
-        <a id="selectedMapLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Google Maps-এ রুট ও সময় দেখুন ↗</a>
+      <div class="routecards" id="routeCards">
+        <article class="routecard"><span class="tag">রুট ১ · প্রস্তাবিত</span><h3>Google Maps-এর প্রস্তাবিত রাস্তা</h3><p id="routeOneText">নির্বাচিত স্থান থেকে গন্তব্য পর্যন্ত রুট ও সম্ভাব্য সময় দেখুন।</p><a id="routeOneLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">রুট ১ দেখুন ↗</a></article>
+        <article class="routecard"><span class="tag">রুট ২ · বিকল্প</span><h3 id="routeTwoTitle">বিকল্প রাস্তা</h3><p id="routeTwoText">Google Maps-এ বিকল্প রাস্তা থাকলে তুলনা করে বেছে নিন।</p><a id="routeTwoLink" class="btn secondary" href="#" target="_blank" rel="noopener noreferrer">রুট ২ দেখুন ↗</a></article>
       </div>
       <div class="map-preview" id="mapPreviewWrap">
         <h3>গন্তব্যের ম্যাপ</h3>
@@ -100,7 +105,12 @@
   const status = document.getElementById('dataStatus');
   const routePanel = document.getElementById('selectedRoute');
   const routeSteps = document.getElementById('routeSteps');
-  const selectedMapLink = document.getElementById('selectedMapLink');
+  const routeOneLink = document.getElementById('routeOneLink');
+  const routeTwoLink = document.getElementById('routeTwoLink');
+  const routeOneText = document.getElementById('routeOneText');
+  const routeTwoTitle = document.getElementById('routeTwoTitle');
+  const routeTwoText = document.getElementById('routeTwoText');
+  const vehicleSelect = document.getElementById('vehicle');
   const routeMapPreview = document.getElementById('routeMapPreview');
   const DESTINATION = '25.1368403,89.7775862';
   const DESTINATION_LABEL = 'ঈশ্বরমনি কুঠির (সাহা বাড়ি), খড়মা, দেওয়ানগঞ্জ, জামালপুর';
@@ -161,8 +171,9 @@
     status.className = 'status';
   });
 
-  function makeDirectionsUrl(origin) {
-    const params = new URLSearchParams({api:'1', origin, destination:DESTINATION, travelmode:'driving'});
+  function makeDirectionsUrl(origin, mode, waypoints = []) {
+    const params = new URLSearchParams({api:'1', origin, destination:DESTINATION, travelmode:mode});
+    if (waypoints.length && mode !== 'transit') params.set('waypoints', waypoints.join('|'));
     return 'https://www.google.com/maps/dir/?' + params.toString();
   }
   function drawSteps(names) {
@@ -188,11 +199,32 @@
     const up = dist?.upazilas[Number(upazilaSelect.value)];
     if (!dist || !up) return;
     const origin = `${up.en}, ${dist.en}, Bangladesh`;
-    drawSteps([`${up.bn}, ${dist.bn}`, 'Google Maps-এর প্রস্তাবিত রাস্তা', DESTINATION_LABEL]);
-    selectedMapLink.href = makeDirectionsUrl(origin);
-    routeMapPreview.src = 'https://www.google.com/maps?output=embed&saddr=' + encodeURIComponent(origin) + '&daddr=' + encodeURIComponent(DESTINATION);
+    const mode = vehicleSelect.value;
+    const isNalitabari = norm(up.en).includes('nalitabari') || norm(up.bn).includes('নালিতাবাড়ী') || norm(up.bn).includes('নালিতাবাড়ী');
+    const route1 = makeDirectionsUrl(origin, mode);
+    routeOneLink.href = route1;
+    routeOneText.textContent = 'এই স্থান থেকে গন্তব্য পর্যন্ত Google Maps-এর প্রস্তাবিত রাস্তা, দূরত্ব ও সম্ভাব্য সময় দেখুন।';
+    routeTwoLink.href = route1;
+    routeTwoTitle.textContent = 'Google Maps-এর বিকল্প রাস্তা';
+    routeTwoText.textContent = 'Google Maps খুলে দেখানো বিকল্প রুটগুলো তুলনা করুন। বিকল্পের সংখ্যা রাস্তা ও যানবাহনের ওপর নির্ভর করবে।';
+    let visibleStops = [`${up.bn}, ${dist.bn}`, 'Google Maps-এর প্রস্তাবিত রাস্তা', DESTINATION_LABEL];
+    if (isNalitabari && norm(dist.en).includes('sherpur')) {
+      const waypoints = ['Sherpur, Sherpur, Bangladesh', 'Jhagrarchar Bazar, Bangladesh', 'Islampur, Jamalpur, Bangladesh'];
+      const customRoute = makeDirectionsUrl(origin, mode, waypoints);
+      routeTwoLink.href = customRoute;
+      routeTwoTitle.textContent = mode === 'transit' ? 'ট্রেন / গণপরিবহনের রুট' : 'শেরপুর–ঝগড়ারচর বাজার–ইসলামপুর';
+      routeTwoText.textContent = mode === 'transit'
+        ? 'ট্রেন/গণপরিবহনের রুট দেখুন। এই মোডে Google Maps-এর লিংকে নির্দিষ্ট মধ্যবর্তী স্টপ বাধ্যতামূলক করা যায় না; পাওয়া গেলে ট্রানজিট অপশন দেখাবে।'
+        : 'নালিতাবাড়ী → শেরপুর → ঝগড়ারচর বাজার → ইসলামপুর → ঈশ্বরমনি কুঠির। এই নির্দিষ্ট পথ ধরে রুট দেখুন।';
+      visibleStops = [`${up.bn}, ${dist.bn}`, 'শেরপুর', 'ঝগড়ারচর বাজার', 'ইসলামপুর, জামালপুর', DESTINATION_LABEL];
+      routeOneText.textContent = 'Google Maps-এর স্বয়ংক্রিয় প্রস্তাবিত রাস্তা। নির্দিষ্ট পথের সঙ্গে সময় ও দূরত্ব মিলিয়ে নিন।';
+      status.textContent = 'দুটি রুট দেওয়া হয়েছে: Google Maps-এর প্রস্তাবিত রুট এবং আপনার নির্দিষ্ট শেরপুর–ঝগড়ারচর বাজার–ইসলামপুর রুট।';
+    } else {
+      status.textContent = 'দুটি রুটের লিংক দেওয়া হয়েছে। Google Maps-এ বিকল্প রাস্তা ও সময় তুলনা করুন; সব যানবাহনের জন্য সব রুট পাওয়া নাও যেতে পারে।';
+    }
+    drawSteps(visibleStops);
+    routeMapPreview.src = 'https://www.google.com/maps?q=' + encodeURIComponent(DESTINATION) + '&output=embed';
     routePanel.hidden = false;
-    status.textContent = 'রুট তৈরি হয়েছে। সম্ভাব্য সময় ও দ্রুততম উপলভ্য রাস্তা দেখতে Google Maps-এ রুট খুলুন।';
     status.className = 'status ok';
   });
 
