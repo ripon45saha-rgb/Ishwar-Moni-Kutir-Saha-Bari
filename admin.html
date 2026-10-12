@@ -95,6 +95,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <a href="committee.html">🙏 পূজা কমিটি</a>
 <a href="gallery.html">📸 Gallery</a>
 <a href="visitors.html">👥 দর্শনার্থী</a>
+<a href="#problemReports">⚠️ সমস্যা রিপোর্ট</a>
 </nav>
 <div id="overview">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
@@ -110,6 +111,20 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
  <div id="districtBreakdown" style="display:grid;gap:10px;margin-top:14px"><div class="small">ডেটা লোড হলে এখানে জেলা-ভিত্তিক রিপোর্ট দেখা যাবে।</div></div>
  <div id="advancedStatsStatus" class="small" style="margin-top:10px"></div>
 </div>
+</div>
+
+
+<div class="card" id="problemReports" style="margin-bottom:18px;scroll-margin-top:90px">
+ <div class="top"><div><h2>⚠️ ওয়েবসাইট সমস্যা রিপোর্ট</h2><div class="small">ভিজিটরদের জমা দেওয়া সমস্যা দেখুন, খুঁজুন এবং সমাধানের স্ট্যাটাস আপডেট করুন।</div></div><button class="btn secondary" type="button" onclick="loadProblemReports()">↻ রিপোর্ট Refresh</button></div>
+ <div class="stats" style="margin-top:12px">
+  <div class="stat">মোট রিপোর্ট<b id="prTotal">0</b></div><div class="stat">নতুন রিপোর্ট<b id="prNew">0</b></div><div class="stat">সমাধান হয়েছে<b id="prResolved">0</b></div>
+ </div>
+ <div class="top" style="margin-top:12px;align-items:end">
+  <div style="flex:1;min-width:220px"><label for="prAdminSearch">রিপোর্ট খুঁজুন</label><input id="prAdminSearch" type="search" placeholder="বিবরণ, পেজ, ধরন বা যোগাযোগ…" oninput="renderProblemReports()"></div>
+  <div style="min-width:190px"><label for="prAdminFilter">স্ট্যাটাস</label><select id="prAdminFilter" onchange="renderProblemReports()" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff"><option value="all">সব রিপোর্ট</option><option value="new">নতুন</option><option value="in_progress">কাজ চলছে</option><option value="resolved">সমাধান হয়েছে</option></select></div>
+ </div>
+ <div id="prAdminStatus" class="small" style="margin:12px 0">রিপোর্ট লোড হয়নি।</div>
+ <div class="table-wrap"><table style="min-width:1050px"><thead><tr><th>#</th><th>সমস্যা / বিবরণ</th><th>পেজ</th><th>যোগাযোগ</th><th>রিপোর্টের সময়</th><th>স্ট্যাটাস</th><th>কাজ</th></tr></thead><tbody id="prAdminRows"><tr><td colspan="7" class="empty">রিপোর্ট লোড হয়নি।</td></tr></tbody></table></div>
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
@@ -200,7 +215,7 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -356,10 +371,49 @@ async function loadGreetingCardLogs(){
  }
 }
 
+let problemReports=[];
+const problemTypeLabels={broken_link:'লিংক কাজ করছে না',image:'ছবি দেখা যাচ্ছে না',wrong_info:'ভুল তথ্য',display:'ডিজাইন / লেখা',technical:'প্রযুক্তিগত সমস্যা',other:'অন্যান্য'};
+const problemStatusLabels={new:'নতুন',in_progress:'কাজ চলছে',resolved:'সমাধান হয়েছে'};
+async function loadProblemReports(){
+ const status=document.getElementById('prAdminStatus'),body=document.getElementById('prAdminRows');if(!status||!body)return;
+ status.textContent='রিপোর্ট লোড হচ্ছে…';body.innerHTML='<tr><td colspan="7" class="empty">লোড হচ্ছে…</td></tr>';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/problem_reports?select=id,issue_type,page_url,page_title,details,contact,status,created_at,updated_at&order=created_at.desc&limit=1000',{headers:h()});
+  const d=await r.json();if(!r.ok)throw Error(d.message||d.details||'Supabase error '+r.status);
+  problemReports=Array.isArray(d)?d:[];renderProblemReports();
+  const fresh=problemReports.filter(x=>x.status==='new').length,resolved=problemReports.filter(x=>x.status==='resolved').length;
+  document.getElementById('prTotal').textContent=problemReports.length;document.getElementById('prNew').textContent=fresh;document.getElementById('prResolved').textContent=resolved;
+  status.textContent=problemReports.length+'টি রিপোর্ট পাওয়া গেছে। সর্বোচ্চ ১০০০টি সাম্প্রতিক রিপোর্ট দেখানো হচ্ছে।';
+ }catch(e){body.innerHTML='<tr><td colspan="7" class="empty">রিপোর্ট লোড হয়নি। SQL/RLS সেটআপ এবং Admin email policy পরীক্ষা করুন।</td></tr>';status.textContent='❌ '+e.message;}
+}
+function renderProblemReports(){
+ const body=document.getElementById('prAdminRows');if(!body)return;
+ const q=(document.getElementById('prAdminSearch')?.value||'').trim().toLocaleLowerCase();
+ const filter=document.getElementById('prAdminFilter')?.value||'all';
+ const rows=problemReports.filter(x=>(filter==='all'||x.status===filter)&&[x.details,x.page_url,x.page_title,x.contact,problemTypeLabels[x.issue_type],x.id].some(v=>String(v||'').toLocaleLowerCase().includes(q)));
+ if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">মিলে এমন কোনো রিপোর্ট নেই।</td></tr>';return;}
+ body.innerHTML=rows.map((x,i)=>{
+  const date=x.created_at?new Date(x.created_at).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'}):'—';
+  const safeUrl=String(x.page_url||'');
+  return `<tr><td>${i+1}</td><td><strong>${esc(problemTypeLabels[x.issue_type]||x.issue_type||'অন্যান্য')}</strong><div style="white-space:pre-wrap;max-width:340px;margin-top:6px">${esc(x.details||'')}</div><div class="small">Report ID: ${esc(x.id)}</div></td><td><div>${esc(x.page_title||'—')}</div><div class="small" style="overflow-wrap:anywhere;max-width:250px">${esc(safeUrl)}</div></td><td>${esc(x.contact||'দেওয়া হয়নি')}</td><td>${esc(date)}</td><td><select id="prStatus-${esc(x.id)}" aria-label="রিপোর্ট স্ট্যাটাস" style="padding:9px;border:1px solid #d9c49c;border-radius:9px;background:#fff">${Object.entries(problemStatusLabels).map(([v,label])=>`<option value="${v}" ${x.status===v?'selected':''}>${label}</option>`).join('')}</select></td><td><button class="btn" type="button" onclick="updateProblemReportStatus(${Number(x.id)},this)" style="padding:9px 12px">Save</button></td></tr>`;
+ }).join('');
+}
+async function updateProblemReportStatus(id,button){
+ const select=document.getElementById('prStatus-'+id);if(!select)return;
+ const status=select.value;button.disabled=true;button.textContent='Saving…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/problem_reports?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({status,updated_at:new Date().toISOString()})});
+  const d=await r.json().catch(()=>[]);if(!r.ok)throw Error(d.message||d.details||'Status update failed');if(!Array.isArray(d)||!d.length)throw Error('কোনো রিপোর্ট আপডেট হয়নি। Admin permission/RLS পরীক্ষা করুন।');
+  const index=problemReports.findIndex(x=>Number(x.id)===Number(id));if(index>=0)problemReports[index]={...problemReports[index],status,updated_at:new Date().toISOString()};
+  renderProblemReports();document.getElementById('prAdminStatus').textContent='✅ রিপোর্ট #'+id+'-এর স্ট্যাটাস আপডেট হয়েছে।';
+  document.getElementById('prTotal').textContent=problemReports.length;document.getElementById('prNew').textContent=problemReports.filter(x=>x.status==='new').length;document.getElementById('prResolved').textContent=problemReports.filter(x=>x.status==='resolved').length;
+ }catch(e){alert('স্ট্যাটাস আপডেট হয়নি: '+e.message);button.disabled=false;button.textContent='Save';}
+}
+
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}
 
 let websiteContentCache={};
 const defaultNav=[

@@ -839,6 +839,80 @@ loadUploadedGallery();
 </script>
 
 
+<style id="problem-report-styles">
+body:not(.entered) .problem-report-fab,body:not(.entered) #problemReportSection{display:none!important}
+.problem-report-fab{position:fixed;right:16px;bottom:18px;z-index:80;border:0;border-radius:999px;background:#7b1020;color:#fff8e8;padding:13px 17px;font:700 14px "Noto Serif Bengali",serif;box-shadow:0 8px 24px #3d071044;cursor:pointer}
+.problem-report-section{background:#fffaf0;padding:64px 20px;border-top:1px solid #edd8a3;border-bottom:1px solid #edd8a3}
+.problem-report-card{max-width:760px;margin:auto;background:#fff;border:1px solid #edd8a3;border-radius:22px;padding:clamp(20px,4vw,34px);box-shadow:0 12px 35px #46190a10}
+.problem-report-card h2{color:#3d0710;font-size:clamp(25px,4vw,36px);line-height:1.3}
+.problem-report-card .pr-help{color:#725b52;margin:8px 0 20px}
+.problem-report-card label{display:block;font-weight:700;color:#42110f;margin:14px 0 6px}
+.problem-report-card input,.problem-report-card select,.problem-report-card textarea{width:100%;padding:12px 13px;border:1px solid #d9c49c;border-radius:11px;background:#fffdf8;font:inherit;color:#35151a}
+.problem-report-card textarea{min-height:125px;resize:vertical}
+.problem-report-card input:focus,.problem-report-card select:focus,.problem-report-card textarea:focus{outline:2px solid #d7a83d;outline-offset:1px}
+.problem-report-card button[type=submit]{border:0;border-radius:11px;padding:13px 20px;background:#7b1020;color:#fff8e8;font:700 15px "Noto Serif Bengali",serif;cursor:pointer;margin-top:16px}
+.problem-report-card button[disabled]{opacity:.65;cursor:wait}
+#problemReportMessage{margin-top:12px;font-weight:700;white-space:pre-wrap}
+.problem-report-hp{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+@media(max-width:520px){.problem-report-fab{right:10px;bottom:10px;padding:11px 13px;font-size:12px}.problem-report-section{padding:45px 13px}}
+</style>
+<button type="button" class="problem-report-fab" onclick="document.getElementById('problemReportSection').scrollIntoView({behavior:'smooth',block:'start'})">⚠️ সমস্যা জানান</button>
+<section id="problemReportSection" class="problem-report-section" aria-labelledby="problemReportTitle">
+ <div class="problem-report-card">
+  <div class="eyebrow">🛠️ ওয়েবসাইট সহায়তা</div>
+  <h2 id="problemReportTitle">ওয়েবসাইটে কোনো সমস্যা পেয়েছেন?</h2>
+  <p class="pr-help">কোন পেজে কী সমস্যা হয়েছে তা জানাও। রিপোর্টটি অ্যাডমিন প্যানেলে যাবে, যাতে আমরা পরীক্ষা করে ঠিক করতে পারি।</p>
+  <form id="problemReportForm">
+   <label for="prType">সমস্যার ধরন *</label>
+   <select id="prType" required>
+    <option value="">সমস্যা নির্বাচন করুন</option>
+    <option value="broken_link">লিংক কাজ করছে না</option>
+    <option value="image">ছবি দেখা যাচ্ছে না</option>
+    <option value="wrong_info">ভুল তথ্য</option>
+    <option value="display">ডিজাইন / লেখা ঠিকমতো দেখা যাচ্ছে না</option>
+    <option value="technical">অন্য প্রযুক্তিগত সমস্যা</option>
+    <option value="other">অন্যান্য</option>
+   </select>
+   <label for="prPageUrl">যে পেজে সমস্যা হয়েছে</label>
+   <input id="prPageUrl" type="url" readonly>
+   <label for="prDetails">সমস্যার বিস্তারিত *</label>
+   <textarea id="prDetails" maxlength="3000" required placeholder="কী করতে গিয়ে সমস্যা হয়েছে? কী দেখাচ্ছে? বিস্তারিত লিখুন…"></textarea>
+   <label for="prContact">যোগাযোগের তথ্য (ঐচ্ছিক)</label>
+   <input id="prContact" type="text" maxlength="120" autocomplete="email" placeholder="ইমেইল বা যোগাযোগের উপায় (ঐচ্ছিক)">
+   <div class="problem-report-hp" aria-hidden="true"><label for="prCompany">ফাঁকা রাখুন</label><input id="prCompany" type="text" tabindex="-1" autocomplete="off"></div>
+   <button id="prSubmit" type="submit">📨 রিপোর্ট জমা দিন</button>
+   <p id="problemReportMessage" role="status" aria-live="polite"></p>
+   <p class="small" style="margin-top:12px">যোগাযোগের তথ্য দেওয়া বাধ্যতামূলক নয়। রিপোর্টের সঙ্গে বর্তমান পেজের ঠিকানা ও সমস্যার বিবরণ পাঠানো হবে।</p>
+  </form>
+ </div>
+</section>
+<script id="problem-report-script">
+(function(){
+ const form=document.getElementById('problemReportForm'); if(!form)return;
+ const url='https://evkjwiicnzruijfthwpm.supabase.co';
+ const key='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+ const pageField=document.getElementById('prPageUrl');
+ pageField.value=location.href.slice(0,2000);
+ function message(text,ok){const el=document.getElementById('problemReportMessage');el.textContent=text;el.style.color=ok?'#176b32':'#8a1010';}
+ form.addEventListener('submit',async function(event){
+  event.preventDefault();
+  if(document.getElementById('prCompany').value.trim())return;
+  const submit=document.getElementById('prSubmit');
+  const issueType=document.getElementById('prType').value;
+  const details=document.getElementById('prDetails').value.trim();
+  const contact=document.getElementById('prContact').value.trim();
+  if(!issueType||details.length<8){message('সমস্যার ধরন নির্বাচন করুন এবং অন্তত ৮ অক্ষরে বিস্তারিত লিখুন।',false);return;}
+  submit.disabled=true;submit.textContent='রিপোর্ট পাঠানো হচ্ছে…';message('',true);
+  try{
+   const response=await fetch(url+'/rest/v1/problem_reports',{method:'POST',headers:{'apikey':key,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({issue_type:issueType,page_url:location.href.slice(0,2000),page_title:document.title.slice(0,250),details:details.slice(0,3000),contact:contact?contact.slice(0,120):null})});
+   if(!response.ok){const body=await response.json().catch(()=>({}));throw new Error(body.message||body.error_description||'রিপোর্ট জমা হয়নি (HTTP '+response.status+')');}
+   form.reset();pageField.value=location.href.slice(0,2000);message('✅ রিপোর্ট জমা হয়েছে। ধন্যবাদ—অ্যাডমিন বিষয়টি পরীক্ষা করবেন।',true);
+  }catch(error){message('❌ রিপোর্ট পাঠানো যায়নি। কিছুক্ষণ পর আবার চেষ্টা করুন। '+(error.message||''),false);}
+  finally{submit.disabled=false;submit.textContent='📨 রিপোর্ট জমা দিন';}
+ });
+})();
+</script>
+
 <section class="contact-section" aria-label="যোগাযোগ">
   <div class="contact-actions contact-actions-right">
     <a class="contact-fb" href="https://www.facebook.com/profile.php?id=61553748532147" target="_blank" rel="noopener noreferrer">🟦 Facebook Page</a>
