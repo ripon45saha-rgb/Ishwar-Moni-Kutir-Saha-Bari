@@ -102,6 +102,14 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
+<div class="stats" style="margin-top:14px">
+<div class="stat">এই সপ্তাহে<b id="weekVisitors">0</b></div><div class="stat">এই মাসে<b id="monthVisitors">0</b></div><div class="stat">জেলা সংখ্যা<b id="districtCount">0</b></div>
+</div>
+<div class="card" style="margin-top:16px;padding:18px">
+ <div class="top"><div><h2>📊 দর্শনার্থী বিশ্লেষণ</h2><div class="small">জেলা অনুযায়ী দর্শনার্থীর সংখ্যা</div></div><button class="btn secondary" onclick="exportVisitorsCSV()">⬇ CSV Export</button></div>
+ <div id="districtBreakdown" style="display:grid;gap:10px;margin-top:14px"><div class="small">ডেটা লোড হলে এখানে জেলা-ভিত্তিক রিপোর্ট দেখা যাবে।</div></div>
+ <div id="advancedStatsStatus" class="small" style="margin-top:10px"></div>
+</div>
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
@@ -109,6 +117,11 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <div class="stats"><div class="stat">মোট ক্লিক<b id="cpTotal">—</b></div><div class="stat">আজকের ক্লিক<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ক্লিক<b id="cpWeek">—</b></div></div>
 <div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
 <div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
+<div style="height:1px;background:#ead7b0;margin:24px 0"></div>
+<div class="top"><div><h2>🎨 শারদীয়া শুভেচ্ছা কার্ড ডাউনলোড</h2><div class="small">একই chandipath_clicks টেবিলে নতুন রেকর্ড হিসেবে নাম, ফরম্যাট ও সময় রাখা হচ্ছে।</div></div><button class="btn secondary" onclick="loadGreetingCardLogs()">↻ কার্ড রিপোর্ট Refresh</button></div>
+<div class="stats"><div class="stat">মোট ডাউনলোড<b id="gcTotal">—</b></div><div class="stat">আজকের ডাউনলোড<b id="gcToday">—</b></div><div class="stat">Story / Post<b id="gcFormats">—</b></div></div>
+<div id="gcStatus" class="small">কার্ড রিপোর্ট লোড হয়নি।</div>
+<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>ফরম্যাট</th><th>ডাউনলোডের সময়</th></tr></thead><tbody id="gcRows"><tr><td colspan="4" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
@@ -173,8 +186,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <div class="card" style="margin-bottom:18px"><h2>🗑️ আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
 <div class="card" id="visitorSection"><div class="top"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
-<tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div>
-<div class="card" style="margin-top:18px"><div class="top"><div><h2>🪪 Visitor Check Login Log</h2><div class="small">visitor-check.html-এ যে নাম দিয়ে প্রবেশ করা হয়েছে, তার সময়সহ তালিকা। এটি পরিচয় যাচাই করে না—শুধু নামের লগ রাখে।</div></div><button class="btn secondary" type="button" onclick="loadVisitorPanelAccessLogs()">↻ Refresh</button></div><div id="panelAccessStatus" class="small">লগ লোড হয়নি।</div><div class="table-wrap"><table style="min-width:520px"><thead><tr><th>#</th><th>প্রবেশের নাম</th><th>সময়</th></tr></thead><tbody id="panelAccessRows"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody></table></div></div></div>
+<tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
 </section></div>
 <script>
 const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co', SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
@@ -188,7 +200,7 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadVisitorPanelAccessLogs()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -196,19 +208,23 @@ if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
 function updateStats(){
- document.getElementById("total").textContent=visitors.length;
+ const totalEl=document.getElementById("total"),avgEl=document.getElementById("avg"),todayEl=document.getElementById("today");
+ if(totalEl)totalEl.textContent=visitors.length;
  let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x>=0&&x<=10);
- document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";
- let day=new Date().toLocaleDateString("en-CA");
- document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length;
+ if(avgEl)avgEl.textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";
+ const now=new Date(),todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()),weekStart=new Date(todayStart);weekStart.setDate(todayStart.getDate()-((todayStart.getDay()+6)%7));const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+ const dated=visitors.map(v=>({...v,_date:v.created_at?new Date(v.created_at):null}));
+ const todayCount=dated.filter(v=>v._date&&!isNaN(v._date)&&v._date>=todayStart).length;
+ const weekCount=dated.filter(v=>v._date&&!isNaN(v._date)&&v._date>=weekStart).length;
+ const monthCount=dated.filter(v=>v._date&&!isNaN(v._date)&&v._date>=monthStart).length;
+ if(todayEl)todayEl.textContent=todayCount;
+ const put=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};put('weekVisitors',weekCount);put('monthVisitors',monthCount);
+ const districts={};visitors.forEach(v=>{const d=String(v.district||'তথ্য নেই').trim()||'তথ্য নেই';districts[d]=(districts[d]||0)+1});put('districtCount',Object.keys(districts).filter(d=>d!=='তথ্য নেই').length);
+ const chart=document.getElementById('districtBreakdown');if(chart){const top=Object.entries(districts).sort((a,b)=>b[1]-a[1]).slice(0,8),max=Math.max(1,...top.map(x=>x[1]));chart.innerHTML=top.length?top.map(([name,count])=>`<div><div style="display:flex;justify-content:space-between;gap:12px;font-size:13px;margin-bottom:4px"><b>${esc(name)}</b><span>${count} জন</span></div><div style="height:9px;background:#f3e6cd;border-radius:20px;overflow:hidden"><div style="height:100%;width:${Math.max(4,count/max*100)}%;background:linear-gradient(90deg,#6f1118,#d6a84f);border-radius:20px"></div></div></div>`).join(''):'<div class="small">এখনো কোনো দর্শনার্থীর তথ্য নেই।</div>';}
+ const status=document.getElementById('advancedStatsStatus');if(status)status.textContent=`রেটিং দেওয়া দর্শনার্থী: ${n.length} জন · ৯ বা তার বেশি রেটিং: ${n.filter(x=>x>=9).length} জন`;
  const rated=document.getElementById("ratedCount"), high=document.getElementById("highRatingCount"), breakdown=document.getElementById("ratingBreakdown");
- if(rated)rated.textContent=n.length;
- if(high)high.textContent=n.filter(x=>x>=9).length;
- if(breakdown){
-   const buckets=[["০–৪",0],["৫–৬",0],["৭–৮",0],["৯–১০",0]];
-   n.forEach(x=>{if(x<5)buckets[0][1]++;else if(x<7)buckets[1][1]++;else if(x<9)buckets[2][1]++;else buckets[3][1]++;});
-   breakdown.textContent="রেটিং বণ্টন: "+buckets.map(([label,count])=>label+" = "+count+" জন").join("  •  ");
- }
+ if(rated)rated.textContent=n.length;if(high)high.textContent=n.filter(x=>x>=9).length;
+ if(breakdown){const buckets=[["০–৪",0],["৫–৬",0],["৭–৮",0],["৯–১০",0]];n.forEach(x=>{if(x<5)buckets[0][1]++;else if(x<7)buckets[1][1]++;else if(x<9)buckets[2][1]++;else buckets[3][1]++;});breakdown.textContent="রেটিং বণ্টন: "+buckets.map(([label,count])=>label+" = "+count+" জন").join("  •  ");}
 }
 function exportVisitorsCSV(){
  if(!visitors.length){alert("ডাউনলোড করার মতো দর্শনার্থীর তথ্য নেই।");return;}
@@ -225,7 +241,7 @@ async function loadChandipathClicks(){
  const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
  if(!status||!body)return; status.textContent='ক্লিক রিপোর্ট লোড হচ্ছে…';
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&order=clicked_at.desc&limit=500',{headers:h()});
+  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&or=(district.is.null,district.neq.Greeting%20Card)&order=clicked_at.desc&limit=500',{headers:h()});
   const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
   const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
   const stamp=x=>new Date(x.clicked_at||x.created_at||0);
@@ -317,15 +333,33 @@ const STATIC_PHOTOS=[['gallery-1','শারদীয় দুর্গোৎস�
 async function loadStaticPhotos(){const el=document.getElementById('staticPhotoList');if(!el)return;try{const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();if(!r.ok)throw Error(d.message||'Load failed');const state=(d[0]&&d[0].content)||{};el.innerHTML=STATIC_PHOTOS.map(([key,label])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee1c7"><input type="checkbox" class="static-photo-toggle" data-key="${key}" ${state[key]===false?'':'checked'} style="width:auto"><span>${label}</span></label>`).join('')}catch(e){el.textContent='❌ Load হয়নি: '+e.message}}
 async function saveStaticPhotos(){const st=document.getElementById('staticPhotoStatus');st.textContent='Saving...';try{const content={};document.querySelectorAll('.static-photo-toggle').forEach(x=>content[x.dataset.key]=x.checked);await upsertWebsiteSection('staticPhotos',content);st.innerHTML='<span class="ok">✅ পরিবর্তন Save হয়েছে</span>'}catch(e){st.textContent='❌ Save হয়নি: '+e.message}}
 
-async function loadVisitorPanelAccessLogs(){
- const st=document.getElementById('panelAccessStatus'),body=document.getElementById('panelAccessRows');if(!st||!body)return;st.textContent='প্রবেশের লগ লোড হচ্ছে…';
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/visitor_panel_access_logs?select=id,visitor_name,created_at&order=created_at.desc&limit=500',{headers:h()});const d=await r.json();if(!r.ok)throw Error(d.message||d.details||'HTTP '+r.status);body.innerHTML=d.length?d.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'নাম নেই')}</td><td>${x.created_at?new Date(x.created_at).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">এখনো কোনো লগ নেই।</td></tr>';st.textContent=d.length+'টি প্রবেশ লগ পাওয়া গেছে।'}catch(e){st.textContent='লগ লোড হয়নি: '+e.message+'। নিচের SQL Supabase-এ চালাও।';body.innerHTML='<tr><td colspan="3" class="empty">ডেটা পাওয়া যায়নি।</td></tr>'}
+
+async function loadGreetingCardLogs(){
+ const status=document.getElementById('gcStatus'), body=document.getElementById('gcRows');
+ if(!status||!body)return;
+ status.textContent='Greeting Card রিপোর্ট লোড হচ্ছে…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&district=eq.Greeting%20Card&order=clicked_at.desc&limit=1000',{headers:h()});
+  const d=await r.json();
+  if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
+  const rows=Array.isArray(d)?d:[];
+  const now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const fmt=x=>x.upazila==='story'?'Story':'Greeting Card / Post';
+  document.getElementById('gcTotal').textContent=rows.length;
+  document.getElementById('gcToday').textContent=rows.filter(x=>new Date(x.clicked_at||x.created_at)>=start).length;
+  document.getElementById('gcFormats').textContent=rows.filter(x=>x.upazila==='story').length+' / '+rows.filter(x=>x.upazila==='post').length;
+  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'—')}</td><td>${fmt(x)}</td><td>${(x.clicked_at||x.created_at)?new Date(x.clicked_at||x.created_at).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">এখনও কোনো কার্ড ডাউনলোড রেকর্ড নেই।</td></tr>';
+  status.textContent='সর্বশেষ ১০০০টি রেকর্ড দেখানো হচ্ছে।';
+ }catch(e){
+  body.innerHTML='<tr><td colspan="4" class="empty">রিপোর্ট লোড হয়নি। chandipath_clicks টেবিলে insert অনুমতি আছে কি না দেখুন।</td></tr>';
+  status.textContent='❌ '+e.message;
+ }
 }
 
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadVisitorPanelAccessLogs()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}
 
 let websiteContentCache={};
 const defaultNav=[
@@ -335,7 +369,8 @@ const defaultNav=[
  {label:'কালীপূজা',href:'#kali-puja'},
  {label:'বিগত বছরের প্রতিমা',href:'#past'},
  {label:'🍚 প্রসাদ ব্যবস্থাপনা',href:'#prasadSection'},
- {label:'অবস্থান',href:'#location'}
+ {label:'অবস্থান',href:'#location'},
+ {label:'🎨 শারদীয়া কার্ড মেকার',href:'greeting-maker.html'}
 ];
 function addNavRow(label='',href=''){
  const box=document.getElementById('edNavRows'); if(!box)return;
