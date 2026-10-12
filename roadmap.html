@@ -52,85 +52,39 @@
   <section class="hero">
     <span class="pill">📍 VISITOR ROUTE GUIDE</span>
     <h1>ঈশ্বরমনি কুঠির, সাহা বাড়ীতে যাওয়ার রুটম্যাপ</h1>
-    <p>বাংলাদেশের নিজের জেলা ও উপজেলা নির্বাচন করে ঈশ্বরমনি কুঠির, সাহা বাড়ি—খারমা, দেওয়ানগঞ্জ, জামালপুরে যাওয়ার দিকনির্দেশনা খুঁজুন। যাত্রার আগে Google Maps-এর রুট এবং স্থানীয় তথ্য মিলিয়ে নিন।</p>
+    <p>বাংলাদেশের ৬৪টি জেলার যেকোনো জেলা ও উপজেলা নির্বাচন করে ঈশ্বরমনি কুঠির, সাহা বাড়ি—খারমা, দেওয়ানগঞ্জ, জামালপুরে যাওয়ার দিকনির্দেশনা খুঁজুন। যাত্রার আগে Google Maps-এর রুট এবং স্থানীয় তথ্য মিলিয়ে নিন।</p>
   </section>
 
   <section class="panel" aria-labelledby="select-title">
     <h2 id="select-title">আপনার যাত্রার স্থান নির্বাচন করুন</h2>
-    <p class="muted">এখানে শুধু শেরপুর, নালিতাবাড়ী, দেওয়ানগঞ্জ ও জামালপুরের অপশন রাখা হয়েছে।</p>
+    <p class="muted">বাংলাদেশের ৬৪টি জেলা থেকে জেলা ও উপজেলা বেছে নিন। তারপর Google Maps-এ ঈশ্বরমনি কুঠির, সাহা বাড়ি যাওয়ার রুট খুলবে।</p>
     <div class="formgrid">
-      <div><label for="district">নিজের জেলা সিলেক্ট করুন</label><select id="district"><option value="">জেলা নির্বাচন করুন</option></select></div>
+      <div><label for="district">জেলা সিলেক্ট করুন</label><select id="district"><option value="">জেলা লোড হচ্ছে…</option></select></div>
       <div><label for="upazila">উপজেলা সিলেক্ট করুন</label><select id="upazila" disabled><option value="">আগে জেলা নির্বাচন করুন</option></select></div>
     </div>
     <div class="btnrow">
       <button id="directions" class="btn primary" type="button">🧭 আমার রুট দেখান</button>
       <button id="clear" class="btn secondary" type="button">রিসেট করুন</button>
     </div>
-    <div id="dataStatus" class="status" role="status" aria-live="polite">শুধু নির্দিষ্ট জেলা ও উপজেলার তালিকা প্রস্তুত করা হচ্ছে…</div>
+    <div id="dataStatus" class="status" role="status" aria-live="polite">বাংলাদেশের জেলা ও উপজেলার তালিকা লোড হচ্ছে…</div>
     <div id="selectedRoute" hidden>
-      <h3 style="margin-top:22px">আপনার নির্বাচিত যাত্রাপথ</h3>
+      <h3 style="margin-top:22px">আপনার যাত্রার রুট</h3>
       <div id="routeSteps" class="route-steps"></div>
       <div class="btnrow">
-        <a id="selectedMapLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Google Maps-এ দিকনির্দেশনা ↗</a>
-        <button id="showMapPreview" class="btn secondary" type="button">এই পেজে ম্যাপ দেখুন ↓</button>
+        <a id="selectedMapLink" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Google Maps-এ রুট ও সময় দেখুন ↗</a>
       </div>
       <div class="map-preview" id="mapPreviewWrap">
-        <h3>আপনার রুটের Google Map</h3>
-        <p class="muted">এই ম্যাপে আপনার নির্বাচিত শুরুর স্থান থেকে গন্তব্য পর্যন্ত রুট দেখানোর চেষ্টা করা হবে। বিস্তারিত Directions-এর জন্য Google Maps খুলুন।</p>
-        <iframe id="routeMapPreview" class="mapframe" title="আপনার নির্বাচিত রুটের Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="about:blank" allowfullscreen></iframe>
+        <h3>গন্তব্যের ম্যাপ</h3>
+        <p class="muted">ম্যাপের মধ্যে গন্তব্যের অবস্থান দেখা যাবে। সম্পূর্ণ রুট, সম্ভাব্য সময় এবং বিকল্প রাস্তা দেখতে উপরের Google Maps লিংকটি খুলুন। Google Maps ট্রাফিক ও রাস্তার অবস্থা অনুযায়ী রুট সাজেস্ট করবে।</p>
+        <iframe id="routeMapPreview" class="mapframe" title="ঈশ্বরমনি কুঠির সাহা বাড়ির Google Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=25.1368403%2C89.7775862&output=embed" allowfullscreen></iframe>
       </div>
     </div>
   </section>
 
   <section class="panel">
-    <h2>পরিচিত কয়েকটি রুট</h2>
-    <p class="muted">আপনার দেওয়া স্থানীয় রুট অনুযায়ী দ্রুত Google Maps খুলুন। রাস্তা ও যাতায়াতের অবস্থা অনুযায়ী Maps রুট পরিবর্তন করতে পারে।</p>
-    <div class="routecards">
-      <article class="routecard">
-        <span class="tag">শেরপুর দিক থেকে</span><h3>নকলা → ঈশ্বরমনি কুঠির</h3>
-        <div class="route-steps"><span class="stop">নকলা</span><span class="arrow">→</span><span class="stop">শেরপুর</span><span class="arrow">→</span><span class="stop">ঝগড়ারচর বাজার</span><span class="arrow">→</span><span class="stop">ইসলামপুর</span><span class="arrow">→</span><span class="stop">কুঠির</span></div>
-        <p>নকলা থেকে শেরপুর জেলা/টাউন, এরপর ঝগড়ারচর বাজার ও ইসলামপুর হয়ে গন্তব্যে যাওয়ার রুট দেখুন।</p>
-        <a class="btn primary preset" data-origin="Nakla, Sherpur, Bangladesh" data-waypoints="Sherpur, Bangladesh|Joghrar Chor Bazar, Bangladesh|Islampur, Jamalpur, Bangladesh" href="#">এই রুট দেখুন ↗</a>
-      </article>
-      <article class="routecard">
-        <span class="tag">জামালপুর দিক থেকে</span><h3>জামালপুর → ইসলামপুর → কুঠির</h3>
-        <div class="route-steps"><span class="stop">জামালপুর</span><span class="arrow">→</span><span class="stop">ইসলামপুর</span><span class="arrow">→</span><span class="stop">খারমা, সাহা বাড়ি</span></div>
-        <p>জামালপুর শহর থেকে ইসলামপুর হয়ে খারমার সাহা বাড়ির দিকে যাওয়ার দিকনির্দেশনা।</p>
-        <a class="btn primary preset" data-origin="Jamalpur, Bangladesh" data-waypoints="Islampur, Jamalpur, Bangladesh" href="#">এই রুট দেখুন ↗</a>
-      </article>
-      <article class="routecard">
-        <span class="tag">দেওয়ানগঞ্জ দিক থেকে</span><h3>দেওয়ানগঞ্জ → খারমা</h3>
-        <div class="route-steps"><span class="stop">দেওয়ানগঞ্জ</span><span class="arrow">→</span><span class="stop">খারমা</span><span class="arrow">→</span><span class="stop">সাহা বাড়ি</span></div>
-        <p>দেওয়ানগঞ্জ থেকে স্থানীয় পরিবহন বা চালকের কাছে “ঈশ্বরমনি কুঠির, সাহা বাড়ি” বলে নিশ্চিত হয়ে নিন।</p>
-        <a class="btn primary preset" data-origin="Dewanganj, Jamalpur, Bangladesh" data-waypoints="" href="#">এই রুট দেখুন ↗</a>
-      </article>
-      <article class="routecard">
-        <span class="tag">মেলান্দহ দিক থেকে</span><h3>মেলান্দহ → ইসলামপুর → কুঠির</h3>
-        <div class="route-steps"><span class="stop">মেলান্দহ</span><span class="arrow">→</span><span class="stop">ইসলামপুর</span><span class="arrow">→</span><span class="stop">খারমা</span></div>
-        <p>মেলান্দহ থেকে ইসলামপুর হয়ে গন্তব্যের পথ যাচাই করুন।</p>
-        <a class="btn primary preset" data-origin="Melandaha, Jamalpur, Bangladesh" data-waypoints="Islampur, Jamalpur, Bangladesh" href="#">এই রুট দেখুন ↗</a>
-      </article>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="two">
-      <div>
-        <h2>Google Maps</h2>
-        <p class="muted">নিচের ম্যাপে গন্তব্যের নাম সার্চ করা হয়েছে। সঠিক পিন নিশ্চিত করতে Directions খুলে যাচাই করুন।</p>
-        <div class="btnrow"><a class="btn primary" href="https://www.google.com/maps/dir/?api=1&destination=Ishwar+Moni+Kutir%2C+Saha+Bari%2C+Kharma%2C+Dewanganj%2C+Jamalpur%2C+Bangladesh" target="_blank" rel="noopener noreferrer">গন্তব্যে যাওয়ার দিকনির্দেশনা ↗</a></div>
-      </div>
-      <div>
-        <h2>যাত্রার ধাপ</h2>
-        <ol class="list">
-          <li>আপনার জেলা ও উপজেলা বেছে নিন।</li>
-          <li>Google Maps-এ যাত্রার শুরু ও গন্তব্য মিলিয়ে দেখুন।</li>
-          <li>দেওয়ানগঞ্জ/ইসলামপুর পৌঁছে স্থানীয়ভাবে শেষ রাস্তা নিশ্চিত করুন।</li>
-        </ol>
-      </div>
-    </div>
-    <iframe class="mapframe" title="ঈশ্বরমনি কুঠিরের Google Maps search" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Ishwar%20Moni%20Kutir%20Saha%20Bari%20Kharma%20Dewanganj%20Jamalpur%20Bangladesh&output=embed" allowfullscreen></iframe>
-    <p class="mapnote">নোট: কুঠিরের নির্ভুল GPS পিন যাচাই করা হয়নি। এই পেজে কোনো অযাচাইকৃত দূরত্ব বা যাত্রার সময় দেখানো হচ্ছে না।</p>
+    <h2>গন্তব্য</h2>
+    <p class="muted">ঈশ্বরমনি কুঠির (সাহা বাড়ি), খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ।</p>
+    <a class="btn secondary" href="https://maps.app.goo.gl/9LWtydPbS5S6hmz26" target="_blank" rel="noopener noreferrer">📍 মন্দিরের সঠিক Google Maps পিন খুলুন ↗</a>
   </section>
 
   <footer>
@@ -148,9 +102,10 @@
   const routeSteps = document.getElementById('routeSteps');
   const selectedMapLink = document.getElementById('selectedMapLink');
   const routeMapPreview = document.getElementById('routeMapPreview');
-  const mapPreviewWrap = document.getElementById('mapPreviewWrap');
-  const DESTINATION = 'Ishwar Moni Kutir, Saha Bari, Kharma, Dewanganj, Jamalpur, Bangladesh';
-  let hierarchy = [];
+  const DESTINATION = '25.1368403,89.7775862';
+  const DESTINATION_LABEL = 'ঈশ্বরমনি কুঠির (সাহা বাড়ি), খড়মা, দেওয়ানগঞ্জ, জামালপুর';
+  const DATA_URL = 'https://iqbalhasandev.github.io/bangladesh-geo-json/bangladesh-geo.json';
+  let districts = [];
   document.getElementById('year').textContent = new Date().getFullYear();
 
   const addOption = (select, value, label) => {
@@ -159,77 +114,55 @@
     option.textContent = label;
     select.appendChild(option);
   };
-  const getName = item => item?.bn_name || item?.name_bn || item?.name?.local || item?.name || '';
-  const getEnglishName = item => item?.name || item?.name?.en || item?.en_name || '';
-  const norm = value => String(value || '').trim().toLocaleLowerCase();
-
-  function parseHierarchy(data) {
-    // Supports the published bilingual hierarchy dataset structure.
-    if (Array.isArray(data) && data.length && Array.isArray(data[0]?.districts)) {
-      return data.map(div => ({
-        name: getName(div) || getEnglishName(div),
-        districts: (div.districts || []).map(dist => ({
-          name: getName(dist) || getEnglishName(dist),
-          english: getEnglishName(dist),
-          upazilas: (dist.upazilas || dist.upazillas || []).map(up => ({
-            name: getName(up) || getEnglishName(up),
-            english: getEnglishName(up)
-          }))
-        }))
-      }));
-    }
-    if (data && Array.isArray(data.districts)) {
-      return [{name:'বাংলাদেশ', districts:data.districts.map(dist => ({
-        name:getName(dist)||getEnglishName(dist), english:getEnglishName(dist),
-        upazilas:(dist.upazilas||dist.upazillas||[]).map(up=>({name:getName(up)||getEnglishName(up),english:getEnglishName(up)}))
-      }))}];
-    }
-    throw new Error('ডেটার ফরম্যাট বোঝা যায়নি');
-  }
+  const clean = value => String(value || '').trim();
+  const labelOf = item => {
+    const bn = clean(item.bn_name || item.bnName || item.name_bn || item.name?.local);
+    const en = clean(item.name?.en || item.name || item.en_name);
+    if (bn && en && bn.toLocaleLowerCase() !== en.toLocaleLowerCase()) return {bn, en, label: `${bn} (${en})`};
+    return {bn: bn || en, en: en || bn, label: bn || en};
+  };
+  const norm = value => clean(value).toLocaleLowerCase();
 
   async function loadLocations() {
-    // Only the locations requested by the site owner are listed.
-    hierarchy = [{
-      name: 'ময়মনসিংহ বিভাগ',
-      districts: [
-        { name: 'শেরপুর', english: 'Sherpur', upazilas: [{ name: 'নালিতাবাড়ী', english: 'Nalitabari' }] },
-        { name: 'জামালপুর', english: 'Jamalpur', upazilas: [{ name: 'দেওয়ানগঞ্জ', english: 'Dewanganj' }] }
-      ]
-    }];
-    populateDistricts();
-    status.textContent = 'তালিকা প্রস্তুত: শেরপুর → নালিতাবাড়ী এবং জামালপুর → দেওয়ানগঞ্জ।';
-    status.className = 'status ok';
+    try {
+      const response = await fetch(DATA_URL, {cache: 'no-cache'});
+      if (!response.ok) throw new Error('তালিকার সার্ভার থেকে ডেটা পাওয়া যায়নি');
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('জেলা-উপজেলার ডেটা সঠিক নয়');
+      districts = data.flatMap(division => (division.districts || []).map(district => {
+        const d = labelOf(district);
+        const divisionName = labelOf(division).label;
+        const ups = (district.upazilas || district.upazillas || []).map(up => ({...labelOf(up)}));
+        return {...d, division: divisionName, upazilas: ups};
+      })).filter(d => d.label && d.upazilas.length).sort((a,b) => a.bn.localeCompare(b.bn, 'bn'));
+      if (districts.length < 60) throw new Error('সম্পূর্ণ জেলা তালিকা পাওয়া যায়নি');
+      districtSelect.innerHTML = '';
+      addOption(districtSelect, '', '— জেলা নির্বাচন করুন —');
+      districts.forEach((dist, i) => addOption(districtSelect, String(i), dist.label));
+      status.textContent = `তালিকা প্রস্তুত: ${districts.length}টি জেলা ও সব উপলব্ধ উপজেলা।`;
+      status.className = 'status ok';
+    } catch (error) {
+      districtSelect.innerHTML = '';
+      addOption(districtSelect, '', 'জেলা তালিকা লোড হয়নি');
+      status.textContent = 'জেলা-উপজেলার তালিকা লোড হয়নি। ইন্টারনেট চালু করে পেজটি আবার রিফ্রেশ করুন।';
+      status.className = 'status error';
+    }
   }
 
-  function allDistricts() {
-    return hierarchy.flatMap(div => div.districts.map(dist => ({...dist, division:div.name})))
-      .sort((a,b)=>a.name.localeCompare(b.name,'bn'));
-  }
-  function populateDistricts() {
-    districtSelect.innerHTML = '';
-    addOption(districtSelect, '', '— জেলা নির্বাচন করুন —');
-    allDistricts().forEach((dist, i) => {
-      const label = dist.name + (dist.english && norm(dist.english)!==norm(dist.name) ? ' ('+dist.english+')' : '');
-      addOption(districtSelect, String(i), label);
-    });
-  }
   districtSelect.addEventListener('change', () => {
     upazilaSelect.innerHTML = '';
     addOption(upazilaSelect, '', districtSelect.value ? '— উপজেলা নির্বাচন করুন —' : 'আগে জেলা নির্বাচন করুন');
     upazilaSelect.disabled = !districtSelect.value;
     routePanel.hidden = true;
     if (!districtSelect.value) return;
-    const dist = allDistricts()[Number(districtSelect.value)];
-    (dist?.upazilas || []).slice().sort((a,b)=>a.name.localeCompare(b.name,'bn')).forEach((up,i) => {
-      const label = up.name + (up.english && norm(up.english)!==norm(up.name) ? ' ('+up.english+')' : '');
-      addOption(upazilaSelect, String(i), label);
-    });
-    if (!dist?.upazilas?.length) status.textContent = 'এই জেলার উপজেলা তালিকা পাওয়া যায়নি। Google Maps-এ জেলা থেকে সরাসরি রুট খুলতে পারেন।';
+    const dist = districts[Number(districtSelect.value)];
+    (dist?.upazilas || []).slice().sort((a,b) => a.bn.localeCompare(b.bn, 'bn')).forEach((up, i) => addOption(upazilaSelect, String(i), up.label));
+    status.textContent = `${dist.label} জেলার উপজেলা নির্বাচন করুন।`;
+    status.className = 'status';
   });
 
-  function makeDirectionsUrl(origin, waypoints = []) {
+  function makeDirectionsUrl(origin) {
     const params = new URLSearchParams({api:'1', origin, destination:DESTINATION, travelmode:'driving'});
-    if (waypoints.length) params.set('waypoints', waypoints.join('|'));
     return 'https://www.google.com/maps/dir/?' + params.toString();
   }
   function drawSteps(names) {
@@ -243,46 +176,34 @@
       stop.className = 'stop'; stop.textContent = name; routeSteps.appendChild(stop);
     });
   }
+
   document.getElementById('directions').addEventListener('click', () => {
     if (!districtSelect.value) {
       status.textContent = 'আগে আপনার জেলা নির্বাচন করুন।'; status.className = 'status error'; districtSelect.focus(); return;
     }
-    const dist = allDistricts()[Number(districtSelect.value)];
-    if (!dist) return;
-    if (!upazilaSelect.value && (dist.upazilas || []).length) {
+    if (!upazilaSelect.value) {
       status.textContent = 'দয়া করে আপনার উপজেলা নির্বাচন করুন।'; status.className = 'status error'; upazilaSelect.focus(); return;
     }
-    const up = (dist.upazilas || [])[Number(upazilaSelect.value)];
-    const origin = [up?.name, dist.name, 'Bangladesh'].filter(Boolean).join(', ');
-    drawSteps([origin, 'দেওয়ানগঞ্জ / ইসলামপুর এলাকার দিকে', 'খারমা, সাহা বাড়ি', 'ঈশ্বরমনি কুঠির']);
+    const dist = districts[Number(districtSelect.value)];
+    const up = dist?.upazilas[Number(upazilaSelect.value)];
+    if (!dist || !up) return;
+    const origin = `${up.en}, ${dist.en}, Bangladesh`;
+    drawSteps([`${up.bn}, ${dist.bn}`, 'Google Maps-এর প্রস্তাবিত রাস্তা', DESTINATION_LABEL]);
     selectedMapLink.href = makeDirectionsUrl(origin);
-    // Embed a Google Maps directions preview in the page. The external Directions link remains available
-    // because Google may show a more complete route there than in an embedded map.
-    const embedParams = new URLSearchParams({output:'embed', origin, destination:DESTINATION});
-    routeMapPreview.src = 'https://www.google.com/maps?output=embed&' + new URLSearchParams({saddr:origin, daddr:DESTINATION}).toString();
+    routeMapPreview.src = 'https://www.google.com/maps?output=embed&saddr=' + encodeURIComponent(origin) + '&daddr=' + encodeURIComponent(DESTINATION);
     routePanel.hidden = false;
-    status.textContent = 'আপনার নির্বাচিত স্থান থেকে Google Maps-এর রুট প্রিভিউ তৈরি হয়েছে। সঠিক রাস্তা ও শেষ প্রবেশপথ যাচাই করুন।';
+    status.textContent = 'রুট তৈরি হয়েছে। সম্ভাব্য সময় ও দ্রুততম উপলভ্য রাস্তা দেখতে Google Maps-এ রুট খুলুন।';
     status.className = 'status ok';
   });
-  document.getElementById('showMapPreview').addEventListener('click', () => {
-    mapPreviewWrap.scrollIntoView({behavior:'smooth', block:'start'});
-  });
+
   document.getElementById('clear').addEventListener('click', () => {
     districtSelect.value = '';
     upazilaSelect.innerHTML = '';
     addOption(upazilaSelect, '', 'আগে জেলা নির্বাচন করুন');
     upazilaSelect.disabled = true;
     routePanel.hidden = true;
-    routeMapPreview.src = 'about:blank';
     status.textContent = 'আপনার জেলা ও উপজেলা নির্বাচন করুন।';
     status.className = 'status';
-  });
-  document.querySelectorAll('.preset').forEach(link => {
-    const origin = link.dataset.origin;
-    const waypoints = (link.dataset.waypoints || '').split('|').filter(Boolean);
-    link.href = makeDirectionsUrl(origin, waypoints);
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
   });
   loadLocations();
 })();
