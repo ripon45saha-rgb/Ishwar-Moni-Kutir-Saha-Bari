@@ -586,16 +586,11 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
       <h3 style="margin:14px 0 4px">খড়মা, দেওয়ানগঞ্জ</h3>
       <p style="margin:0">জামালপুর</p>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px">
-       <a href="https://goo.gl/maps/5cAF12gHYvBaQxWr6" target="_blank" rel="noopener" class="btn">📍 Google Maps-এ দেখুন ↗</a>
-       <a href="https://www.google.com/maps/dir/?api=1&destination=ঈশ্বরমনি+কুঠির,+খড়মা,+দেওয়ানগঞ্জ,+জামালপুর,+বাংলাদেশ" target="_blank" rel="noopener" class="btn" style="background:#f1dfb8;color:#4b1512">🧭 যাওয়ার পথ দেখুন ↗</a>
+       <a href="https://goo.gl/maps/5cAF12gHYvBaQxWr6" target="_blank" rel="noopener" class="btn" style="margin-top:0">📍 Google Maps-এ দেখুন ↗</a>
+       <a href="https://www.google.com/maps/dir/?api=1&destination=Khorma%2C+Dewanganj%2C+Jamalpur%2C+Bangladesh" target="_blank" rel="noopener" class="btn" style="margin-top:0;background:#f1dfb8;color:#4b1512">🧭 যাওয়ার পথ দেখুন ↗</a>
       </div>
     </div>
    </div>
-  </div>
-  <div style="margin-top:22px;border:1px solid #ead7b0;border-radius:18px;overflow:hidden;background:#fff8e9">
-   <div style="padding:12px 16px;color:#6f1423;font-weight:800">🗺️ মানচিত্রে অবস্থান</div>
-   <iframe title="ঈশ্বরমনি কুঠিরের মানচিত্র" src="https://maps.google.com/maps?q=ঈশ্বরমনি%20কুঠির%2C%20খড়মা%2C%20দেওয়ানগঞ্জ%2C%20জামালপুর%2C%20বাংলাদেশ&output=embed" width="100%" height="320" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-   <p style="margin:0;padding:10px 16px;color:#6b5547;font-size:13px">মানচিত্রে সঠিক পিন না দেখালে Google Maps-এ দেখুন বাটন ব্যবহার করুন।</p>
   </div>
  </div>
 </section>
@@ -1014,10 +1009,12 @@ if ("serviceWorker" in navigator) {
 </script>
 
 <script id="ishwar-web-push-client">
-// Replace this placeholder with the VAPID PUBLIC key generated for your project.
+// Push subscription client with detailed, safe diagnostics.
+// Only the public VAPID key and Supabase publishable key belong in browser code.
 window.ISHWAR_VAPID_PUBLIC_KEY = 'BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q';
 window.enableIshwarPush = async function(){
-  const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.textContent=m;b.prepend(n)}};
+  const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.style.whiteSpace='pre-wrap';n.textContent=m;b.prepend(n)}};
+  const log=(...args)=>{try{console.log('[Ishwar Push]',...args)}catch(_){}};
   try{
     if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
     if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
@@ -1026,24 +1023,34 @@ window.enableIshwarPush = async function(){
     if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
     const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
     const key=window.ISHWAR_VAPID_PUBLIC_KEY;
-    const applicationServerKey=Uint8Array.from(atob(key.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+    const padded=key.replace(/-/g,'+').replace(/_/g,'/');
+    const applicationServerKey=Uint8Array.from(atob(padded+'='.repeat((4-padded.length%4)%4)),c=>c.charCodeAt(0));
     let sub=await reg.pushManager.getSubscription();
     if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey});
     let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
-    const resp=await fetch('https://evkjwiicnzruijfthwpm.supabase.co/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
-      method:'POST',headers:{
-        'apikey':'sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d',
-        'Content-Type':'application/json',
-        'Prefer':'resolution=ignore-duplicates,return=minimal'
-      },
-      body:JSON.stringify({endpoint:sub.endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null})
+    const supabaseUrl='https://evkjwiicnzruijfthwpm.supabase.co';
+    const publishableKey='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+    const endpoint=sub.endpoint;
+    const payload={endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null};
+    log('Saving subscription', {url:supabaseUrl+'/rest/v1/web_push_subscriptions', endpointHost:(()=>{try{return new URL(endpoint).host}catch(_){return 'invalid'}})(), hasSubscription:!!payload.subscription, hasPublishableKey:!!publishableKey});
+    const resp=await fetch(supabaseUrl+'/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
+      method:'POST',
+      headers:{'apikey':publishableKey,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify(payload)
     });
-    if(!resp.ok) throw new Error('Supabase subscription save failed: '+await resp.text());
+    const responseText=await resp.text();
+    if(!resp.ok){
+      let detail=responseText;
+      try{const parsed=JSON.parse(responseText);detail=parsed.message||parsed.error_description||parsed.error||responseText; if(parsed.code)detail+=' (code '+parsed.code+')'; if(parsed.hint)detail+='; hint: '+parsed.hint;}catch(_){}
+      log('Subscription save failed', {status:resp.status,statusText:resp.statusText,body:responseText,contentType:resp.headers.get('content-type')});
+      throw new Error('Supabase HTTP '+resp.status+': '+detail);
+    }
+    log('Subscription saved', {status:resp.status});
     say('✅ এই ডিভাইসে নোটিফিকেশন চালু হয়েছে। নতুন ঘোষণা এলে নোটিফিকেশন পাবেন।');
   }catch(e){
-    console.error('Push subscription error',e);
-    const detail=String(e && e.message ? e.message : e).slice(0,260);
-    say('নোটিফিকেশন চালু হয়নি: '+detail);
+    console.error('[Ishwar Push] subscription error',e);
+    const detail=String(e && e.message ? e.message : e).slice(0,700);
+    say('নোটিফিকেশন চালু হয়নি: '+detail+'\n\nবিস্তারিত দেখতে Chrome-এর Console/Logs দেখুন।');
   }
 };
 </script>
