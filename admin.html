@@ -58,6 +58,64 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 @media(max-width:720px){body:has(#loginBox:not([style*="display: none"])){background:linear-gradient(160deg,#4b0b11,#210609)}.login-shell{grid-template-columns:1fr;min-height:0;margin:14px auto;border-radius:22px;width:100%}.login-art{display:none}.login-form-side{padding:27px 23px 23px}.login-mobile-brand{display:flex;align-items:center;gap:12px;margin-bottom:31px}.login-mobile-brand>span{display:grid;place-items:center;width:47px;height:47px;border-radius:15px;background:#70151b;color:#f6d78d;font-size:25px}.login-mobile-brand b{display:block;color:#4a1115;font-size:16px}.login-mobile-brand small{display:block;color:#a07c41;font-size:9px;letter-spacing:1.7px;margin-top:3px}.login-form-head{margin-bottom:20px}.login-lock{display:none}.login-form-head h2{font-size:24px}.login-copyright{margin-top:20px}}
 </style>
 
+
+<style id="ishwarmani-admin-polish-v3">
+:root{--heritage-red:#71131c;--heritage-red-deep:#3b0910;--heritage-gold:#d6ad58;--heritage-cream:#fffaf0;--heritage-line:#eadcc3;--heritage-ink:#30181a;--heritage-muted:#786762;--heritage-shadow:0 14px 38px rgba(55,17,20,.075)}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{background:radial-gradient(ellipse at 0% 0%,rgba(214,173,88,.13),transparent 28%),linear-gradient(180deg,#fffaf2 0%,#f8f1e6 100%);color:var(--heritage-ink)}
+.wrap{max-width:1420px;padding:clamp(12px,2.3vw,30px)}
+#dashboard{animation:heritageRise .32s ease both}
+.admin-command-header{position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:2px 0 16px;padding:22px 24px;border-radius:22px;overflow:hidden;color:#fff7e5;background:linear-gradient(115deg,#33070d 0%,#71131c 58%,#8a2428 100%);border:1px solid rgba(214,173,88,.42);box-shadow:0 16px 36px rgba(59,9,16,.17)}
+.admin-command-header:after{content:"✺";position:absolute;right:25px;top:-34px;font-size:150px;line-height:1;color:rgba(255,225,159,.07);pointer-events:none}
+.admin-command-brand{display:flex;align-items:center;gap:14px;min-width:0;position:relative;z-index:1}
+.admin-command-mark{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border:1px solid rgba(245,215,145,.75);border-radius:16px;color:#f4d58e;background:rgba(255,255,255,.06);font-size:25px;box-shadow:0 0 0 5px rgba(255,255,255,.025)}
+.admin-command-title{margin:0!important;color:#ffe3a1!important;font-size:clamp(18px,2.4vw,25px)!important;line-height:1.35}
+.admin-command-subtitle{margin-top:5px;color:rgba(255,247,229,.78);font-size:12px;line-height:1.6}
+.admin-command-pill{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(245,215,145,.35);border-radius:999px;padding:9px 12px;background:rgba(20,3,6,.18);color:#ffebbb;font-size:11px;font-weight:800;letter-spacing:.8px;white-space:nowrap}
+.admin-command-pill:before{content:"";width:7px;height:7px;border-radius:50%;background:#e9c56f;box-shadow:0 0 0 4px rgba(233,197,111,.13)}
+.admin-navbar{top:10px;gap:7px;padding:9px;background:rgba(255,252,246,.92);border:1px solid rgba(218,197,160,.8);border-radius:17px;box-shadow:0 10px 26px rgba(62,24,22,.07)}
+.admin-navbar a{display:inline-flex;align-items:center;gap:7px;padding:11px 14px;border-radius:11px;border:1px solid transparent;background:transparent;color:#674448;transition:background .18s,color .18s,border-color .18s,transform .18s}
+.admin-navbar a:hover,.admin-navbar a:focus-visible{background:#fff3d8;color:var(--heritage-red);border-color:#ead3a0;transform:translateY(-1px)}
+.admin-navbar a[aria-current="page"]{background:linear-gradient(135deg,#71131c,#4a0a12);color:#fff1ce;border-color:#71131c;box-shadow:0 5px 13px rgba(113,19,28,.16)}
+.card,.editor-card{border:1px solid rgba(226,207,171,.85);border-radius:20px;background:rgba(255,255,255,.92);box-shadow:var(--heritage-shadow)}
+.card{padding:clamp(15px,2vw,24px)}
+.editor-card{padding:clamp(15px,2vw,24px);margin-bottom:20px}
+#overview>.top{align-items:center;margin:8px 0 20px;padding:3px 2px 14px;border-bottom:1px solid #eadcc4}
+#overview h1{font-size:clamp(22px,3vw,31px);letter-spacing:-.45px;color:#5b1018}
+h2{font-size:clamp(17px,2vw,21px);letter-spacing:-.2px;color:#54151b;line-height:1.45}
+.small{color:var(--heritage-muted);line-height:1.65}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}
+.stats .stat{position:relative;isolation:isolate;min-height:120px;overflow:hidden;padding:20px;border:1px solid #ecdfc8;border-radius:18px;background:linear-gradient(145deg,#fff 0%,#fffaf0 100%);box-shadow:0 7px 20px rgba(66,28,20,.045);transition:transform .18s,box-shadow .18s,border-color .18s}
+.stats .stat:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(66,28,20,.08);border-color:#ddc48f}
+.stats .stat:before{position:absolute;right:14px;top:8px;font-size:17px;color:#d6ad58;opacity:.72}
+.stats .stat b{position:relative;z-index:1;margin-top:10px;font-size:clamp(25px,3vw,34px);font-weight:850;letter-spacing:-.8px;color:#71131c;overflow-wrap:anywhere}
+.btn{min-height:42px;border:1px solid #71131c;border-radius:12px;padding:11px 16px;background:linear-gradient(135deg,#811b24,#5b0d15);box-shadow:0 5px 12px rgba(113,19,28,.12);transition:transform .18s,box-shadow .18s,filter .18s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 17px rgba(113,19,28,.17);filter:brightness(1.04)}
+.btn:active{transform:translateY(0)}
+.btn.secondary{border-color:#e6d5b2;background:#fff5df;color:#6d2528;box-shadow:none}
+.btn.secondary:hover{background:#ffedc8;border-color:#d9bc7f}
+button:focus-visible,a:focus-visible{outline:3px solid rgba(214,173,88,.7);outline-offset:3px}
+.table-wrap{border:1px solid #eadcc4;border-radius:15px;background:#fff;box-shadow:inset 0 1px 0 #fff}
+table{background:#fff}th{background:linear-gradient(100deg,#71131c,#4a0b12);color:#fff2d5;font-size:12px;letter-spacing:.25px;padding:14px 13px}td{padding:13px;border-bottom:1px solid #f0e7d7;color:#4a3331;font-size:13px;line-height:1.65}tbody tr:nth-child(even) td{background:#fffdf8}tr:hover td{background:#fff4df}
+input,textarea,select{color:#32191a}input::placeholder,textarea::placeholder{color:#ad9a8c}input:focus,textarea:focus,select:focus{border-color:#b88b36!important;box-shadow:0 0 0 4px rgba(214,173,88,.16)!important}
+.editor-card> .top{align-items:flex-start;padding-bottom:14px;border-bottom:1px solid #f0e3cc;margin-bottom:16px}
+.editor-grid{gap:18px}
+.editor-card label{color:#5a2929;font-size:13px;line-height:1.55}
+.editor-card textarea,.editor-card select,.editor-card input[type=text],.editor-card input[type=datetime-local],.editor-card input[type=url]{border-color:#e4d5bc;border-radius:12px;padding:13px;min-height:45px}
+.editor-card textarea{min-height:125px;line-height:1.7}
+.editor-help{line-height:1.65;color:#88736a}
+.editor-nav-row,.committee-editor-row{border-color:#eadcc4;background:#fffdf8;border-radius:13px;padding:12px}
+#districtBreakdown>div{padding:11px 12px;border:1px solid #f0e5d3;border-radius:12px;background:#fffdf8}
+#districtBreakdown>div>div:first-child{align-items:center}
+.msg{border:1px solid transparent;line-height:1.65}
+.empty{padding:30px 15px;color:#89756b}
+#editorSection,#committeeEditorCard,#photosSection>.card{scroll-margin-top:100px}
+@keyframes heritageRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.wrap{padding:10px}.admin-command-header{padding:17px;border-radius:17px;gap:12px}.admin-command-mark{flex-basis:42px;width:42px;height:42px;border-radius:13px}.admin-command-pill{font-size:10px}.admin-navbar{top:5px;border-radius:14px}.admin-navbar a{padding:10px 12px;font-size:12px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stats .stat{min-height:105px;padding:15px;border-radius:15px}.stats .stat b{font-size:27px}.top{align-items:flex-start}.top>div{min-width:0}.table-wrap{border-radius:12px}th,td{padding:10px;font-size:12px}}
+@media(max-width:430px){.admin-command-header{align-items:flex-start}.admin-command-pill{width:100%;justify-content:center}.stats{grid-template-columns:1fr 1fr}.stats .stat{min-height:96px;padding:12px}.stats .stat b{font-size:24px}.btn{padding:10px 12px;font-size:12px}.admin-navbar a{padding:9px 10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+
 </head>
 <body data-admin-view="overview">
 <div class="wrap">
@@ -88,6 +146,10 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
   </div>
 </section>
 <section id="dashboard" style="display:none">
+<div class="admin-command-header" aria-label="Admin workspace header">
+  <div class="admin-command-brand"><div class="admin-command-mark" aria-hidden="true">ॐ</div><div><h1 class="admin-command-title">ঈশ্বরমনি কুঠির</h1><div class="admin-command-subtitle">সাহা বাড়ি · ওয়েবসাইট ব্যবস্থাপনা কেন্দ্র</div></div></div>
+  <div class="admin-command-pill">ADMIN WORKSPACE</div>
+</div>
 <nav class="admin-navbar" aria-label="Admin sections">
 <a href="admin.html" aria-current="page">🏠 Overview</a>
 <a href="chandipath-clicks.html">🔱 চণ্ডীপাঠ ক্লিক</a>
@@ -95,7 +157,6 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <a href="committee.html">🙏 পূজা কমিটি</a>
 <a href="gallery.html">📸 Gallery</a>
 <a href="visitors.html">👥 দর্শনার্থী</a>
-<a href="#problemReports">⚠️ সমস্যা রিপোর্ট</a>
 </nav>
 <div id="overview">
 <div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
@@ -111,20 +172,6 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
  <div id="districtBreakdown" style="display:grid;gap:10px;margin-top:14px"><div class="small">ডেটা লোড হলে এখানে জেলা-ভিত্তিক রিপোর্ট দেখা যাবে।</div></div>
  <div id="advancedStatsStatus" class="small" style="margin-top:10px"></div>
 </div>
-</div>
-
-
-<div class="card" id="problemReports" style="margin-bottom:18px;scroll-margin-top:90px">
- <div class="top"><div><h2>⚠️ ওয়েবসাইট সমস্যা রিপোর্ট</h2><div class="small">ভিজিটরদের জমা দেওয়া সমস্যা দেখুন, খুঁজুন এবং সমাধানের স্ট্যাটাস আপডেট করুন।</div></div><button class="btn secondary" type="button" onclick="loadProblemReports()">↻ রিপোর্ট Refresh</button></div>
- <div class="stats" style="margin-top:12px">
-  <div class="stat">মোট রিপোর্ট<b id="prTotal">0</b></div><div class="stat">নতুন রিপোর্ট<b id="prNew">0</b></div><div class="stat">সমাধান হয়েছে<b id="prResolved">0</b></div>
- </div>
- <div class="top" style="margin-top:12px;align-items:end">
-  <div style="flex:1;min-width:220px"><label for="prAdminSearch">রিপোর্ট খুঁজুন</label><input id="prAdminSearch" type="search" placeholder="বিবরণ, পেজ, ধরন বা যোগাযোগ…" oninput="renderProblemReports()"></div>
-  <div style="min-width:190px"><label for="prAdminFilter">স্ট্যাটাস</label><select id="prAdminFilter" onchange="renderProblemReports()" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff"><option value="all">সব রিপোর্ট</option><option value="new">নতুন</option><option value="in_progress">কাজ চলছে</option><option value="resolved">সমাধান হয়েছে</option></select></div>
- </div>
- <div id="prAdminStatus" class="small" style="margin:12px 0">রিপোর্ট লোড হয়নি।</div>
- <div class="table-wrap"><table style="min-width:1050px"><thead><tr><th>#</th><th>সমস্যা / বিবরণ</th><th>পেজ</th><th>যোগাযোগ</th><th>রিপোর্টের সময়</th><th>স্ট্যাটাস</th><th>কাজ</th></tr></thead><tbody id="prAdminRows"><tr><td colspan="7" class="empty">রিপোর্ট লোড হয়নি।</td></tr></tbody></table></div>
 </div>
 
 <div class="card" id="clickAnalytics" style="margin-bottom:18px">
@@ -215,7 +262,7 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -371,49 +418,10 @@ async function loadGreetingCardLogs(){
  }
 }
 
-let problemReports=[];
-const problemTypeLabels={broken_link:'লিংক কাজ করছে না',image:'ছবি দেখা যাচ্ছে না',wrong_info:'ভুল তথ্য',display:'ডিজাইন / লেখা',technical:'প্রযুক্তিগত সমস্যা',other:'অন্যান্য'};
-const problemStatusLabels={new:'নতুন',in_progress:'কাজ চলছে',resolved:'সমাধান হয়েছে'};
-async function loadProblemReports(){
- const status=document.getElementById('prAdminStatus'),body=document.getElementById('prAdminRows');if(!status||!body)return;
- status.textContent='রিপোর্ট লোড হচ্ছে…';body.innerHTML='<tr><td colspan="7" class="empty">লোড হচ্ছে…</td></tr>';
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/problem_reports?select=id,issue_type,page_url,page_title,details,contact,status,created_at,updated_at&order=created_at.desc&limit=1000',{headers:h()});
-  const d=await r.json();if(!r.ok)throw Error(d.message||d.details||'Supabase error '+r.status);
-  problemReports=Array.isArray(d)?d:[];renderProblemReports();
-  const fresh=problemReports.filter(x=>x.status==='new').length,resolved=problemReports.filter(x=>x.status==='resolved').length;
-  document.getElementById('prTotal').textContent=problemReports.length;document.getElementById('prNew').textContent=fresh;document.getElementById('prResolved').textContent=resolved;
-  status.textContent=problemReports.length+'টি রিপোর্ট পাওয়া গেছে। সর্বোচ্চ ১০০০টি সাম্প্রতিক রিপোর্ট দেখানো হচ্ছে।';
- }catch(e){body.innerHTML='<tr><td colspan="7" class="empty">রিপোর্ট লোড হয়নি। SQL/RLS সেটআপ এবং Admin email policy পরীক্ষা করুন।</td></tr>';status.textContent='❌ '+e.message;}
-}
-function renderProblemReports(){
- const body=document.getElementById('prAdminRows');if(!body)return;
- const q=(document.getElementById('prAdminSearch')?.value||'').trim().toLocaleLowerCase();
- const filter=document.getElementById('prAdminFilter')?.value||'all';
- const rows=problemReports.filter(x=>(filter==='all'||x.status===filter)&&[x.details,x.page_url,x.page_title,x.contact,problemTypeLabels[x.issue_type],x.id].some(v=>String(v||'').toLocaleLowerCase().includes(q)));
- if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">মিলে এমন কোনো রিপোর্ট নেই।</td></tr>';return;}
- body.innerHTML=rows.map((x,i)=>{
-  const date=x.created_at?new Date(x.created_at).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'}):'—';
-  const safeUrl=String(x.page_url||'');
-  return `<tr><td>${i+1}</td><td><strong>${esc(problemTypeLabels[x.issue_type]||x.issue_type||'অন্যান্য')}</strong><div style="white-space:pre-wrap;max-width:340px;margin-top:6px">${esc(x.details||'')}</div><div class="small">Report ID: ${esc(x.id)}</div></td><td><div>${esc(x.page_title||'—')}</div><div class="small" style="overflow-wrap:anywhere;max-width:250px">${esc(safeUrl)}</div></td><td>${esc(x.contact||'দেওয়া হয়নি')}</td><td>${esc(date)}</td><td><select id="prStatus-${esc(x.id)}" aria-label="রিপোর্ট স্ট্যাটাস" style="padding:9px;border:1px solid #d9c49c;border-radius:9px;background:#fff">${Object.entries(problemStatusLabels).map(([v,label])=>`<option value="${v}" ${x.status===v?'selected':''}>${label}</option>`).join('')}</select></td><td><button class="btn" type="button" onclick="updateProblemReportStatus(${Number(x.id)},this)" style="padding:9px 12px">Save</button></td></tr>`;
- }).join('');
-}
-async function updateProblemReportStatus(id,button){
- const select=document.getElementById('prStatus-'+id);if(!select)return;
- const status=select.value;button.disabled=true;button.textContent='Saving…';
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/problem_reports?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({status,updated_at:new Date().toISOString()})});
-  const d=await r.json().catch(()=>[]);if(!r.ok)throw Error(d.message||d.details||'Status update failed');if(!Array.isArray(d)||!d.length)throw Error('কোনো রিপোর্ট আপডেট হয়নি। Admin permission/RLS পরীক্ষা করুন।');
-  const index=problemReports.findIndex(x=>Number(x.id)===Number(id));if(index>=0)problemReports[index]={...problemReports[index],status,updated_at:new Date().toISOString()};
-  renderProblemReports();document.getElementById('prAdminStatus').textContent='✅ রিপোর্ট #'+id+'-এর স্ট্যাটাস আপডেট হয়েছে।';
-  document.getElementById('prTotal').textContent=problemReports.length;document.getElementById('prNew').textContent=problemReports.filter(x=>x.status==='new').length;document.getElementById('prResolved').textContent=problemReports.filter(x=>x.status==='resolved').length;
- }catch(e){alert('স্ট্যাটাস আপডেট হয়নি: '+e.message);button.disabled=false;button.textContent='Save';}
-}
-
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs()}
 
 let websiteContentCache={};
 const defaultNav=[
