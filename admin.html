@@ -88,6 +88,11 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 
+\n<style id="gallery-caption-editor-style">
+#photoList .uploaded-photo-row .photo-caption-edit{box-sizing:border-box;font:inherit;color:#291014;background:#fffefa}
+#photoList .uploaded-photo-row .photo-caption-edit:focus{outline:none;border-color:#bd8c34;box-shadow:0 0 0 3px rgba(201,154,66,.14)}
+@media(max-width:600px){#photoList .uploaded-photo-row{gap:9px!important}#photoList .uploaded-photo-row>img{width:68px!important;height:60px!important}#photoList .uploaded-photo-row>div:last-child{width:100%;padding-left:0}#photoList .uploaded-photo-row>div:last-child .btn{flex:1}}
+</style>
 </head>
 <body data-admin-view="overview">
 <div class="wrap">
@@ -324,10 +329,53 @@ async function uploadPhoto(){
 }
 async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json(); if(!r.ok)throw Error(d.message||'Load failed');
- if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
- el.innerHTML=d.map(x=>{const ep=encodeURIComponent(String(x.path||''));let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');return `<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(display)}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" data-photo-id="${Number(x.id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">Delete</button></div>`}).join('');
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();
+  if(!r.ok)throw Error(d.message||'Load failed');
+  if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
+  el.innerHTML=d.map(x=>{
+   const ep=encodeURIComponent(String(x.path||'')), id=Number(x.id);
+   let cap=String(x.caption||''), m=cap.match(/^YEAR:(\d{4})\|(.*)$/), editCaption=m?m[2]:cap;
+   let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');
+   return `<div class="uploaded-photo-row" style="display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #eee1c7;padding:14px 0;flex-wrap:wrap">
+    <img src="${esc(x.public_url)}" alt="Uploaded gallery photo" style="width:82px;height:68px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0">
+    <div style="flex:1;min-width:190px">
+     <div class="small" style="margin-bottom:5px">বর্তমান ক্যাপশন: <b>${esc(display)}</b></div>
+     <label style="margin:5px 0">ক্যাপশন পরিবর্তন</label>
+     <input class="photo-caption-edit" data-photo-id="${id}" data-photo-year="${m?m[1]:''}" value="${esc(editCaption)}" maxlength="500" aria-label="ছবির নতুন ক্যাপশন" placeholder="ছবির ক্যাপশন লিখুন" style="width:100%;padding:10px;border:1px solid #d9c49c;border-radius:9px">
+     <div class="small" style="margin-top:5px">বিভাগ: ${esc(x.section)}${m&&x.section==='past'?' · সাল: '+esc(m[1]):''}</div>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+     <button class="btn" data-photo-id="${id}" onclick="savePhotoCaption(${id},this)">💾 Save Caption</button>
+     <button class="btn secondary" style="color:#a11" data-photo-id="${id}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">🗑️ Delete</button>
+    </div>
+   </div>`;
+  }).join('');
  }catch(e){el.textContent='Error: '+e.message;}
+}
+async function savePhotoCaption(id,btn){
+ const row=btn.closest('.uploaded-photo-row');
+ const input=row&&row.querySelector('.photo-caption-edit');
+ if(!id||!input){alert('ছবির তথ্য পাওয়া যায়নি।');return;}
+ const captionText=input.value.trim();
+ if(captionText.length>500){alert('ক্যাপশন সর্বোচ্চ ৫০০ অক্ষরের হতে পারবে।');return;}
+ const year=String(input.dataset.photoYear||'').trim();
+ // Keep the year metadata used by the "বিগত বছরের প্রতিমা" gallery.
+ const caption=year?'YEAR:'+year+'|'+captionText:captionText;
+ const oldText=btn.textContent;btn.disabled=true;btn.textContent='Saving…';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{
+   method:'PATCH',
+   headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},
+   body:JSON.stringify({caption})
+  });
+  if(!r.ok)throw Error(await r.text());
+  btn.textContent='✅ Saved';
+  await loadPhotos();
+ }catch(e){
+  alert('ক্যাপশন Save হয়নি: '+e.message+'\nSupabase-এর gallery_photos UPDATE permission/RLS policy পরীক্ষা করুন।');
+  btn.disabled=false;btn.textContent=oldText;
+ }
 }
 async function deletePhotoFromButton(btn){
  const id=Number(btn.dataset.photoId);
