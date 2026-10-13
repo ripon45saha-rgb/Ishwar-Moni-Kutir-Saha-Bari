@@ -232,10 +232,56 @@ async function uploadPhoto(){
 }
 async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
- try{const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json(); if(!r.ok)throw Error(d.message||'Load failed');
- if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
- el.innerHTML=d.map(x=>{const ep=encodeURIComponent(String(x.path||''));return `<div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee1c7;padding:10px 0"><img src="${esc(x.public_url)}" style="width:70px;height:55px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0"><div style="flex:1"><b>${esc(x.caption||'কোনো caption নেই')}</b><br><span>${esc(x.section)}</span></div><button class="btn" style="background:#a11" data-photo-id="${Number(x.id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">Delete</button></div>`}).join('');
- }catch(e){el.textContent='Error: '+e.message;}
+ el.textContent='ছবি লোড হচ্ছে...';
+ try{
+  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{
+   headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}
+  });
+  const d=await r.json().catch(()=>[]);
+  if(!r.ok)throw Error(d.message||d.details||'Load failed (HTTP '+r.status+')');
+  if(!Array.isArray(d)||!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
+  el.innerHTML=d.map(x=>{
+   const id=String(x.id??'');
+   const ep=encodeURIComponent(String(x.path||''));
+   return `<div class="uploaded-photo-row" data-photo-row="${esc(id)}" style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;border-bottom:1px solid #eee1c7;padding:14px 0">
+    <img src="${esc(x.public_url||'')}" alt="Gallery photo" style="width:76px;height:62px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #ead7b0">
+    <div style="flex:1;min-width:180px">
+     <div class="small" style="margin-bottom:6px">বর্তমান ক্যাপশন: <b>${esc(x.caption||'কোনো caption নেই')}</b></div>
+     <label style="margin:5px 0">ক্যাপশন পরিবর্তন</label>
+     <input type="text" class="photo-caption-edit" data-photo-id="${esc(id)}" maxlength="500" value="${esc(x.caption||'')}" placeholder="নতুন ক্যাপশন লিখুন" style="width:100%;padding:10px;border:1px solid #d9c49c;border-radius:9px">
+     <div class="small" style="margin-top:5px">বিভাগ: ${esc(x.section||'—')}</div>
+     <div class="photo-caption-status small" role="status" aria-live="polite" style="margin-top:5px"></div>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+     <button type="button" class="btn" data-photo-id="${esc(id)}" onclick="savePhotoCaption(this.dataset.photoId,this)">💾 Save Caption</button>
+     <button type="button" class="btn secondary" style="color:#a11" data-photo-id="${esc(id)}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">🗑️ Delete</button>
+    </div>
+   </div>`;
+  }).join('');
+ }catch(e){el.textContent='❌ ছবি লোড হয়নি: '+e.message;}
+}
+async function savePhotoCaption(id,btn){
+ const row=document.querySelector('.uploaded-photo-row[data-photo-row="'+CSS.escape(String(id))+'"]');
+ if(!row){alert('ছবির তথ্য পাওয়া যায়নি। Gallery Reload করুন।');return;}
+ const input=row.querySelector('.photo-caption-edit');
+ const status=row.querySelector('.photo-caption-status');
+ const caption=input.value.trim();
+ const oldText=btn.textContent;
+ btn.disabled=true;btn.textContent='সেভ হচ্ছে…';status.textContent='Supabase-এ সেভ হচ্ছে…';status.style.color='#725b52';
+ try{
+  const url=SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(String(id));
+  const r=await fetch(url,{method:'PATCH',headers:{...h(),'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({caption})});
+  const raw=await r.text();
+  let result=[];try{result=raw?JSON.parse(raw):[];}catch(_){}
+  if(!r.ok)throw Error(raw||('HTTP '+r.status));
+  if(Array.isArray(result)&&result.length===0)throw Error('কোনো database row update হয়নি। Supabase-এর gallery_photos টেবিলে UPDATE RLS policy/permission পরীক্ষা করতে হবে।');
+  status.textContent='✅ ক্যাপশন সেভ হয়েছে।';status.style.color='#176b32';
+  const current=row.querySelector('.small b');
+  if(current)current.textContent=caption||'কোনো caption নেই';
+  btn.textContent='✅ Saved';
+ }catch(e){
+  status.textContent='❌ সেভ হয়নি: '+e.message;status.style.color='#a11';btn.textContent=oldText;
+ }finally{btn.disabled=false;}
 }
 async function deletePhotoFromButton(btn){
  const id=Number(btn.dataset.photoId);
