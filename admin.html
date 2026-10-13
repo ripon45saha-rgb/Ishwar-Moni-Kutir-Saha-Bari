@@ -334,7 +334,7 @@ async function loadPhotos(){
   if(!r.ok)throw Error(d.message||'Load failed');
   if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
   el.innerHTML=d.map(x=>{
-   const ep=encodeURIComponent(String(x.path||'')), id=Number(x.id);
+   const ep=encodeURIComponent(String(x.path||'')), id=String(x.id??'');
    let cap=String(x.caption||''), m=cap.match(/^YEAR:(\d{4})\|(.*)$/), editCaption=m?m[2]:cap;
    let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');
    return `<div class="uploaded-photo-row" style="display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #eee1c7;padding:14px 0;flex-wrap:wrap">
@@ -346,17 +346,18 @@ async function loadPhotos(){
      <div class="small" style="margin-top:5px">বিভাগ: ${esc(x.section)}${m&&x.section==='past'?' · সাল: '+esc(m[1]):''}</div>
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap">
-     <button class="btn" data-photo-id="${id}" onclick="savePhotoCaption(${id},this)">💾 Save Caption</button>
+     <button class="btn" data-photo-id="${esc(id)}" onclick="savePhotoCaption(this)">💾 Save Caption</button>
      <button class="btn secondary" style="color:#a11" data-photo-id="${id}" data-photo-path="${ep}" onclick="deletePhotoFromButton(this)">🗑️ Delete</button>
     </div>
    </div>`;
   }).join('');
  }catch(e){el.textContent='Error: '+e.message;}
 }
-async function savePhotoCaption(id,btn){
- const row=btn.closest('.uploaded-photo-row');
+async function savePhotoCaption(btn){
+ const id=String(btn&&btn.dataset?btn.dataset.photoId||'':'').trim();
+ const row=btn&&btn.closest('.uploaded-photo-row');
  const input=row&&row.querySelector('.photo-caption-edit');
- if(!id||!input){alert('ছবির তথ্য পাওয়া যায়নি।');return;}
+ if(!id||!input){alert('ছবির তথ্য পাওয়া যায়নি। আবার Gallery লোড করে চেষ্টা করুন।');return;}
  const captionText=input.value.trim();
  if(captionText.length>500){alert('ক্যাপশন সর্বোচ্চ ৫০০ অক্ষরের হতে পারবে।');return;}
  const year=String(input.dataset.photoYear||'').trim();
@@ -366,10 +367,12 @@ async function savePhotoCaption(id,btn){
  try{
   const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?id=eq.'+encodeURIComponent(id),{
    method:'PATCH',
-   headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},
+   headers:{...h(),'Content-Type':'application/json','Prefer':'return=representation'},
    body:JSON.stringify({caption})
   });
   if(!r.ok)throw Error(await r.text());
+  const updated=await r.json().catch(()=>[]);
+  if(!Array.isArray(updated)||updated.length===0)throw Error('কোনো row update হয়নি। Supabase-এর gallery_photos টেবিলে UPDATE permission/RLS policy দিন।');
   btn.textContent='✅ Saved';
   await loadPhotos();
  }catch(e){
