@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="bn"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#4b1022"><title>দুর্গা পূজা মিউজিক</title>
+<style>
+:root{--wine:#4b1022;--wine2:#741c35;--gold:#e7bd67;--cream:#fff8ed}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#7a243b,#300b18 62%,#1d0710);color:var(--cream);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;min-height:100vh}
+.wrap{width:min(960px,100%);margin:auto;padding:22px 14px 40px}header{text-align:center;padding:12px 4px 20px}.lamp{font-size:32px}
+h1{font-size:clamp(26px,6vw,42px);margin:6px 0;color:var(--gold)}.sub{margin:0;color:#f3dce1;font-size:14px}
+.panel{background:#fff8ed0b;border:1px solid #e7bd6759;border-radius:20px;padding:14px;box-shadow:0 18px 45px #16040b55}
+.player-shell{position:relative;width:100%;aspect-ratio:16/9;background:#14060b;border-radius:14px;overflow:hidden}#player{position:absolute;inset:0;width:100%;height:100%}
+.now{padding:13px 3px 8px}.kicker{font-size:12px;color:var(--gold);letter-spacing:1px}#nowTitle{font-size:18px;font-weight:700;margin-top:4px;line-height:1.45;overflow-wrap:anywhere}
+.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
+button{border:0;border-radius:999px;padding:11px 16px;font-size:14px;font-weight:700;cursor:pointer;background:var(--gold);color:#32101b}button.secondary{background:#ffffff12;border:1px solid #e7bd6780;color:var(--cream)}
+.playlist-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:24px 2px 10px}h2{font-size:19px;margin:0;color:var(--gold)}#count{font-size:12px;color:#f0d8de}
+#search{width:100%;border:1px solid #e7bd6770;border-radius:12px;background:#fff9f0;color:#29151c;padding:12px 13px;font-size:15px;margin:0 0 12px}
+.list{display:grid;gap:8px}.track{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border-radius:13px;padding:12px;background:#fff9f00d;border:1px solid #ffffff18;color:var(--cream)}
+.track.active{background:#e7bd6722;border-color:var(--gold)}.num{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border-radius:50%;background:#ffffff12;color:var(--gold);font-weight:800}
+.track-title{font-size:14px;line-height:1.4;overflow-wrap:anywhere;flex:1}.track-play{font-size:12px;color:var(--gold)}
+.note{font-size:12px;line-height:1.6;color:#f0d8deaa;text-align:center;margin:18px 4px 0}.error{color:#ffd2a8;font-size:13px;line-height:1.5}
+@media(min-width:700px){.list{grid-template-columns:1fr 1fr}.track{min-height:68px}}
+</style></head><body><div class="wrap">
+<header><div class="lamp">🪔 ✨ 🪔</div><h1>দুর্গা পূজা মিউজিক</h1><p class="sub">শারদীয়ার গান এক জায়গায়</p></header>
+<section class="panel"><div class="player-shell"><div id="player"></div></div><div class="now"><div class="kicker">এখন চলছে</div><div id="nowTitle">গানের নাম লোড হচ্ছে…</div></div>
+<div class="controls"><button class="secondary" id="prevBtn">⏮ আগের গান</button><button id="playBtn">▶ চালাও</button><button class="secondary" id="nextBtn">পরের গান ⏭</button></div></section>
+<div class="playlist-head"><h2>গানের তালিকা</h2><span id="count">গান লোড হচ্ছে…</span></div>
+<input id="search" type="search" placeholder="গানের নাম খুঁজুন…" aria-label="গানের নাম খুঁজুন"><div class="list" id="list"></div>
+<p class="note">গানগুলো YouTube-এর এমবেডেড প্লেয়ারে চলে। প্লে করতে ইন্টারনেট সংযোগ প্রয়োজন।</p><p class="error" id="status" role="status"></p>
+</div>
+<script>
+const ids=["tVj93-Aho2s","EZbQ-uaDbw4","xlElO06nQy8","tXXwsHeS_T0","4zyCkmAS1Oo","sPuZ0Q3KDWo","id5_3dKvEBg","4h5DXcN6cd4","GSJDim_JP4M","hbXuXt7gkFY","voH3xUpLVr4","_GUdZJQun2I","E2zfQEo7Q_M","Ez44dZdXDRk","xUMhpMmwAmM","3Gg0GP8DxhU","o3HccF0qviA","45O8KBhSZ0I","4ZWQYdzS_WY","60tSbJWJCr0","3E_qefwPA0E","jk0ZLYkAKEQ"];
+let tracks=ids.map((id,i)=>({id,title:"গান "+(i+1)})),current=0,player=null,ready=false;
+const list=document.getElementById("list"),statusEl=document.getElementById("status");
+function norm(s){return (s||"").toLowerCase().normalize("NFKC").replace(/[|•·–—\-_:()[\]{}.,!?'"]/g," ").replace(/\s+/g," ").trim()}
+function draw(){const q=norm(document.getElementById("search").value);list.innerHTML="";let shown=0;tracks.forEach((t,i)=>{if(q&&!norm(t.title).includes(q))return;shown++;const b=document.createElement("button");b.className="track"+(i===current?" active":"");const n=document.createElement("span");n.className="num";n.textContent=i+1;const title=document.createElement("span");title.className="track-title";title.textContent=t.title;const play=document.createElement("span");play.className="track-play";play.textContent=i===current?"▶ চলছে":"▶ চালাও";b.append(n,title,play);b.onclick=()=>playIndex(i);list.appendChild(b)});document.getElementById("count").textContent=tracks.length+"টি গান"+(q?" · "+shown+"টি দেখাচ্ছে":"")}
+function setTitle(){document.getElementById("nowTitle").textContent=tracks[current]?.title||"গান নির্বাচন করুন";draw()}
+function playIndex(i){if(!tracks.length)return;current=(i+tracks.length)%tracks.length;setTitle();if(ready){player.loadVideoById(tracks[current].id);document.getElementById("playBtn").textContent="⏸ বিরতি"}}
+document.getElementById("prevBtn").onclick=()=>playIndex(current-1);document.getElementById("nextBtn").onclick=()=>playIndex(current+1);
+document.getElementById("playBtn").onclick=()=>{if(!ready)return;if(player.getPlayerState()===1){player.pauseVideo();document.getElementById("playBtn").textContent="▶ চালাও"}else{player.playVideo();document.getElementById("playBtn").textContent="⏸ বিরতি"}};
+document.getElementById("search").oninput=draw;
+window.onYouTubeIframeAPIReady=()=>{player=new YT.Player("player",{videoId:tracks[current].id,playerVars:{playsinline:1,rel:0,modestbranding:1},events:{onReady:()=>{ready=true},onStateChange:e=>{if(e.data===YT.PlayerState.ENDED)playIndex(current+1);if(e.data===YT.PlayerState.PLAYING)document.getElementById("playBtn").textContent="⏸ বিরতি";if(e.data===YT.PlayerState.PAUSED)document.getElementById("playBtn").textContent="▶ চালাও";const d=player.getVideoData?.();if(d?.title){tracks[current].title=d.title;document.getElementById("nowTitle").textContent=d.title;draw()}},onError:()=>statusEl.textContent="এই ভিডিওটি চালানো যাচ্ছে না। পরের গান চেষ্টা করুন।"}})};
+async function loadTitles(){const results=await Promise.all(ids.map(async(id,i)=>{try{const r=await fetch("https://www.youtube.com/oembed?url="+encodeURIComponent("https://www.youtube.com/watch?v="+id)+"&format=json");if(!r.ok)throw Error();const d=await r.json();return{id,title:d.title||"গান "+(i+1)}}catch{return{id,title:"গান "+(i+1)}}}));const seen=new Set();tracks=[];for(const t of results){const k=norm(t.title);if(k&&seen.has(k))continue;if(k)seen.add(k);tracks.push(t)}if(!tracks.length)tracks=ids.map((id,i)=>({id,title:"গান "+(i+1)}));setTitle();statusEl.textContent=tracks.length<ids.length?(ids.length-tracks.length)+"টি একই নামের ডুপ্লিকেট বাদ দেওয়া হয়েছে।":"শিরোনাম পাওয়া গেলে গানের আসল নাম দেখা যাবে।"}
+const api=document.createElement("script");api.src="https://www.youtube.com/iframe_api";document.head.appendChild(api);loadTitles();
+</script></body></html>
