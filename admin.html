@@ -233,7 +233,8 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
-<div class="card" id="visitorSection"><div class="top"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
+<div class="card" id="visitorSection"><div class="top" style="flex-wrap:wrap"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"><button class="btn" type="button" style="background:#9b1c1c" onclick="clearAllVisitorData()">🗑️ সব দর্শনার্থীর ডেটা মুছুন</button></div>
+<div class="small" style="margin:-4px 0 12px">এই কাজ করলে দর্শনার্থীর তালিকা ও এর ওপর ভিত্তি করে তৈরি বিশ্লেষণ শূন্য হবে। মুছে ফেলা ডেটা ফেরানো যাবে না।</div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
 <tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
 </section></div>
@@ -250,6 +251,34 @@ const loginButton=document.getElementById("loginButton");if(loginButton){loginBu
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
 document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+async function clearAllVisitorData(){
+  const first=confirm('সতর্কতা: Supabase-এর visitors টেবিলের সব দর্শনার্থীর তথ্য মুছে ফেলতে চান? এই কাজ ফেরানো যাবে না।');
+  if(!first)return;
+  const second=prompt('নিশ্চিত করতে CLEAR লিখুন।');
+  if(second!=='CLEAR'){alert('বাতিল করা হয়েছে।');return;}
+  const status=document.getElementById('status');
+  if(status)status.textContent='সব দর্শনার্থীর তথ্য মুছছি…';
+  try{
+    const response=await fetch(SUPABASE_URL+'/rest/v1/visitors?id=not.is.null',{
+      method:'DELETE',
+      headers:{...h(),'Prefer':'return=representation'}
+    });
+    const body=await response.text();
+    if(!response.ok)throw Error(body||('Supabase HTTP '+response.status));
+    let deletedRows=[];
+    try { deletedRows=body ? JSON.parse(body) : []; } catch (_) { deletedRows=[]; }
+    if(!Array.isArray(deletedRows) || deletedRows.length===0){
+      await loadVisitors();
+      throw Error('Supabase কোনো deleted row ফেরত দেয়নি। ডেটা মুছে যায়নি—DELETE RLS policy/permission পরীক্ষা করতে হবে।');
+    }
+    visitors=[];
+    updateStats();
+    render();
+    if(status)status.textContent='✅ '+deletedRows.length+'টি দর্শনার্থীর রেকর্ড মুছে ফেলা হয়েছে। বিশ্লেষণও এখন শূন্য।';
+  }catch(e){
+    if(status)status.textContent='❌ ডেটা মুছতে পারিনি: '+e.message+' — Supabase visitors টেবিলের DELETE RLS policy/permission পরীক্ষা করুন।';
+  }
+}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
