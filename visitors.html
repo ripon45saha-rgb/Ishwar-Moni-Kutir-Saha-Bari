@@ -170,7 +170,7 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
 <div class="card" style="margin-bottom:18px"><h2>🗑️ Uploaded Photos</h2><div id="photoList" class="small">Loading...</div></div>
-<div class="card" id="visitorSection"><div class="top"><h2>👥 Visitor Information</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
+<div class="card" id="visitorSection"><div class="top" style="flex-wrap:wrap"><h2>👥 Visitor Information</h2><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn" style="background:#a11" onclick="deleteAllVisitors()">🗑️ সব দর্শনার্থীর ডেটা মুছুন</button><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div></div><div class="small" style="margin:8px 0 12px">সব ডেটা স্থায়ীভাবে মুছতে বাটনে চাপ দিয়ে নিশ্চিত করুন।</div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
 <tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
 </section></div>
@@ -192,6 +192,32 @@ document.getElementById("status").textContent="তথ্য লোড হচ্�
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
 if(!r.ok)throw Error(d.message||"Data load failed");visitors=Array.isArray(d)?d:[];updateStats();render();document.getElementById("status").textContent=visitors.length+"টি visitor record পাওয়া গেছে।"}
 catch(e){document.getElementById("status").textContent="Error: "+e.message}}
+async function deleteAllVisitors(){
+ const status=document.getElementById("status");
+ if(!accessToken){status.textContent="❌ আগে Admin লগইন করুন।";return;}
+ if(!confirm("সতর্কতা: visitors টেবিলের সব দর্শনার্থীর তথ্য স্থায়ীভাবে মুছে যাবে। এগোবেন?"))return;
+ const phrase=prompt('নিশ্চিত করতে CLEAR লিখুন।');
+ if(phrase!=="CLEAR"){status.textContent="মুছে ফেলা বাতিল করা হয়েছে।";return;}
+ const btn=document.querySelector('#visitorSection button[onclick="deleteAllVisitors()"]');
+ if(btn){btn.disabled=true;btn.textContent="মুছে ফেলা হচ্ছে…";}
+ status.textContent="Supabase থেকে দর্শনার্থীর ডেটা মুছে ফেলা হচ্ছে…";
+ try{
+   const r=await fetch(SUPABASE_URL+"/rest/v1/visitors?id=not.is.null",{method:"DELETE",headers:{...h(),"Prefer":"return=representation"}});
+   const raw=await r.text();
+   if(!r.ok)throw Error("Supabase "+r.status+": "+raw);
+   let deleted=[];try{deleted=raw?JSON.parse(raw):[]}catch(_){}
+   visitors=[];
+   updateStats();render();
+   status.textContent=Array.isArray(deleted)
+    ? "✅ Supabase থেকে "+deleted.length+"টি রেকর্ড মুছে ফেলা হয়েছে।"
+    : "✅ DELETE অনুরোধ সফল হয়েছে। Refresh করে নিশ্চিত করুন।";
+   await loadVisitors();
+ }catch(e){
+   status.textContent="❌ ডেটা মুছে ফেলা যায়নি: "+e.message+" — Supabase visitors টেবিলের DELETE RLS policy/permission পরীক্ষা করুন।";
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent="🗑️ সব দর্শনার্থীর ডেটা মুছুন";}
+ }
+}
 function ratingNumber(v){if(v==null)return null;let s=String(v).replace(/[০-৯]/g,c=>"০১২৩৪৫৬৭৮৯".indexOf(c)).replace("/","");let m=s.match(/\d+(?:\.\d+)?/);return m?Number(m[0]):null}
 function updateStats(){document.getElementById("total").textContent=visitors.length;let n=visitors.map(v=>ratingNumber(v.rating)).filter(x=>x!==null&&x<=10);document.getElementById("avg").textContent=n.length?(n.reduce((a,b)=>a+b,0)/n.length).toFixed(1)+"/10":"—";let day=new Date().toLocaleDateString("en-CA");document.getElementById("today").textContent=visitors.filter(v=>v.created_at&&new Date(v.created_at).toLocaleDateString("en-CA")===day).length}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
