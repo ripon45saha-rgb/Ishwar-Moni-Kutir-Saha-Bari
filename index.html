@@ -385,7 +385,7 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
   <button class="mobile-menu-btn" type="button" aria-label="মেনু" aria-expanded="false" onclick="toggleSiteMenu(this)">☰</button>
   <button id="siteNotificationBell" class="site-notification-bell" type="button" aria-label="নোটিফিকেশন খুলুন" onclick="openSiteNotifications()"><span aria-hidden="true">🔔</span><span id="siteNotificationBadge" class="site-notification-badge" hidden>0</span></button>
   <div class="links">
-    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="pujo-songs.html" data-i18n="songCollection">🎵 Pujo Songs</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a>
+    <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a><a href="durga-puja-music.html" data-i18n="durgaMusic">দুর্গা পুজা মিউজিক</a>
   </div>
 </div></nav>
 <script>
@@ -469,7 +469,7 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
    </div>
   </div>
   <div class="timeline" id="contentTimeline">
-   <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহালয়া</b><br>মহালয়া ও দেবীপক্ষের সূচনা।</div></div>
+   <div class="event"><div class="date">২২ আশ্বিন</div><div><b>মহালয়া</b><br>মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।</div></div>
    <div class="event"><div class="date">২৮ আশ্বিন</div><div><b>মহা ষষ্ঠী</b><br>এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।</div></div>
    <div class="event"><div class="date">২৯ ও ৩০ আশ্বিন</div><div><b>মহা সপ্তমী</b><br>মহা সপ্তমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।</div></div>
    <div class="event"><div class="date">১ কার্তিক</div><div><b>মহা অষ্টমী</b><br>মহা অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।</div></div>
@@ -556,7 +556,18 @@ document.addEventListener('click',e=>{const m=document.querySelector('.links'),b
 </section>
 
 
-
+<section class="section" id="mahalaya">
+  <div class="section-inner">
+    <div class="section-heading">
+      <span class="eyebrow">শ্রবণ</span>
+      <h2>🔱 মহালয়ার চণ্ডীপাঠ</h2>
+    </div>
+    <div class="audio-card" style="text-align:center;padding:28px 20px;">
+      <p style="margin:0 0 20px;color:#6b4b50;">মহালয়ার পবিত্র চণ্ডীপাঠ শুনতে আলাদা শ্রবণ পেজে প্রবেশ করুন।</p>
+      <a href="chandipath.html" class="btn" style="margin-top:0;" data-i18n="🎧 সরাসরি চণ্ডীপাঠ শুনুন" onclick="trackChandipathClick(event)">🎧 সরাসরি চণ্ডীপাঠ শুনুন</a>
+    </div>
+  </div>
+</section>
 
 <section id="location" class="location-box">
  <div class="container">
@@ -750,9 +761,8 @@ async function loadWebsiteContent(){
   const nav=data.navbar;
   if(nav && Array.isArray(nav.items) && nav.items.length){
    const links=document.querySelector('.links');
-   if(links){let items=nav.items.filter(x=>x.href!=='greeting-maker.html').map(x=>({...x,href:(x.href==='puja-songs.html'?'pujo-songs.html':(x.href==='#committee'?'committee.html':x.href)),label:x.href==='puja-songs.html'?'🎵 Pujo Songs':x.label}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
-   if(!items.some(x=>x.href==='pujo-songs.html')){const at=items.findIndex(x=>x.href==='puja-committee.html');items.splice(at>=0?at+1:1,0,{label:'🎵 Pujo Songs',href:'pujo-songs.html'});}
-   links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
+   if(links){let items=nav.items.filter(x=>x.href!=='greeting-maker.html').map(x=>({...x,href:x.href==='#committee'?'committee.html':x.href}));if(!items.some(x=>x.href==='puja-committee.html')){const at=items.findIndex(x=>x.href==='#utsav');items.splice(at>=0?at+1:1,0,{label:'ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি',href:'puja-committee.html'});}
+   items=items.filter(x=>x.href!=='durga-puja-music.html');items.push({label:'দুর্গা পুজা মিউজিক',href:'durga-puja-music.html'});links.innerHTML=items.map(x=>`<a href="${String(x.href||'#').replace(/"/g,'&quot;')}">${String(x.label||'').replace(/</g,'&lt;')}</a>`).join('');}
   }
   const set=(id,val)=>{const e=document.getElementById(id);if(e&&val!==undefined&&val!==null)e.textContent=val};
   const a=data.about||{}; set('contentAboutTitle',a.title); set('contentAboutText',a.text);
@@ -925,12 +935,12 @@ body:not(.entered) .problem-report-fab,body:not(.entered) #problemReportSection{
 (function(){
  const translations={
   '🪔 ঈশ্বরমনি কুঠির':'🪔 Ishwarmani Kutir',
-  'পরিচিতি':'About','দুর্গোৎসব ২০২৬':'Durga Puja 2026','ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি':'Ishwarmani Kutir Puja Celebration Committee','🎵 পূজার গান':'🎵 Puja Songs','🙏 আমাদের পরিচালনা':'🙏 Our Committee','পূজার আয়োজন ও পরিচালনায় যুক্ত কমিটির সদস্যবৃন্দ':'Members involved in organizing and managing the Puja','গ্যালারি':'Gallery','কালীপূজা':'Kali Puja','বিগত বছরের প্রতিমা':'Past Idols','অবস্থান':'Location','🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements',
+  'পরিচিতি':'About','দুর্গা পুজা মিউজিক':'Durga Puja Music','durgaMusic':'Durga Puja Music','দুর্গোৎসব ২০২৬':'Durga Puja 2026','ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি':'Ishwarmani Kutir Puja Celebration Committee','🙏 আমাদের পরিচালনা':'🙏 Our Committee','পূজার আয়োজন ও পরিচালনায় যুক্ত কমিটির সদস্যবৃন্দ':'Members involved in organizing and managing the Puja','গ্যালারি':'Gallery','কালীপূজা':'Kali Puja','বিগত বছরের প্রতিমা':'Past Idols','অবস্থান':'Location','🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements',
   'সবার জন্য উন্মুক্ত':'Open to Everyone','সাহা বাড়ি':'Saha Family Home','খড়মা • দেওয়ানগঞ্জ • জামালপুর':'Kharma • Dewanganj • Jamalpur','🛕 দর্শনার্থী তথ্য':'🛕 Visitor Information','আপনার নাম :':'Your Name:','আপনার নাম লিখুন':'Enter your name','দর্শনার্থী বা ভক্তবৃন্দ কোথা হতে মন্দির দর্শন করতে এসেছেন :':'Where are you visiting from?','জেলা :':'District:','জেলা নির্বাচন করুন':'Select district','উপজেলা :':'Upazila:','আগে জেলা নির্বাচন করুন':'Select a district first','মন্দির নিয়ে আপনার মতামত :':'Your feedback about the temple:','আপনার মতামত লিখুন...':'Write your feedback...','⭐ ১০ এর মধ্যে রেটিং :':'⭐ Rating out of 10:','মন্দিরের পরিবেশ, প্রতিমা, ব্যবহার, প্রসাদ ব্যবস্থাকে আপনি ১০ এর মধ্যে কত রেটিং করবেন?':'How would you rate the temple, idol, hospitality and prasad out of 10?','০/১০, ৯/১০, ১০/১০':'e.g. 8/10, 9/10, 10/10','🪔 প্রবেশ করুন':'🪔 Enter',
   '🛕 সাহা বাড়ি • খড়মা • দেওয়ানগঞ্জ • জামালপুর':'🛕 Saha Family Home • Kharma • Dewanganj • Jamalpur','ভক্তি • ঐতিহ্য • পারিবারিক পূজার স্মৃতি':'Devotion • Heritage • Family Puja Memories','মন্দির সম্পর্কে':'About the Temple','পূজার সময়সূচি':'Puja Schedule','⌄ নিচে দেখুন':'⌄ Scroll Down',
   '🛕 আমাদের মন্দির':'🛕 Our Temple','ঈশ্বরমনি কুঠির, সাহা বাড়ি':'Ishwarmani Kutir, Saha Family Home','🙏 মায়ের আশীর্বাদে':'🙏 With the Mother’s Blessings','শুভকামনা':'Best Wishes','মায়ের কৃপায় সকলের জীবন শান্তি, সমৃদ্ধি ও মঙ্গলময় হোক।':'May the Mother bless everyone with peace, prosperity and wellbeing.',
   'এক নজরে':'AT A GLANCE','পূজা, স্মৃতি, প্রসাদ ও মন্দিরের প্রয়োজনীয় তথ্য এক জায়গায়।':'Puja, memories, prasad and essential temple information in one place.','মন্দির পরিচিতি':'Temple Introduction','ইতিহাস ও ঐতিহ্য':'History & Heritage','২০২৬ সালের আয়োজন':'2026 Celebrations','পূজার গ্যালারি':'Puja Gallery','স্মৃতির অ্যালবাম':'Album of Memories','প্রসাদ ব্যবস্থা':'Prasad Arrangements','সেবা ও নিয়ম':'Service & Guidelines','কীভাবে আসবেন':'How to Reach',
-  '🌺 শারদীয় দুর্গোৎসব':'🌺 Sharadiya Durga Puja','ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।':'Invitation and arrangements for the 2026 Puja at Ishwarmani Kutir (Saha Family Home).','🪔 মহাষষ্ঠী শুরু হতে বাকি':'🪔 Until Maha Shashthi Begins','দিন':'Days','ঘণ্টা':'Hours','মিনিট':'Minutes','সেকেন্ড':'Seconds','মহালয়া':'Mahalaya','মহালয়া ও দেবীপক্ষের সূচনা।':'মহালয়া ও দেবীপক্ষের সূচনা।','মহা ষষ্ঠী':'Maha Shashthi','এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।':'The main Durga Puja celebrations begin on this day.','মহা সপ্তমী':'Maha Saptami','মহা সপ্তমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।':'Puja rituals and special devotional events for Maha Saptami.','মহা অষ্টমী':'Maha Ashtami','মহা অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।':'Puja rituals and special devotional events for Maha Ashtami.','মহা নবমী':'Maha Navami','মহা নবমীর পূজা ও সন্ধ্যারতি।':'Maha Navami Puja and evening arati.','বিজয়া দশমী':'Bijoya Dashami','দশমীর পূজা ও বিজয়ার আয়োজন।':'Dashami Puja and Bijoya celebrations.','নিমন্ত্রণপত্রে প্রদত্ত সময়সূচিই চূড়ান্ত হিসেবে বিবেচ্য।':'Please treat the schedule printed on the invitation as final.',
+  '🌺 শারদীয় দুর্গোৎসব':'🌺 Sharadiya Durga Puja','ঈশ্বরমনি কুঠির (সাহা বাড়ি)-এর ২০২৬ সালের পূজার নিমন্ত্রণপত্র ও আয়োজন।':'Invitation and arrangements for the 2026 Puja at Ishwarmani Kutir (Saha Family Home).','🪔 মহাষষ্ঠী শুরু হতে বাকি':'🪔 Until Maha Shashthi Begins','দিন':'Days','ঘণ্টা':'Hours','মিনিট':'Minutes','সেকেন্ড':'Seconds','মহালয়া':'Mahalaya','মহালয়ার পবিত্র চণ্ডীপাঠ ও দেবীপক্ষের সূচনা।':'Sacred Chandi recitation and the beginning of Devi Paksha.','মহা ষষ্ঠী':'Maha Shashthi','এই দিন থেকে দুর্গাপূজার মূল আয়োজন শুরু।':'The main Durga Puja celebrations begin on this day.','মহা সপ্তমী':'Maha Saptami','মহা সপ্তমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।':'Puja rituals and special devotional events for Maha Saptami.','মহা অষ্টমী':'Maha Ashtami','মহা অষ্টমীর পূজা ও বিশেষ ভক্তিমূলক আয়োজন।':'Puja rituals and special devotional events for Maha Ashtami.','মহা নবমী':'Maha Navami','মহা নবমীর পূজা ও সন্ধ্যারতি।':'Maha Navami Puja and evening arati.','বিজয়া দশমী':'Bijoya Dashami','দশমীর পূজা ও বিজয়ার আয়োজন।':'Dashami Puja and Bijoya celebrations.','নিমন্ত্রণপত্রে প্রদত্ত সময়সূচিই চূড়ান্ত হিসেবে বিবেচ্য।':'Please treat the schedule printed on the invitation as final.',
   '📜 নিমন্ত্রণপত্র':'📜 Invitation','২০২৬ সালের নিমন্ত্রণ পত্র':'Invitation for 2026','📸 পূজার স্মৃতি':'📸 Puja Memories','ঈশ্বরমনি কুঠিরের শারদীয় দুর্গোৎসব ২০২৬-এর বিশেষ কিছু মুহূর্ত।':'Special moments from the temple and this year’s Puja. More photos may be added here.',
   'দুর্গাপূজা বৃত্তান্ত':'About Durga Puja','দেবী দুর্গা ও দুর্গাপূজা':'Goddess Durga and Durga Puja','মা দুর্গার বিভিন্ন নাম':'Different Names of Goddess Durga','অকালবোধন':'Akal Bodhan (Invocation)','দুর্গার বাহন সিংহ':'The Lion, Goddess Durga’s Mount','সপরিবার দুর্গা: মূর্তিতত্ত্ব':'Durga with Her Family: Iconography','গণেশ, লক্ষ্মী, সরস্বতী, কার্তিক':'Ganesha, Lakshmi, Saraswati and Kartik',
   'ভক্তি, ঐতিহ্য ও পারিবারিক পূজার স্মৃতিকে একসাথে ধরে রাখার একটি ছোট্ট ডিজিটাল ঠিকানা।':'A small digital home preserving devotion, heritage and family Puja memories.',
@@ -940,7 +950,7 @@ body:not(.entered) .problem-report-fab,body:not(.entered) #problemReportSection{
   'শারদীয় দুর্গোৎসব ২০২৬':'Temple Grounds and Special Moments from the Upcoming Sharadiya Durga Puja',
   '🕰️ পূজার স্মৃতি':'🕰️ Puja Memories','বিগত বছরের দুর্গাপূজার প্রতিমাগুলোর কিছু স্মৃতি।':'Memories of Durga Puja idols from previous years.',
   '🪔 কালীপূজা':'🪔 Kali Puja','শ্যামা পূজা':'Shyama Puja','ঈশ্বরমনি কুঠিরের কালীপূজার কিছু বিশেষ মুহূর্ত।':'Special moments from Kali Puja at Ishwarmani Kutir.',
-  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja',
+  '🪷 কোজাগরী লক্ষ্মী পূজা':'🪷 Kojagari Lakshmi Puja','🔱 মহালয়ার চণ্ডীপাঠ':'🔱 Mahalaya Chandi Recitation','মহিষাসুরমর্দ্দিনী — চণ্ডীপাঠ':'Mahishasuramardini — Chandi Recitation','🎧 সরাসরি চণ্ডীপাঠ শুনুন':'🎧 Listen to Chandi Path','🔗 শ্রবণ পেজের লিংক কপি করুন':'🔗 Copy listening page link',
   'আমাদের অবস্থান':'Our Location','খড়মা, দেওয়ানগঞ্জ, জামালপুর, বাংলাদেশ':'Kharma, Dewanganj, Jamalpur, Bangladesh','খড়মা, দেওয়ানগঞ্জ':'Kharma, Dewanganj','📍 Google Maps-এ দেখুন ↗':'📍 View on Google Maps ↗',
   '🍚 প্রসাদ ব্যবস্থাপনা':'🍚 Prasad Arrangements','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।':'Prasad details will be announced soon.','প্রসাদ সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে':'Prasad details will be announced soon.','🕐 বিতরণের সময়':'🕐 Distribution Time',
   'আমাদের সঙ্গে যোগাযোগ করুন':'Contact Us','যোগাযোগ':'Contact','খড়মা, দেওয়ানগঞ্জ, জামালপুর':'Kharma, Dewanganj, Jamalpur','© ২০২৬ ঈশ্বরমনি কুঠির • সর্বমঙ্গল সংরক্ষিত':'© 2026 Ishwarmani Kutir • May all be blessed'
@@ -981,9 +991,41 @@ body:not(.entered) .problem-report-fab,body:not(.entered) #problemReportSection{
 </script>
 
 
+<script id="chandi-share-helper">
+async function copyChandiLink(){
+  const url=new URL('chandipath.html',window.location.href).href;
+  const status=document.getElementById('chandiCopyStatus');
+  try{await navigator.clipboard.writeText(url); if(status) status.textContent='শ্রবণ পেজের লিংক কপি হয়েছে। এখন যেকাউকে পাঠাতে পারো।';}
+  catch(e){if(status) status.textContent='এই লিংকটি কপি করে শেয়ার করো: '+url; }
+}
+</script>
 
-
-
+<script id="chandipath-click-tracker">
+// Record the click before navigating away, so the browser does not cancel the request.
+let chandipathClickInProgress = false;
+async function trackChandipathClick(event){
+  const link = event.currentTarget;
+  if (!link || chandipathClickInProgress) { event.preventDefault(); return; }
+  event.preventDefault();
+  chandipathClickInProgress = true;
+  const destination = link.href;
+  const navigationFallback = setTimeout(() => { window.location.href = destination; }, 2500);
+  try {
+    const response = await fetch(SUPABASE_URL + '/rest/v1/chandipath_clicks', {
+      method: 'POST',
+      headers: {'apikey': SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
+      body: JSON.stringify((() => { let v={}; try { v=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}'); } catch(e) {} return {source:'homepage_mahalaya_button', visitor_name:v.name||'অজানা/তথ্য দেননি', district:v.district||null, upazila:v.upazila||null}; })()),
+      keepalive: true
+    });
+    if (!response.ok) console.error('Chandipath click tracking failed:', response.status, await response.text());
+  } catch (err) {
+    console.error('Chandipath click tracking failed:', err);
+  } finally {
+    clearTimeout(navigationFallback);
+    window.location.href = destination;
+  }
+}
+</script>
 
 <!-- PWA: service worker registration -->
 <script id="pwa-service-worker">
@@ -1000,7 +1042,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 <div id="siteNotificationOverlay" class="site-notification-overlay" role="dialog" aria-modal="true" aria-labelledby="siteNotificationTitle" onclick="if(event.target===this)closeSiteNotifications()">
  <section class="site-notification-panel">
   <div class="site-notification-head"><span aria-hidden="true">🔔</span><h2 id="siteNotificationTitle">নোটিফিকেশন</h2><button type="button" aria-label="বন্ধ করুন" onclick="closeSiteNotifications()">×</button></div>
-  <div class="site-notification-tools"><button type="button" onclick="markAllSiteNotificationsRead()">সব পড়া হয়েছে</button><button type="button" onclick="loadSiteNotifications(true)">↻ Refresh</button></div>
+  <div class="site-notification-tools"><button type="button" onclick="enableIshwarPush()">🔔 ফোনে নোটিফিকেশন চালু করুন</button><button type="button" onclick="markAllSiteNotificationsRead()">সব পড়া হয়েছে</button><button type="button" onclick="loadSiteNotifications(true)">↻ Refresh</button></div>
   <div id="siteNotificationList" aria-live="polite"><div class="site-notification-empty">নোটিফিকেশন লোড হচ্ছে…</div></div>
  </section>
 </div>
@@ -1040,7 +1082,52 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
-
+<script id="ishwar-web-push-client">
+// Push subscription client with detailed, safe diagnostics.
+// Only the public VAPID key and Supabase publishable key belong in browser code.
+window.ISHWAR_VAPID_PUBLIC_KEY = 'BBWSVhsMjsBTFv9qeC4WAvI2qCKW9xQHjz6W_nY8Qnb2paFqIZOWdXCaNHHuTG2BbtnykOvlugFqQt-JLYyYQ7Q';
+window.enableIshwarPush = async function(){
+  const say=(m)=>{const b=document.getElementById('siteNotificationList');if(b){const n=document.createElement('div');n.className='site-notification-empty';n.style.whiteSpace='pre-wrap';n.textContent=m;b.prepend(n)}};
+  const log=(...args)=>{try{console.log('[Ishwar Push]',...args)}catch(_){}};
+  try{
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){say('এই ব্রাউজারে Push Notification সমর্থিত নয়। Android Chrome দিয়ে চেষ্টা করুন।');return;}
+    if(location.protocol!=='https:'&&location.hostname!=='localhost'){say('Push Notification চালু করতে HTTPS ওয়েবসাইট প্রয়োজন।');return;}
+    if(!window.ISHWAR_VAPID_PUBLIC_KEY || window.ISHWAR_VAPID_PUBLIC_KEY==='PASTE_VAPID_PUBLIC_KEY_HERE'){say('Push সেটআপের শেষ ধাপ বাকি: VAPID public key বসাতে হবে।');return;}
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted'){say('নোটিফিকেশনের অনুমতি দেওয়া হয়নি। ফোনের Site Settings থেকে অনুমতি চালু করতে পারেন।');return;}
+    const reg=await navigator.serviceWorker.register('/sw.js',{scope:'/'});
+    const key=window.ISHWAR_VAPID_PUBLIC_KEY;
+    const padded=key.replace(/-/g,'+').replace(/_/g,'/');
+    const applicationServerKey=Uint8Array.from(atob(padded+'='.repeat((4-padded.length%4)%4)),c=>c.charCodeAt(0));
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey});
+    let info={};try{info=JSON.parse(localStorage.getItem('ishwarmaniVisitorInfo')||'{}')}catch(_){}
+    const supabaseUrl='https://evkjwiicnzruijfthwpm.supabase.co';
+    const publishableKey='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+    const endpoint=sub.endpoint;
+    const payload={endpoint,subscription:sub.toJSON(),visitor_name:info.name||null,district:info.district||null,upazila:info.upazila||null};
+    log('Saving subscription', {url:supabaseUrl+'/rest/v1/web_push_subscriptions', endpointHost:(()=>{try{return new URL(endpoint).host}catch(_){return 'invalid'}})(), hasSubscription:!!payload.subscription, hasPublishableKey:!!publishableKey});
+    const resp=await fetch(supabaseUrl+'/rest/v1/web_push_subscriptions?on_conflict=endpoint',{
+      method:'POST',
+      headers:{'apikey':publishableKey,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify(payload)
+    });
+    const responseText=await resp.text();
+    if(!resp.ok){
+      let detail=responseText;
+      try{const parsed=JSON.parse(responseText);detail=parsed.message||parsed.error_description||parsed.error||responseText; if(parsed.code)detail+=' (code '+parsed.code+')'; if(parsed.hint)detail+='; hint: '+parsed.hint;}catch(_){}
+      log('Subscription save failed', {status:resp.status,statusText:resp.statusText,body:responseText,contentType:resp.headers.get('content-type')});
+      throw new Error('Supabase HTTP '+resp.status+': '+detail);
+    }
+    log('Subscription saved', {status:resp.status});
+    say('✅ এই ডিভাইসে নোটিফিকেশন চালু হয়েছে। নতুন ঘোষণা এলে নোটিফিকেশন পাবেন।');
+  }catch(e){
+    console.error('[Ishwar Push] subscription error',e);
+    const detail=String(e && e.message ? e.message : e).slice(0,700);
+    say('নোটিফিকেশন চালু হয়নি: '+detail+'\n\nবিস্তারিত দেখতে Chrome-এর Console/Logs দেখুন।');
+  }
+};
+</script>
 
 </body>
 </html>
