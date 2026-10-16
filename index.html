@@ -799,9 +799,17 @@ loadWebsiteContent();
 
 async function loadStaticPhotoVisibility(){
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}});
-  if(!r.ok)return; const rows=await r.json(); const hidden=(rows[0]&&rows[0].content)||{};
-  document.querySelectorAll('img[data-static-photo]').forEach(img=>{if(hidden[img.dataset.staticPhoto]===false){const wrap=img.closest('.gallery-grid > div')||img; wrap.style.display='none';}});
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Cache-Control':'no-cache'},cache:'no-store'});
+  if(!r.ok){console.warn('Static photo visibility could not be loaded:',r.status,await r.text());return;}
+  const rows=await r.json();
+  let hidden=(rows.find(row=>row.section==='staticPhotos')||{}).content||{};
+  if(typeof hidden==='string'){try{hidden=JSON.parse(hidden)}catch(_){hidden={}}}
+  document.querySelectorAll('img[data-static-photo]').forEach(img=>{
+   const shouldHide=hidden[img.dataset.staticPhoto]===false;
+   const item=img.closest('.gallery-grid > div')||img;
+   item.style.display=shouldHide?'none':'';
+   item.setAttribute('aria-hidden',shouldHide?'true':'false');
+  });
  }catch(e){console.warn('Static photo visibility load failed',e)}
 }
 loadStaticPhotoVisibility();
@@ -810,7 +818,7 @@ async function loadUploadedGallery(){
  try{
   const [photosRes,hiddenRes]=await Promise.all([
    fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.asc',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}}),
-   fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}})
+   fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Cache-Control':'no-cache'},cache:'no-store'})
   ]);
   if(!photosRes.ok)return; const items=await photosRes.json();
   const hiddenRows=hiddenRes.ok?await hiddenRes.json():[];
