@@ -225,7 +225,7 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 <option value="shyama">শ্যামা পূজা</option>
 <option value="lokkhi">কোজাগরী লক্ষ্মী পূজা</option>
 </select>
-<label>ছবি</label><input id="photoFile" type="file" accept="image/*">
+<label>ছবি অথবা ভিডিও</label><input id="photoFile" type="file" accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg"><div class="editor-help">ছবি সর্বোচ্চ ৮ MB · ভিডিও সর্বোচ্চ ৫০ MB (MP4/WebM/MOV)। ভিডিওটি গ্যালারিতে controls-সহ চলবে।</div>
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: সাহা বাড়ির দুর্গাপূজার প্রতিমা">
 <label>প্রতিমার সাল (শুধু ‘বিগত বছরের প্রতিমা’ বিভাগের জন্য)</label><input id="photoYear" type="number" min="1900" max="2100" placeholder="যেমন: ২০২৪ বা 2024">
 <div class="editor-help">‘বিগত বছরের প্রতিমা’ নির্বাচন করলে সাল লিখুন। ওয়েবসাইটে ছবির নিচে “শারদীয় দুর্গোৎসব ২০২৪” দেখাবে। অন্য বিভাগে সাল ফাঁকা রাখতে পারেন।</div>
@@ -314,8 +314,12 @@ async function uploadPhoto(){
   caption='YEAR:'+year+'|'+rawCaption;
  }
  if(!file){st.textContent='আগে একটি ছবি নির্বাচন করুন।';return;}
- if(!file.type.startsWith('image/')){st.textContent='শুধু ছবি upload করা যাবে।';return;}
- if(file.size>8*1024*1024){st.textContent='ছবির সাইজ সর্বোচ্চ ৮ MB রাখুন।';return;}
+ const isImage=file.type.startsWith('image/');
+ const isVideo=file.type.startsWith('video/');
+ if(!isImage&&!isVideo){st.textContent='শুধু ছবি বা ভিডিও (MP4/WebM/MOV) upload করা যাবে।';return;}
+ if(isImage&&file.size>8*1024*1024){st.textContent='ছবির সাইজ সর্বোচ্চ ৮ MB রাখুন।';return;}
+ if(isVideo&&file.size>50*1024*1024){st.textContent='ভিডিওর সাইজ সর্বোচ্চ ৫০ MB রাখুন।';return;}
+ if(isVideo&&!['video/mp4','video/webm','video/quicktime','video/ogg'].includes(file.type)){st.textContent='MP4, WebM, MOV বা OGG ভিডিও দিন।';return;}
  st.textContent='Upload হচ্ছে...';
  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
  const path=section+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
@@ -325,7 +329,7 @@ async function uploadPhoto(){
   const publicUrl=SUPABASE_URL+'/storage/v1/object/public/Gallery/'+path;
   r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({section,path,public_url:publicUrl,caption})});
   if(!r.ok) throw Error(await r.text());
-  st.textContent='✅ ছবি যোগ হয়েছে।'; document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';document.getElementById('photoYear').value='';loadPhotos();
+  st.textContent=isVideo?'✅ ভিডিও যোগ হয়েছে।':'✅ ছবি যোগ হয়েছে।'; document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';document.getElementById('photoYear').value='';loadPhotos();
  }catch(e){st.textContent='❌ Upload হয়নি: '+e.message;}
 }
 async function loadPhotos(){
@@ -338,8 +342,10 @@ async function loadPhotos(){
    const ep=encodeURIComponent(String(x.path||'')), id=Number(x.id);
    let cap=String(x.caption||''), m=cap.match(/^YEAR:(\d{4})\|(.*)$/), editCaption=m?m[2]:cap;
    let display=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):(cap||'কোনো caption নেই');
+   const isVideo=/\.(mp4|webm|mov|ogg)(?:$|\?)/i.test(String(x.path||x.public_url||''));
+   const preview=isVideo?`<video src="${esc(x.public_url)}" controls muted playsinline style="width:120px;max-height:90px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0"></video>`:`<img src="${esc(x.public_url)}" alt="Uploaded gallery media" style="width:82px;height:68px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0">`;
    return `<div class="uploaded-photo-row" style="display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #eee1c7;padding:14px 0;flex-wrap:wrap">
-    <img src="${esc(x.public_url)}" alt="Uploaded gallery photo" style="width:82px;height:68px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid #ead7b0">
+    ${preview}
     <div style="flex:1;min-width:190px">
      <div class="small" style="margin-bottom:5px">বর্তমান ক্যাপশন: <b>${esc(display)}</b></div>
      <label style="margin:5px 0">ক্যাপশন পরিবর্তন</label>
