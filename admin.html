@@ -218,18 +218,18 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
  <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">＋ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">💾 কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">↻ Reload</button><span id="committeeEditorStatus" class="small"></span></div>
 </div>
 
-<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸 গ্যালারিতে ছবি যোগ করুন</h2><div class="small">এখান থেকে ছবি আপলোড করলে ওয়েবসাইটের গ্যালারিতে যোগ হবে।</div></div></div>
+<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸🎥 গ্যালারিতে ছবি / ভিডিও যোগ করুন</h2><div class="small">এখান থেকে ছবি অথবা ভিডিও আপলোড করলে ওয়েবসাইটের গ্যালারিতে যোগ হবে।</div></div></div>
 <label>গ্যালারির বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
 <option value="gallery">শারদীয় দুর্গোৎসব ২০২৬</option>
 <option value="past">বিগত বছরের প্রতিমা</option>
 <option value="shyama">শ্যামা পূজা</option>
 <option value="lokkhi">কোজাগরী লক্ষ্মী পূজা</option>
 </select>
-<label>ছবি অথবা ভিডিও</label><input id="photoFile" type="file" accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg"><div class="editor-help">ছবি সর্বোচ্চ ৮ MB · ভিডিও সর্বোচ্চ ৫০ MB (MP4/WebM/MOV)। ভিডিওটি গ্যালারিতে controls-সহ চলবে।</div>
+<label for="photoFile">ছবি অথবা ভিডিও ফাইল নির্বাচন করুন</label><input id="photoFile" type="file" accept="image/*,video/*"><div class="editor-help">ছবি সর্বোচ্চ ৮ MB · ভিডিও সর্বোচ্চ ৫০ MB (MP4/WebM/MOV/OGG)। ফাইল নির্বাচন করলে নাম এখানে দেখা যাবে।</div>
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: সাহা বাড়ির দুর্গাপূজার প্রতিমা">
 <label>প্রতিমার সাল (শুধু ‘বিগত বছরের প্রতিমা’ বিভাগের জন্য)</label><input id="photoYear" type="number" min="1900" max="2100" placeholder="যেমন: ২০২৪ বা 2024">
 <div class="editor-help">‘বিগত বছরের প্রতিমা’ নির্বাচন করলে সাল লিখুন। ওয়েবসাইটে ছবির নিচে “শারদীয় দুর্গোৎসব ২০২৪” দেখাবে। অন্য বিভাগে সাল ফাঁকা রাখতে পারেন।</div>
- <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি Upload করুন</button> <span id="uploadStatus" class="small"></span>
+ <br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি / ভিডিও Upload করুন</button> <span id="uploadStatus" class="small"></span>
 </div>
 
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
