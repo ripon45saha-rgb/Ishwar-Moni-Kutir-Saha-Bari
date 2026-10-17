@@ -799,16 +799,12 @@ loadWebsiteContent();
 
 async function loadStaticPhotoVisibility(){
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Cache-Control':'no-cache'},cache:'no-store'});
-  if(!r.ok){console.warn('Static photo visibility could not be loaded:',r.status,await r.text());return;}
-  const rows=await r.json();
-  let hidden=(rows.find(row=>row.section==='staticPhotos')||{}).content||{};
-  if(typeof hidden==='string'){try{hidden=JSON.parse(hidden)}catch(_){hidden={}}}
+  const r=await fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.staticPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Accept':'application/json'}});
+  if(!r.ok){console.warn('Static photo visibility could not load:',r.status,await r.text());return;}
+  const rows=await r.json(); const hidden=(rows[0]&&rows[0].content)||{};
   document.querySelectorAll('img[data-static-photo]').forEach(img=>{
-   const shouldHide=hidden[img.dataset.staticPhoto]===false;
-   const item=img.closest('.gallery-grid > div')||img;
-   item.style.display=shouldHide?'none':'';
-   item.setAttribute('aria-hidden',shouldHide?'true':'false');
+   const card=img.closest('.gallery-grid > div')||img;
+   card.style.display=hidden[img.dataset.staticPhoto]===false?'none':'';
   });
  }catch(e){console.warn('Static photo visibility load failed',e)}
 }
@@ -818,7 +814,7 @@ async function loadUploadedGallery(){
  try{
   const [photosRes,hiddenRes]=await Promise.all([
    fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.asc',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}}),
-   fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Cache-Control':'no-cache'},cache:'no-store'})
+   fetch(SUPABASE_URL+'/rest/v1/website_content?select=section,content&section=eq.deletedUploadedPhotos',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY}})
   ]);
   if(!photosRes.ok)return; const items=await photosRes.json();
   const hiddenRows=hiddenRes.ok?await hiddenRes.json():[];
@@ -826,7 +822,7 @@ async function loadUploadedGallery(){
   const map={gallery:'gallery',past:'past',shyama:'kali-puja',lokkhi:'lokkhi-puja'};
   const visibleItems=items.filter(x=>!hidden[String(x.id)]);
   visibleItems.sort((a,b)=>{if(a.section==='past'&&b.section==='past'){const ya=(String(a.caption||'').match(/^YEAR:(\d{4})\|/)||[])[1]||'0';const yb=(String(b.caption||'').match(/^YEAR:(\d{4})\|/)||[])[1]||'0';return Number(yb)-Number(ya)||new Date(a.created_at)-new Date(b.created_at)}return new Date(a.created_at)-new Date(b.created_at)});
-  visibleItems.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.dataset.uploadedId=x.id; let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let title=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):cap;const safeUrl=String(x.public_url).replace(/"/g,'&quot;');const safeTitle=String(title||'মন্দিরের ছবি').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');const isVideo=/\.(mp4|webm|mov|ogg)(?:$|\?)/i.test(String(x.path||x.public_url||''));div.innerHTML=`${isVideo?`<video src="${safeUrl}" aria-label="${safeTitle}" controls playsinline preload="metadata" style="width:100%;height:auto;max-height:520px;display:block;border-radius:12px;background:#180d0e"></video>`:`<img src="${safeUrl}" alt="${safeTitle}" loading="lazy" onclick="openImg(this.src)">`}${title?`<p class="uploaded-photo-caption">${safeTitle}</p>`:''}`; grid.appendChild(div);});
+  visibleItems.forEach(x=>{const id=map[x.section], sec=document.getElementById(id); if(!sec)return; const grid=sec.querySelector('.gallery-grid'); if(!grid)return; const div=document.createElement('div'); div.className='uploaded-photo'; div.dataset.uploadedId=x.id; let cap=String(x.caption||'');let m=cap.match(/^YEAR:(\d{4})\|(.*)$/);let title=m?(x.section==='past'?'শারদীয় দুর্গোৎসব '+m[1]+(m[2]?' — '+m[2]:''):(m[2]||m[1])):cap;const safeUrl=String(x.public_url).replace(/"/g,'&quot;');const safeTitle=String(title||'মন্দিরের ছবি').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');div.innerHTML=`<img src="${safeUrl}" alt="${safeTitle}" onclick="openImg(this.src)">${title?`<p class="uploaded-photo-caption">${safeTitle}</p>`:''}`; grid.appendChild(div);});
  }catch(e){console.warn('Uploaded gallery load failed',e)}
 }
 loadUploadedGallery();
