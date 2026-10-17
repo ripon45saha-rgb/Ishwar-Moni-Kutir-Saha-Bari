@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>মহানবমী | ঈশ্বরমনি কুঠির, সাহা বাড়ি</title>
+<meta name="description" content="ঈশ্বরমনি কুঠির, সাহা বাড়ির দুর্গাপুজা ২০২৬ — মহানবমী দিনের ছবি ও স্মৃতি।">
+<style>
+:root{--wine:#761321;--gold:#bd9140;--cream:#fff8e9;--ink:#32191b;--muted:#765f5c}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8e9,#fff);color:var(--ink);font-family:"Noto Serif Bengali","Nirmala UI",serif}
+header{background:linear-gradient(135deg,#5b0b18,#8f1d2d);color:#fff8e9;padding:30px 18px 36px;text-align:center;border-bottom:4px solid var(--gold)}
+.toplinks{max-width:1100px;margin:0 auto 18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.toplinks a{color:#fff0c9;text-decoration:none;font-size:14px;font-weight:700}
+.eyebrow{color:#f1d38d;font:800 12px Arial,sans-serif;letter-spacing:1.5px}
+h1{font-size:clamp(30px,5vw,48px);margin:10px 0;line-height:1.35}header p{margin:0;color:#f8e7d7}
+main{max-width:1120px;margin:0 auto;padding:28px 16px 60px}
+.note{text-align:center;color:var(--muted);line-height:1.8;margin:0 auto 25px;max-width:760px}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.photo{overflow:hidden;border:1px solid #ead8b4;border-radius:16px;background:#fff;box-shadow:0 8px 25px #4d15120c}
+.photo img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;cursor:zoom-in;transition:transform .25s}
+.photo img:hover{transform:scale(1.025)}
+.caption{padding:12px 14px 15px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.state{grid-column:1/-1;padding:35px 16px;text-align:center;border:1px dashed #d8bd84;border-radius:16px;background:#fffdf8;color:var(--muted);line-height:1.8}
+.back{display:inline-flex;margin:30px auto 0;padding:12px 18px;background:var(--wine);color:white;text-decoration:none;border-radius:999px;font-weight:700}
+footer{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+.lightbox{display:none;position:fixed;inset:0;z-index:99;background:#16070ced;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}
+.lightbox.open{display:flex}.lightbox img{max-width:96vw;max-height:92vh;object-fit:contain;border-radius:8px}
+@media(max-width:760px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.caption{padding:10px;font-size:14px}}
+@media(max-width:460px){.gallery{grid-template-columns:1fr}.photo img{aspect-ratio:5/4}}
+</style>
+</head>
+<body>
+<header>
+ <div class="toplinks"><a href="index.html">← মূল ওয়েবসাইট</a><a href="gallery.html">📸 পূজার গ্যালারি</a></div>
+ <div class="eyebrow">ঈশ্বরমনি কুঠির · সাহা বাড়ি · দুর্গোৎসব ২০২৬</div>
+ <h1>মহানবমী</h1>
+ <p>মহানবমীর পূজা ও আরতি</p>
+</header>
+<main>
+ <p class="note">এই দিনের ছবি অ্যাডমিন প্যানেলের “দুর্গাপুজা ২০২৬ — মহানবমী” বিভাগে আপলোড করা যাবে। ছবি ও ক্যাপশন আপলোডের পর এখানে স্বয়ংক্রিয়ভাবে দেখা যাবে।</p>
+ <div class="gallery" id="gallery"><div class="state">ছবি লোড হচ্ছে…</div></div>
+ <div style="text-align:center"><a class="back" href="index.html#durga-2026-days">← পাঁচ দিনের গ্যালারিতে ফিরে যান</a></div>
+</main>
+<footer>© ঈশ্বরমনি কুঠির, সাহা বাড়ি · খড়মা, দেওয়ানগঞ্জ</footer>
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt="বড় ছবি"></div>
+<script>
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+const SECTION='maha-navami';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function loadDayPhotos(){
+ const box=document.getElementById('gallery');
+ try{
+  const url=SUPABASE_URL+'/rest/v1/gallery_photos?select=id,section,public_url,caption,path,created_at&section=eq.'+encodeURIComponent(SECTION)+'&order=created_at.asc';
+  const r=await fetch(url,{headers:{apikey:SUPABASE_KEY,Accept:'application/json'}});
+  if(!r.ok)throw Error('HTTP '+r.status);
+  const data=await r.json();
+  const photos=(Array.isArray(data)?data:[]).filter(x=>x.public_url && !/\.(mp4|webm|mov|m4v|ogv|ogg)(\?|$)/i.test(x.path||x.public_url));
+  if(!photos.length){box.innerHTML='<div class="state">এই দিনের ছবি এখনো আপলোড করা হয়নি।<br>অ্যাডমিন প্যানেল থেকে ছবি আপলোড করলে এখানে দেখা যাবে।</div>';return;}
+  box.innerHTML=photos.map(x=>`<article class="photo"><img loading="lazy" src="${esc(x.public_url)}" alt="${esc(x.caption||'মহানবমী')}" onclick="openPhoto(this.src)"><div class="caption">${esc(x.caption||'')}</div></article>`).join('');
+ }catch(e){box.innerHTML='<div class="state">ছবি লোড করা যায়নি। Supabase-এর gallery_photos টেবিলে public SELECT permission / RLS policy পরীক্ষা করুন।</div>';console.warn(e);}
+}
+function openPhoto(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lightbox').classList.remove('open')});
+loadDayPhotos();
+</script>
+</body>
+</html>
