@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#761321">
+<meta name="description" content="পত্রিকায় ঈশ্বর মনি কুঠির — সংবাদপত্রে প্রকাশিত প্রতিবেদন, ছবি ও স্মৃতি।">
+<title>পত্রিকায় ঈশ্বর মনি কুঠির | সাহা বাড়ি</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--wine:#761321;--gold:#bd9140;--cream:#fff8e9;--ink:#32191b;--muted:#765f5c}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8e9,#fff);color:var(--ink);font-family:"Noto Serif Bengali","Nirmala UI",serif;line-height:1.7}
+header{background:linear-gradient(135deg,#4b0912,#8f1d2d);color:#fff8e9;padding:22px 18px 34px;text-align:center;border-bottom:4px solid var(--gold)}
+.toplinks{max-width:1120px;margin:0 auto 24px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.toplinks a{color:#fff0c9;text-decoration:none;font-size:14px;font-weight:700}
+.eyebrow{color:#f1d38d;font:800 12px Arial,sans-serif;letter-spacing:1.5px}h1{font-size:clamp(30px,5vw,48px);margin:10px 0;line-height:1.35}header p{margin:0 auto;color:#f8e7d7;max-width:720px}
+main{max-width:1180px;margin:0 auto;padding:30px 16px 64px}.note{text-align:center;color:var(--muted);line-height:1.9;margin:0 auto 25px;max-width:800px}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.item{overflow:hidden;border:1px solid #ead8b4;border-radius:16px;background:#fff;box-shadow:0 8px 25px #4d15120c}.item img,.item video{display:block;width:100%;max-height:560px;aspect-ratio:4/3;object-fit:contain;background:#f9f5ed;cursor:zoom-in}.caption{padding:12px 14px 15px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}.state{grid-column:1/-1;padding:35px 16px;text-align:center;border:1px dashed #d8bd84;border-radius:16px;background:#fffdf8;color:var(--muted);line-height:1.9}.back{display:inline-flex;margin:30px auto 0;padding:12px 18px;background:var(--wine);color:white;text-decoration:none;border-radius:999px;font-weight:700}
+footer{text-align:center;padding:22px;color:var(--muted);font-size:13px}.lightbox{display:none;position:fixed;inset:0;z-index:99;background:#16070ced;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}.lightbox.open{display:flex}.lightbox img{max-width:96vw;max-height:92vh;object-fit:contain;border-radius:8px}
+@media(max-width:800px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.caption{padding:10px;font-size:14px}}@media(max-width:480px){.gallery{grid-template-columns:1fr}.toplinks{justify-content:center}}
+</style>
+</head>
+<body>
+<header><div class="toplinks"><a href="index.html">← মূল ওয়েবসাইট</a><a href="admin.html">অ্যাডমিন প্যানেল</a></div><div class="eyebrow">ঈশ্বরমনি কুঠির · সাহা বাড়ি</div><h1>পত্রিকায় ঈশ্বর মনি কুঠির</h1><p>পত্রিকায় প্রকাশিত সংবাদ, প্রতিবেদন, ছবি ও স্মৃতিচিহ্ন</p></header>
+<main><p class="note">অ্যাডমিন প্যানেল থেকে “পত্রিকায় ঈশ্বর মনি কুঠির” বিভাগে ছবি বা ভিডিও আপলোড করুন। প্রতিটি ফাইলের ক্যাপশন অ্যাডমিন প্যানেল থেকেই সম্পাদনা করা যাবে।</p><div class="gallery" id="gallery"><div class="state">ছবি ও ভিডিও লোড হচ্ছে…</div></div><div style="text-align:center"><a class="back" href="index.html">← মূল ওয়েবসাইটে ফিরে যান</a></div></main>
+<footer>© ঈশ্বরমনি কুঠির, সাহা বাড়ি · খড়মা, দেওয়ানগঞ্জ</footer>
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt="বড় ছবি"></div>
+<script>
+const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
+const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
+const SECTION='press';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isVideo=x=>/\.(mp4|webm|mov|m4v|ogv|ogg)(?:$|\?)/i.test(String(x.path||x.public_url||''));
+async function loadPressItems(){
+ const box=document.getElementById('gallery');
+ try{
+  const url=SUPABASE_URL+'/rest/v1/gallery_photos?select=id,section,public_url,caption,path,created_at&section=eq.'+encodeURIComponent(SECTION)+'&order=created_at.desc';
+  const data=[];let offset=0;
+  while(true){
+   const r=await fetch(url,{headers:{apikey:SUPABASE_KEY,Accept:'application/json','Range-Unit':'items','Range':`${offset}-${offset+99}`}});
+   if(r.status===416)break;if(!r.ok)throw Error('HTTP '+r.status);
+   const batch=await r.json();if(!Array.isArray(batch)||batch.length===0)break;
+   data.push(...batch);offset+=batch.length;
+   if(batch.length<100)break;
+  }
+  const items=data.filter(x=>x.public_url);
+  if(!items.length){box.innerHTML='<div class="state">এখনো কোনো পত্রিকার ছবি বা ভিডিও আপলোড করা হয়নি।<br>অ্যাডমিন প্যানেল থেকে “পত্রিকায় ঈশ্বর মনি কুঠির” বিভাগে আপলোড করলে এখানে দেখা যাবে।</div>';return;}
+  box.innerHTML=items.map(x=>`<article class="item">${isVideo(x)?`<video src="${esc(x.public_url)}" controls preload="metadata" playsinline></video>`:`<img loading="lazy" src="${esc(x.public_url)}" alt="${esc(x.caption||'পত্রিকায় ঈশ্বর মনি কুঠির')}" onclick="openPhoto(this.src)">`}${x.caption?`<div class="caption">${esc(x.caption)}</div>`:''}</article>`).join('');
+ }catch(e){box.innerHTML='<div class="state">কনটেন্ট লোড করা যায়নি। Supabase-এর gallery_photos টেবিলে public SELECT permission / RLS policy পরীক্ষা করুন।</div>';console.warn(e);}
+}
+function openPhoto(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lightbox').classList.remove('open')});loadPressItems();
+</script>
+</body></html>
