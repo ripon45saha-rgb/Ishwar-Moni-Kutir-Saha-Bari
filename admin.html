@@ -230,7 +230,7 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 <option value="shyama">শ্যামা পূজা</option>
 <option value="lokkhi">কোজাগরী লক্ষ্মী পূজা</option>
 </select>
-<label for="photoFile">ছবি অথবা ভিডিও ফাইল নির্বাচন করুন</label><input id="photoFile" type="file" accept="image/*,video/*" multiple onchange="showSelectedPhotoFiles()"><div class="editor-help">ছবি সর্বোচ্চ ৮ MB · ভিডিও সর্বোচ্চ ৫০ MB (MP4/WebM/MOV/OGG)। একসঙ্গে একাধিক ছবি/ভিডিও নির্বাচন করুন (Ctrl বা Shift চাপুন)। ছবি সর্বোচ্চ ৮ MB, ভিডিও সর্বোচ্চ ৫০ MB।</div>
+<label for="photoFile">ছবি অথবা ভিডিও ফাইল নির্বাচন করুন</label><input id="photoFile" type="file" accept="image/*,video/*" multiple onchange="showSelectedPhotoFiles()"><div class="editor-help">ছবি সর্বোচ্চ ৮ MB · ভিডিও সর্বোচ্চ ৫০ MB (MP4/WebM/MOV/OGG)। একসঙ্গে যতগুলো প্রয়োজন ছবি/ভিডিও নির্বাচন করুন; নির্দিষ্ট সংখ্যার সীমা নেই। মোট আপলোড Supabase Storage quota-এর ওপর নির্ভর করবে।</div>
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: সাহা বাড়ির দুর্গাপূজার প্রতিমা">
 <label>প্রতিমার সাল (শুধু ‘বিগত বছরের প্রতিমা’ বিভাগের জন্য)</label><input id="photoYear" type="number" min="1900" max="2100" placeholder="যেমন: ২০২৪ বা 2024">
 <div class="editor-help">‘বিগত বছরের প্রতিমা’ নির্বাচন করলে সাল লিখুন। ওয়েবসাইটে ছবির নিচে “শারদীয় দুর্গোৎসব ২০২৪” দেখাবে। অন্য বিভাগে সাল ফাঁকা রাখতে পারেন।</div>
@@ -359,8 +359,17 @@ async function uploadPhoto(){
 async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
  try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}}),d=await r.json();
-  if(!r.ok)throw Error(d.message||'Load failed');
+  const url=SUPABASE_URL+'/rest/v1/gallery_photos?select=*&order=created_at.desc';
+  const d=[]; let offset=0;
+  // Load every record even if Supabase API max_rows is configured as low as 2.
+  while(true){
+   const r=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken,'Range-Unit':'items','Range':`${offset}-${offset+1}`}});
+   if(r.status===416)break;
+   const batch=await r.json();
+   if(!r.ok)throw Error(batch.message||'Load failed');
+   if(!Array.isArray(batch)||batch.length===0)break;
+   d.push(...batch); offset+=batch.length;
+  }
   if(!d.length){el.textContent='এখনও কোনো নতুন ছবি upload করা হয়নি।';return;}
   el.innerHTML=d.map(x=>{
    const ep=encodeURIComponent(String(x.path||'')), id=Number(x.id);
