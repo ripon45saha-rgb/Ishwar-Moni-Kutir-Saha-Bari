@@ -168,9 +168,9 @@ body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:ra
 <option value="lokkhi">কোজাগরী লক্ষ্মী পূজা</option>
 <option value="memory2025">২০২৫ সালের আনন্দঘন মধুময় স্মৃতি</option>
 </select>
-<label>ছবি অথবা ভিডিও</label><input id="photoFile" type="file" accept="image/*,video/*"><div class="small">ছবি সর্বোচ্চ ৮ MB, ভিডিও সর্বোচ্চ ৫০ MB। MP4/WebM/MOV সহ ব্রাউজার-সমর্থিত ফরম্যাট ব্যবহার করুন।</div>
+<label>ছবি অথবা ভিডিও</label><input id="photoFile" type="file" accept="image/*,video/*" multiple onchange="showSelectedPhotoFiles()"><div class="small">ছবি সর্বোচ্চ ৮ MB, ভিডিও সর্বোচ্চ ৫০ MB। MP4/WebM/MOV সহ ব্রাউজার-সমর্থিত ফরম্যাট ব্যবহার করুন।</div>
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: ২০২৬ সালের পূজার একটি মুহূর্ত">
-<br><button class="btn" onclick="uploadPhoto()">⬆️ ছবি / ভিডিও Upload করুন</button> <span id="uploadStatus" class="small"></span>
+<div id="selectedPhotoFiles" class="small" aria-live="polite">এখনো কোনো ফাইল নির্বাচন করা হয়নি।</div><br><button id="uploadPhotoBtn" class="btn" onclick="uploadPhoto()">⬆️ নির্বাচিত সব ছবি / ভিডিও Upload করুন</button> <span id="uploadStatus" class="small" aria-live="polite"></span>
 </div>
 
 <div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
@@ -218,25 +218,44 @@ async function loadChandipathClicks(){
 }
 function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
 
+function showSelectedPhotoFiles(){
+ const input=document.getElementById('photoFile'), out=document.getElementById('selectedPhotoFiles');
+ if(!input||!out)return;
+ const files=Array.from(input.files||[]);
+ out.textContent=files.length?`${files.length}টি ফাইল নির্বাচিত: `+files.map(f=>f.name).join(' • '):'এখনো কোনো ফাইল নির্বাচন করা হয়নি।';
+}
 async function uploadPhoto(){
- const file=document.getElementById('photoFile').files[0], section=document.getElementById('photoSection').value, caption=document.getElementById('photoCaption').value.trim(), st=document.getElementById('uploadStatus');
- if(!file){st.textContent='আগে একটি ছবি অথবা ভিডিও নির্বাচন করুন।';return;}
- const isImage=file.type.startsWith('image/');
- const isVideo=file.type.startsWith('video/');
- if(!isImage&&!isVideo){st.textContent='শুধু ছবি বা ভিডিও ফাইল upload করা যাবে।';return;}
- if(isImage&&file.size>8*1024*1024){st.textContent='ছবির সাইজ সর্বোচ্চ ৮ MB রাখুন।';return;}
- if(isVideo&&file.size>50*1024*1024){st.textContent='ভিডিওর সাইজ সর্বোচ্চ ৫০ MB রাখুন।';return;}
- st.textContent=(isVideo?'ভিডিও':'ছবি')+' Upload হচ্ছে...';
- const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
- const path=section+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+ const files=Array.from(document.getElementById('photoFile').files||[]), section=document.getElementById('photoSection').value, caption=document.getElementById('photoCaption').value.trim(), st=document.getElementById('uploadStatus'), btn=document.getElementById('uploadPhotoBtn');
+ if(!files.length){st.textContent='আগে এক বা একাধিক ছবি/ভিডিও নির্বাচন করুন।';return;}
+ const valid=[], errors=[];
+ for(const file of files){
+  const isImage=file.type.startsWith('image/'), isVideo=file.type.startsWith('video/');
+  if(!isImage&&!isVideo){errors.push(file.name+': সমর্থিত ছবি/ভিডিও নয়।');continue;}
+  if(isImage&&file.size>8*1024*1024){errors.push(file.name+': ছবির সাইজ ৮ MB-এর বেশি।');continue;}
+  if(isVideo&&file.size>50*1024*1024){errors.push(file.name+': ভিডিওর সাইজ ৫০ MB-এর বেশি।');continue;}
+  valid.push(file);
+ }
+ if(!valid.length){st.textContent='কোনো ফাইল আপলোডের উপযোগী নয়। '+errors.join(' ');return;}
+ if(btn)btn.disabled=true;
+ let success=0;
  try{
-  let r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+encodeURIComponent(path).replace(/%2F/g,'/'),{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken,'Content-Type':file.type,'x-upsert':'false'},body:file});
-  if(!r.ok) throw Error(await r.text());
-  const publicUrl=SUPABASE_URL+'/storage/v1/object/public/Gallery/'+path;
-  r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({section,path,public_url:publicUrl,caption})});
-  if(!r.ok) throw Error(await r.text());
-  st.textContent='✅ '+(isVideo?'ভিডিও':'ছবি')+' যোগ হয়েছে।'; document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';loadPhotos();
- }catch(e){st.textContent='❌ Upload হয়নি: '+e.message;}
+  for(let i=0;i<valid.length;i++){
+   const file=valid[i], isVideo=file.type.startsWith('video/');
+   st.textContent=`${i+1}/${valid.length} আপলোড হচ্ছে: ${file.name}`;
+   const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+   const path=section+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+   let r=await fetch(SUPABASE_URL+'/storage/v1/object/Gallery/'+encodeURIComponent(path).replace(/%2F/g,'/'),{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken,'Content-Type':file.type||'application/octet-stream','x-upsert':'false'},body:file});
+   if(!r.ok){errors.push(file.name+': Storage upload ব্যর্থ ('+r.status+').');continue;}
+   const publicUrl=SUPABASE_URL+'/storage/v1/object/public/Gallery/'+path;
+   const perFileCaption=caption?(valid.length>1?caption+' — '+file.name.replace(/\.[^.]+$/,''):caption):file.name.replace(/\.[^.]+$/,'');
+   r=await fetch(SUPABASE_URL+'/rest/v1/gallery_photos',{method:'POST',headers:{...h(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({section,path,public_url:publicUrl,caption:perFileCaption})});
+   if(!r.ok){errors.push(file.name+': ডাটাবেজে যোগ হয়নি ('+r.status+').');continue;}
+   success++;
+  }
+ }catch(e){errors.push('সমস্যা: '+e.message);}
+ finally{if(btn)btn.disabled=false;}
+ document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';showSelectedPhotoFiles();loadPhotos();
+ st.textContent=`সম্পন্ন: ${success}টি সফল${errors.length?'। ব্যর্থ/বাদ: '+errors.join(' '):'। কোনো সমস্যা হয়নি।'}`;
 }
 async function loadPhotos(){
  const el=document.getElementById('photoList'); if(!el)return;
