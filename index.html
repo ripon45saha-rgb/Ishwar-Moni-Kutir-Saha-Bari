@@ -387,7 +387,12 @@ body{background:linear-gradient(180deg,#fffaf0 0%,#fff7e7 42%,#fffaf2 100%);colo
   <div class="links">
     <a href="#about">পরিচিতি</a><a href="#utsav">দুর্গোৎসব ২০২৬</a><a href="puja-committee.html" data-i18n="committeeTitle">ঈশ্বরমনি কুঠির পূজা উদযাপন কমিটি</a><a href="#gallery">গ্যালারি</a><a href="press.html">পত্রিকায় ঈশ্বর মনি কুঠির</a><a href="#kali-puja">কালীপূজা</a><a href="#past">বিগত বছরের প্রতিমা</a><a href="#prasadSection">🍚 প্রসাদ ব্যবস্থাপনা</a><a href="#location">অবস্থান</a><a href="history-heritage.html">ইতিহাস ও ঐতিহ্য</a><a href="puja-events.html">পূজা ও অনুষ্ঠান</a><a href="memory-book.html">স্মৃতির খাতা</a><a href="puja-fund.html">পূজা ফান্ড</a>
   </div>
-</div></nav>
+</div>
+<a href="puja-fund.html">পূজা ফান্ড</a>
+<a href="history-heritage.html">ইতিহাস ও ঐতিহ্য</a>
+<a href="puja-events.html">পূজা ও অনুষ্ঠান</a>
+<a href="memory-book.html">স্মৃতির খাতা</a>
+</nav>
 <script>
 function toggleSiteMenu(btn){const m=document.querySelector('.links');if(!m)return;const open=m.classList.toggle('mobile-open');btn.setAttribute('aria-expanded',open?'true':'false');}
 document.addEventListener('click',e=>{const m=document.querySelector('.links'),b=document.querySelector('.mobile-menu-btn');if(!m||!b)return;if(!m.contains(e.target)&&!b.contains(e.target)){m.classList.remove('mobile-open');b.setAttribute('aria-expanded','false');}if(e.target.closest('.links a')){m.classList.remove('mobile-open');b.setAttribute('aria-expanded','false');}});
@@ -1029,5 +1034,13 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 
 
 
+
+<div class="requested-pages-nav" aria-label="নতুন পেজ" style="position:relative;z-index:10;background:#fff8e8;border-top:1px solid #e5ca82;padding:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+
+<a href="puja-fund.html">পূজা ফান্ড</a>
+<a href="history-heritage.html">ইতিহাস ও ঐতিহ্য</a>
+<a href="puja-events.html">পূজা ও অনুষ্ঠান</a>
+<a href="memory-book.html">স্মৃতির খাতা</a>
+</div>
 </body>
 </html>
