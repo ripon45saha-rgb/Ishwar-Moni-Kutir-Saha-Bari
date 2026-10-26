@@ -22,14 +22,14 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 .admin-navbar{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:10px;margin:0 0 18px;background:rgba(255,248,233,.96);backdrop-filter:blur(10px);border:1px solid #ead7b0;border-radius:16px;box-shadow:0 8px 22px rgba(70,25,10,.08)}.admin-navbar a{white-space:nowrap;text-decoration:none;background:#fff;border:1px solid #ead7b0;color:#6f1118;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:800}.admin-navbar a:hover,.admin-navbar a:focus{background:#6f1118;color:white}.admin-section-active{outline:2px solid #d6a84f;outline-offset:2px;scroll-margin-top:90px}@media(max-width:700px){.admin-navbar{margin:0 0 12px;padding:8px}.admin-navbar a{padding:9px 11px}}
 
 /* Separate admin pages: show only the selected workspace after login */
-body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
-body[data-admin-view="clicks"] #visitorInsights,body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
+body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
 body[data-admin-view="editor"] #visitorInsights,body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
 body[data-admin-view="committee"] #visitorInsights,body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
 body[data-admin-view="gallery"] #visitorInsights,body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
 body[data-admin-view="gallery"] #visitorSection{display:none!important}
 body[data-admin-view="visitors"] #visitorInsights,body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
 body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
+body[data-admin-view="reports"] #overview,body[data-admin-view="reports"] #clickAnalytics,body[data-admin-view="reports"] #editorSection,body[data-admin-view="reports"] #committeeEditorCard,body[data-admin-view="reports"] #photosSection{display:none!important}
 .admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
 .page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
 </style>
@@ -142,7 +142,15 @@ td{font-size:15px;border-bottom-color:var(--line)}tr:hover td{background:#fbf7ef
 body:not([data-admin-view="overview"]) #greetingLogs{display:none!important}
 </style>
 </head>
-<body data-admin-view="overview">
+<body data-admin-view="visitors">
+<script id="admin-page-route">
+(function(){
+  const path = (location.pathname || '').toLowerCase().split('/').pop();
+  const routes = {'admin.html':'overview','website-editor.html':'editor','visitors.html':'visitors','gallery.html':'gallery','committee.html':'committee'};
+  document.body.dataset.adminView = routes[path] || 'overview';
+})();
+</script>
+
 <div class="wrap">
 <section id="loginBox" class="login-shell">
   <div class="login-art">

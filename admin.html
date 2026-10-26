@@ -2,8 +2,8 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ঈশ্বরমনি কুঠির — 🏠 Overview</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#2b070d"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<title>ওভারভিউ — ঈশ্বরমনি কুঠির অ্যাডমিন</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#fff8eb;color:#32100e}
 .wrap{max-width:1200px;margin:auto;padding:20px}.card{background:white;border:1px solid #ead7b0;border-radius:18px;padding:20px;box-shadow:0 8px 30px rgba(70,25,10,.08)}
@@ -23,29 +23,20 @@ th{background:#7a1717;color:#fff;position:sticky;top:0}tr:hover td{background:#f
 
 /* Separate admin pages: show only the selected workspace after login */
 body[data-admin-view="overview"] #clickAnalytics,body[data-admin-view="overview"] #editorSection,body[data-admin-view="overview"] #committeeEditorCard,body[data-admin-view="overview"] #photosSection{display:none!important}
-body[data-admin-view="clicks"] #visitorInsights,body[data-admin-view="clicks"] #overview,body[data-admin-view="clicks"] #editorSection,body[data-admin-view="clicks"] #committeeEditorCard,body[data-admin-view="clicks"] #photosSection{display:none!important}
 body[data-admin-view="editor"] #visitorInsights,body[data-admin-view="editor"] #overview,body[data-admin-view="editor"] #clickAnalytics,body[data-admin-view="editor"] #committeeEditorCard,body[data-admin-view="editor"] #photosSection{display:none!important}
 body[data-admin-view="committee"] #visitorInsights,body[data-admin-view="committee"] #overview,body[data-admin-view="committee"] #clickAnalytics,body[data-admin-view="committee"] #editorSection,body[data-admin-view="committee"] #photosSection{display:none!important}
 body[data-admin-view="gallery"] #visitorInsights,body[data-admin-view="gallery"] #overview,body[data-admin-view="gallery"] #clickAnalytics,body[data-admin-view="gallery"] #editorSection,body[data-admin-view="gallery"] #committeeEditorCard{display:none!important}
 body[data-admin-view="gallery"] #visitorSection{display:none!important}
 body[data-admin-view="visitors"] #visitorInsights,body[data-admin-view="visitors"] #overview,body[data-admin-view="visitors"] #clickAnalytics,body[data-admin-view="visitors"] #editorSection,body[data-admin-view="visitors"] #committeeEditorCard{display:none!important}
 body[data-admin-view="visitors"] #photosSection > .card:not(#visitorSection){display:none!important}
+body[data-admin-view="reports"] #overview,body[data-admin-view="reports"] #clickAnalytics,body[data-admin-view="reports"] #editorSection,body[data-admin-view="reports"] #committeeEditorCard,body[data-admin-view="reports"] #photosSection{display:none!important}
 .admin-navbar a[aria-current="page"]{background:#6f1118;color:#fff;border-color:#6f1118}
 .page-heading{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:14px 18px;border-radius:16px;background:#fff;border:1px solid #ead7b0;color:#6f1118;font-weight:900}
 </style>
 
-<style id="admin-professional-redesign">
-:root{--adm-maroon:#6f1118;--adm-deep:#25070a;--adm-gold:#d6a84f;--adm-cream:#fff8e9}
-body{background:linear-gradient(180deg,#fffaf0,#fff5e4 45%,#fffaf2);font-family:"Noto Sans Bengali",Arial,sans-serif}.wrap{max-width:1240px;padding:22px 18px 45px}
-#dashboard>.top{background:linear-gradient(135deg,#31070c,#74151c);color:#fff;border-radius:24px;padding:22px 24px;box-shadow:0 18px 45px rgba(60,5,10,.2);border:1px solid rgba(214,168,79,.35)}
-#dashboard>.top h1{color:#ffe7ad;margin:0}.card,.editor-card{border-radius:20px!important;box-shadow:0 12px 34px rgba(70,25,10,.08)!important;border-color:#ead7b0!important}.stats{grid-template-columns:repeat(3,1fr);gap:16px}.stat{border-radius:18px;background:linear-gradient(135deg,#fff,#fff8e9);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:rgba(214,168,79,.12)}.stat b{font-size:34px}.editor-card{background:linear-gradient(180deg,#fff,#fffaf1)!important}.editor-card h2,.card h2{color:var(--adm-maroon)}.btn{background:linear-gradient(135deg,#7d171d,#5f0d13);box-shadow:0 6px 14px rgba(95,13,19,.15)}.btn.secondary{background:#f0dfb8;color:#4b1512;box-shadow:none}.table-wrap{box-shadow:0 8px 22px rgba(70,25,10,.06)}th{background:linear-gradient(90deg,#6f1118,#851b22)}
-@media(max-width:700px){.wrap{padding:12px}.stats{grid-template-columns:1fr 1fr}.stat b{font-size:28px}#dashboard>.top{padding:18px 16px;border-radius:20px}}
-@media(max-width:460px){.stats{grid-template-columns:1fr}.top{align-items:flex-start}.top>div{width:100%}.top .btn{margin-top:4px}}
-</style>
 
-<style id="professional-admin-v2">
-#dashboard{animation:admIn .35s ease}.admin-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;color:#6f1118;font-weight:900;font-size:14px}.admin-section-label:after{content:"";height:1px;background:#ead7b0;flex:1}.stats .stat{min-height:112px;display:flex;flex-direction:column;justify-content:center}.stats .stat:before{content:"✦";color:#d6a84f;font-size:13px}.editor-card{overflow:hidden}.editor-card> .top{padding-bottom:10px;border-bottom:1px solid #f0dfbe}.btn{transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}input,textarea,select{transition:border-color .18s,box-shadow .18s}input:focus,textarea:focus,select:focus{outline:none;border-color:#b9852f!important;box-shadow:0 0 0 3px rgba(214,168,79,.16)}@keyframes admIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-</style>
+
+
 
 <style id="professional-login-entry">
 body:has(#loginBox:not([style*="display: none"])){min-height:100vh;background:radial-gradient(ellipse at 12% 10%,rgba(214,168,79,.18),transparent 35%),linear-gradient(135deg,#1e0609 0%,#4c0d13 48%,#26070b 100%);}
@@ -93,23 +84,88 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 #photoList .uploaded-photo-row .photo-caption-edit:focus{outline:none;border-color:#bd8c34;box-shadow:0 0 0 3px rgba(201,154,66,.14)}
 @media(max-width:600px){#photoList .uploaded-photo-row{gap:9px!important}#photoList .uploaded-photo-row>img{width:68px!important;height:60px!important}#photoList .uploaded-photo-row>div:last-child{width:100%;padding-left:0}#photoList .uploaded-photo-row>div:last-child .btn{flex:1}}
 </style>
+<style id="admin-redesign">
+:root{--maroon:#7a1424;--deep:#2b070d;--ink:#2d1518;--muted:#6d5a58;--gold:#c8962f;--gold-lt:#ecd08a;--paper:#fbf7ef;--line:#e8dcc3;--sans:"Noto Sans Bengali",system-ui,-apple-system,"Segoe UI",sans-serif;--serif:"Tiro Bangla","Noto Serif Bengali",Georgia,serif}
+html{-webkit-text-size-adjust:100%}
+body{font:400 16px/1.75 var(--sans);background:var(--paper);color:var(--ink)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.4;color:var(--deep)}
+.wrap{max-width:1180px;padding:16px 16px 56px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.admin-head{display:flex;align-items:center;gap:10px;padding:12px 16px;margin-bottom:12px;background:var(--deep);border-radius:16px;color:var(--gold-lt)}
+.admin-brand{display:flex;align-items:center;gap:10px;margin-right:auto;font:400 21px/1.3 var(--serif)}.admin-brand svg{flex:none;color:var(--gold)}
+.admin-brand small{display:block;font:400 13px/1.3 var(--sans);color:#d9bdad}
+.admin-head a,.admin-head button{display:inline-flex;align-items:center;min-height:40px;padding:8px 16px;border:1px solid rgba(236,208,138,.45);border-radius:99px;background:transparent;color:var(--gold-lt);font:500 14px/1.3 var(--sans);cursor:pointer}
+.admin-head a:hover,.admin-head button:hover{background:rgba(236,208,138,.14)}
+.admin-navbar{position:sticky;top:8px;z-index:20;display:flex;gap:4px;overflow-x:auto;padding:6px;margin:0 0 20px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(60,10,15,.06);backdrop-filter:none}
+.admin-navbar a{white-space:nowrap;padding:10px 16px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-size:15px;font-weight:600;line-height:1.4}
+.admin-navbar a:hover,.admin-navbar a:focus{background:var(--paper);color:var(--maroon)}
+.admin-navbar a[aria-current="page"],.admin-navbar a[aria-current="page"]:hover{background:var(--maroon);color:#fff;border:0}
+.card,.editor-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:16px!important;box-shadow:0 6px 22px rgba(60,10,15,.06)!important;padding:clamp(18px,3vw,28px)}
+.editor-card{margin-bottom:18px}
+.card h2,.editor-card h2{margin:0 0 4px;font-size:clamp(22px,3vw,27px);color:var(--maroon)}
+h1{font-size:clamp(26px,4vw,34px);color:var(--maroon)}
+.small,.editor-help{font-size:14px;line-height:1.7;color:var(--muted)}
+.top{margin-bottom:18px}
+.editor-card>.top{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.stats{gap:14px}
+.stat{padding:20px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:15px}
+.stat b{font:400 clamp(30px,5vw,40px)/1.2 var(--serif);color:var(--maroon)}
+.stats .stat:before,.stat:after{content:none;display:none}
+.btn{min-height:44px;padding:10px 20px;border:0;border-radius:10px;background:var(--maroon);color:#fff;font:600 15px/1.4 var(--sans);box-shadow:none;cursor:pointer;transition:background .2s}
+.btn:hover{background:var(--deep);transform:none;filter:none}
+.btn.secondary{background:#f3ead4;color:var(--maroon)}.btn.secondary:hover{background:#eadcb8}
+label{margin:16px 0 6px;font-size:15px;font-weight:600;color:var(--ink)}
+input,select,textarea{font:400 16px/1.5 var(--sans);color:var(--ink);padding:11px 13px;border:1px solid #d9c9a5;border-radius:10px;background:#fff}
+input[type=checkbox]{width:auto;accent-color:var(--maroon)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)!important;box-shadow:0 0 0 3px rgba(200,150,47,.18)}
+.table-wrap{border:1px solid var(--line);border-radius:12px;box-shadow:none}
+th{background:var(--deep);color:var(--gold-lt);font-size:14px;font-weight:600;white-space:nowrap}
+td{font-size:15px;border-bottom-color:var(--line)}tr:hover td{background:#fbf7ef}
+.empty{padding:32px 16px;color:var(--muted)}
+.msg.err{background:#fde8e8;color:#8a1010;border:1px solid #f1b9b9}
+.ok{color:#176b32}
+.committee-editor-row,.editor-nav-row{border-radius:12px}
+.committee-editor-row{background:var(--paper);border:1px solid var(--line)}
+#problemReportsSection .report-card{border-color:var(--line);border-radius:14px;box-shadow:none}
+#problemReportsSection .report-badge{background:#f3ead4;color:var(--maroon)}
+.admin-section-label{margin:24px 0 10px;color:var(--maroon);font-size:15px}
+/* login */
+.login-kicker,.login-art-note,.login-eyebrow{letter-spacing:0;font-size:13px;font-weight:600}
+.login-art h1,.login-form-head h2{font-family:var(--serif);font-weight:400}
+.login-copyright,.login-mobile-brand small{letter-spacing:0;font-size:12px}
+.login-form-side label{font-size:15px}
+.login-security-note{font-size:13px}
+@media(max-width:700px){.wrap{padding:10px 10px 48px}.admin-head{padding:10px 12px;border-radius:12px}.admin-brand{font-size:18px}.admin-brand small{display:none}.admin-head a{display:none}.stats{grid-template-columns:1fr 1fr}.card,.editor-card{padding:18px 16px}}
+@media(max-width:460px){.stats{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+body:not([data-admin-view="overview"]) #greetingLogs{display:none!important}
+</style>
 </head>
 <body data-admin-view="overview">
+<script id="admin-page-route">
+(function(){
+  const path = (location.pathname || '').toLowerCase().split('/').pop();
+  const routes = {'admin.html':'overview','website-editor.html':'editor','visitors.html':'visitors','gallery.html':'gallery','committee.html':'committee'};
+  document.body.dataset.adminView = routes[path] || 'overview';
+})();
+</script>
+
 <div class="wrap">
 <section id="loginBox" class="login-shell">
   <div class="login-art">
     <div class="login-brand-mark" aria-hidden="true">ॐ</div>
-    <div class="login-kicker">ISHWARMONI KUTIR · OFFICIAL</div>
+    <div class="login-kicker">সাহা বাড়ি · খড়মা</div>
     <h1>ঈশ্বরমনি কুঠির</h1>
     <p class="login-art-lead">ঐতিহ্য, ভক্তি ও পরিবারের পূজার স্মৃতি—এক জায়গায়।</p>
     <div class="login-art-rule"><span>✦</span></div>
-    <div class="login-art-note">ADMINISTRATION PORTAL</div>
+    <div class="login-art-note">অ্যাডমিন প্যানেল</div>
     <p class="login-art-foot">শুধুমাত্র অনুমোদিত প্রশাসকের জন্য</p>
     <div class="login-art-mandala" aria-hidden="true">✺</div>
   </div>
   <div class="login-form-side">
-    <div class="login-mobile-brand"><span>ॐ</span><div><b>ঈশ্বরমনি কুঠির</b><small>OFFICIAL ADMIN</small></div></div>
-    <div class="login-form-head"><span class="login-lock">♙</span><div class="login-eyebrow">SECURE ACCESS</div><h2>অ্যাডমিন লগইন</h2><p>আপনার অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p></div>
+    <div class="login-mobile-brand"><span>ॐ</span><div><b>ঈশ্বরমনি কুঠির</b><small>অ্যাডমিন প্যানেল</small></div></div>
+    <div class="login-form-head"><span class="login-lock">♙</span><div class="login-eyebrow">নিরাপদ প্রবেশ</div><h2>অ্যাডমিন লগইন</h2><p>আপনার অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p></div>
     <form id="adminLoginForm" onsubmit="event.preventDefault();login()">
       <label for="email">ইমেইল ঠিকানা</label>
       <div class="login-input-wrap"><span aria-hidden="true">✉</span><input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required></div>
@@ -119,23 +175,23 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
       <div id="loginMsg" class="msg err" role="alert" aria-live="polite"></div>
     </form>
     <div class="login-security-note"><span>♢</span><span>আপনার লগইন তথ্য গোপন রাখুন। শেয়ার করা ডিভাইসে কাজ শেষে Logout করুন।</span></div>
-    <div class="login-copyright">© ঈশ্বরমনি কুঠির · ADMIN PANEL</div>
+    <div class="login-copyright">© ঈশ্বরমনি কুঠির · অ্যাডমিন প্যানেল</div>
   </div>
 </section>
 <section id="dashboard" style="display:none">
+<div class="admin-head"><div class="admin-brand"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1.6 2 2.4 3.4 2.4 4.8A2.4 2.4 0 0 1 12 9.2a2.4 2.4 0 0 1-2.4-2.4C9.6 5.4 10.4 4 12 2Z"/><path d="M3 13h18c0 4-3.6 7-9 7s-9-3-9-7Z"/></svg><div>ঈশ্বরমনি কুঠির<small>অ্যাডমিন প্যানেল</small></div></div><a href="index.html" target="_blank" rel="noopener">ওয়েবসাইট দেখুন</a><button type="button" onclick="logout()">লগআউট</button></div>
 <nav class="admin-navbar" aria-label="Admin sections">
-<a href="admin.html" aria-current="page">🏠 Overview</a>
-<a href="chandipath-clicks.html">🔱 চণ্ডীপাঠ ক্লিক</a>
-<a href="website-editor.html">🛠️ Website Editor</a>
-<a href="committee.html">🙏 পূজা কমিটি</a>
-<a href="gallery.html">📸 Gallery</a>
-<a href="visitors.html">👥 দর্শনার্থী</a>
-<a id="problem-reports-nav" href="#problemReportsSection" onclick="setAdminView('reports');return false;">⚠️ সমস্যা রিপোর্ট <span id="problemReportNavCount"></span></a>
-<a href="notifications.html">🔔 নোটিফিকেশন</a>
+<a href="admin.html" aria-current="page">ওভারভিউ</a>
+<a href="website-editor.html">ওয়েবসাইট এডিটর</a>
+<a href="committee.html">পূজা কমিটি</a>
+<a href="gallery.html">গ্যালারি</a>
+<a href="visitors.html">দর্শনার্থী</a>
+<a id="problem-reports-nav" href="#problemReportsSection" onclick="setAdminView('reports');return false;">সমস্যা রিপোর্ট <span id="problemReportNavCount"></span></a>
+<a href="notifications.html">নোটিফিকেশন</a>
 </nav>
 <section id="problemReportsSection" class="card" style="margin-bottom:18px;display:none">
- <div class="top"><div><h2>⚠️ সমস্যা রিপোর্ট</h2><div class="small">ওয়েবসাইটের দর্শনার্থীরা যে রিপোর্ট জমা দিয়েছেন, সেগুলো এখানে দেখা ও সমাধানের অবস্থা আপডেট করা যাবে।</div></div>
- <button class="btn secondary" onclick="loadProblemReports()">↻ রিপোর্ট Refresh</button></div>
+ <div class="top"><div><h2>সমস্যা রিপোর্ট</h2><div class="small">ওয়েবসাইটের দর্শনার্থীরা যে রিপোর্ট জমা দিয়েছেন, সেগুলো এখানে দেখা ও সমাধানের অবস্থা আপডেট করা যাবে।</div></div>
+ <button class="btn secondary" onclick="loadProblemReports()">রিপোর্ট Refresh</button></div>
  <div class="stats" style="margin-top:12px">
   <div class="stat">মোট রিপোর্ট<b id="prTotal">—</b></div><div class="stat">নতুন রিপোর্ট<b id="prNew">—</b></div><div class="stat">সমাধান হয়েছে<b id="prResolved">—</b></div>
  </div>
@@ -147,8 +203,8 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
  <div id="problemReportsList"><div class="empty">রিপোর্ট দেখতে Refresh চাপুন।</div></div>
 </section>
 <div id="overview">
-<div class="top"><div><h1>🪔 Admin Dashboard</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
-<div><button class="btn secondary" onclick="loadVisitors()">↻ Refresh</button> <button class="btn" onclick="logout()">Logout</button></div></div>
+<div class="top"><div><h1>ড্যাশবোর্ড</h1><div class="small">ঈশ্বরমনি কুঠির — দর্শনার্থী তথ্য</div></div>
+<div><button class="btn secondary" onclick="loadVisitors()">Refresh</button> </div></div>
 <div class="stats">
 <div class="stat">মোট দর্শনার্থী<b id="total">0</b></div><div class="stat">গড় Rating<b id="avg">—</b></div><div class="stat">আজকের দর্শনার্থী<b id="today">0</b></div>
 </div>
@@ -156,44 +212,40 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 <div class="stat">এই সপ্তাহে<b id="weekVisitors">0</b></div><div class="stat">এই মাসে<b id="monthVisitors">0</b></div><div class="stat">জেলা সংখ্যা<b id="districtCount">0</b></div>
 </div>
 <div class="card" style="margin-top:16px;padding:18px">
- <div class="top"><div><h2>📊 দর্শনার্থী বিশ্লেষণ</h2><div class="small">জেলা অনুযায়ী দর্শনার্থীর সংখ্যা</div></div><button class="btn secondary" onclick="exportVisitorsCSV()">⬇ CSV Export</button></div>
+ <div class="top"><div><h2>দর্শনার্থী বিশ্লেষণ</h2><div class="small">জেলা অনুযায়ী দর্শনার্থীর সংখ্যা</div></div><button class="btn secondary" onclick="exportVisitorsCSV()">CSV Export</button></div>
  <div id="districtBreakdown" style="display:grid;gap:10px;margin-top:14px"><div class="small">ডেটা লোড হলে এখানে জেলা-ভিত্তিক রিপোর্ট দেখা যাবে।</div></div>
  <div id="advancedStatsStatus" class="small" style="margin-top:10px"></div>
 </div>
 </div>
 
-<div class="card" id="clickAnalytics" style="margin-bottom:18px">
-<div class="top"><div><h2>🔱 মহালয়ার চণ্ডীপাঠ ক্লিক রিপোর্ট</h2><div class="small">কে ক্লিক করেছে—দর্শনার্থী ফর্মে দেওয়া নাম থাকলে দেখাবে; নাম না থাকলে অজানা দেখাবে।</div></div><button class="btn secondary" onclick="loadChandipathClicks()">↻ রিপোর্ট Refresh</button></div>
-<div class="stats"><div class="stat">মোট ক্লিক<b id="cpTotal">—</b></div><div class="stat">আজকের ক্লিক<b id="cpToday">—</b></div><div class="stat">গত ৭ দিনের ক্লিক<b id="cpWeek">—</b></div></div>
-<div id="cpStatus" class="small">রিপোর্ট লোড হয়নি।</div>
-<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>ক্লিকের সময়</th></tr></thead><tbody id="cpRows"><tr><td colspan="5" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
-<div style="height:1px;background:#ead7b0;margin:24px 0"></div>
-<div class="top"><div><h2>🎨 শারদীয়া শুভেচ্ছা কার্ড ডাউনলোড</h2><div class="small">একই chandipath_clicks টেবিলে নতুন রেকর্ড হিসেবে নাম, ফরম্যাট ও সময় রাখা হচ্ছে।</div></div><button class="btn secondary" onclick="loadGreetingCardLogs()">↻ কার্ড রিপোর্ট Refresh</button></div>
+<div class="card" id="greetingLogs" style="margin-top:18px">
+
+<div class="top"><div><h2>শারদীয়া শুভেচ্ছা কার্ড ডাউনলোড</h2><div class="small">একই chandipath_clicks টেবিলে নতুন রেকর্ড হিসেবে নাম, ফরম্যাট ও সময় রাখা হচ্ছে।</div></div><button class="btn secondary" onclick="loadGreetingCardLogs()">কার্ড রিপোর্ট Refresh</button></div>
 <div class="stats"><div class="stat">মোট ডাউনলোড<b id="gcTotal">—</b></div><div class="stat">আজকের ডাউনলোড<b id="gcToday">—</b></div><div class="stat">Story / Post<b id="gcFormats">—</b></div></div>
 <div id="gcStatus" class="small">কার্ড রিপোর্ট লোড হয়নি।</div>
 <div class="table-wrap"><table style="min-width:650px"><thead><tr><th>#</th><th>নাম</th><th>ফরম্যাট</th><th>ডাউনলোডের সময়</th></tr></thead><tbody id="gcRows"><tr><td colspan="4" class="empty">লোড হচ্ছে…</td></tr></tbody></table></div>
 </div>
 
 <div id="editorSection" class="editor-card">
- <div class="top"><div><h2>🛠️ Website Visual Editor</h2><div class="small">এখান থেকেই মোবাইলে ওয়েবসাইটের লেখা, Navbar, Countdown, Timeline ও Footer বদলে Save & Publish করতে পারবেন।</div></div></div>
+ <div class="top"><div><h2>Website Visual Editor</h2><div class="small">এখান থেকেই মোবাইলে ওয়েবসাইটের লেখা, Navbar, Countdown, Timeline ও Footer বদলে Save & Publish করতে পারবেন।</div></div></div>
  <div class="editor-grid">
   <div>
-   <label>🏠 পরিচিতির শিরোনাম</label><input id="edAboutTitle" type="text">
+   <label>পরিচিতির শিরোনাম</label><input id="edAboutTitle" type="text">
    <label>পরিচিতির লেখা</label><textarea id="edAboutText"></textarea>
-   <label>🌺 দুর্গোৎসবের শিরোনাম</label><input id="edUtsavTitle" type="text">
+   <label>দুর্গোৎসবের শিরোনাম</label><input id="edUtsavTitle" type="text">
    <label>দুর্গোৎসবের লেখা</label><textarea id="edUtsavText"></textarea>
   </div>
   <div>
-   <label>🪔 পূজার Countdown-এর লক্ষ্য তারিখ ও সময়</label><input id="edCountdown" type="datetime-local">
+   <label>পূজার Countdown-এর লক্ষ্য তারিখ ও সময়</label><input id="edCountdown" type="datetime-local">
    <label>Countdown শিরোনাম</label><input id="edCountdownLabel" type="text">
    <label>Countdown-এর নিচের লেখা</label><input id="edCountdownSub" type="text">
-   <label>📅 পূজার সময়সূচি (এক লাইনে একটি অনুষ্ঠান)</label><textarea id="edTimeline" placeholder="তারিখ | অনুষ্ঠানের নাম | বিবরণ"></textarea>
+   <label>পূজার সময়সূচি (এক লাইনে একটি অনুষ্ঠান)</label><textarea id="edTimeline" placeholder="তারিখ | অনুষ্ঠানের নাম | বিবরণ"></textarea>
    <div class="editor-help">উদাহরণ: ২৮ আশ্বিন | মহা ষষ্ঠী | সকাল ৯টা থেকে বোধন। এখানে তারিখ, অনুষ্ঠানের নাম ও সময়/বিবরণ লিখুন। নিচের Save & Publish চাপলে Countdown ও সময়সূচি দুটোই ওয়েবসাইটে আপডেট হবে।</div>
   </div>
  </div>
  <div>
-  <label>🧭 Navbar Menu</label><div id="edNavRows"></div>
-  <button class="btn secondary" type="button" onclick="addNavRow()">＋ Menu যোগ করুন</button>
+  <label>Navbar Menu</label><div id="edNavRows"></div>
+  <button class="btn secondary" type="button" onclick="addNavRow()">+ Menu যোগ করুন</button>
  </div>
  <div class="editor-grid" style="margin-top:10px">
   <div>
@@ -201,7 +253,7 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
    <label>Footer-এর ঠিকানা</label><input id="edFooterAddress" type="text">
   </div>
   <div>
-   <label>🍚 প্রসাদের নাম</label><input id="edPrasadTitle" type="text">
+   <label>প্রসাদের নাম</label><input id="edPrasadTitle" type="text">
    <label>কী কী থাকবে</label><textarea id="edPrasadItems"></textarea>
    <label>বিতরণের সময়</label><input id="edPrasadTime" type="text">
    <label>বিতরণের স্থান</label><input id="edPrasadLocation" type="text">
@@ -209,16 +261,16 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
    <label style="display:flex;align-items:center;gap:8px;font-weight:700"><input id="edPrasadActive" type="checkbox" style="width:auto"> প্রসাদ তথ্য প্রকাশ করুন</label>
   </div>
  </div>
- <div class="save-row"><button class="btn" onclick="saveWebsiteEditor()">💾 Save & Publish</button><button class="btn secondary" onclick="loadWebsiteEditor()">↻ Reload</button><span id="editorStatus" class="small"></span></div>
+ <div class="save-row"><button class="btn" onclick="saveWebsiteEditor()">Save & Publish</button><button class="btn secondary" onclick="loadWebsiteEditor()">Reload</button><span id="editorStatus" class="small"></span></div>
 </div>
 
 <div class="editor-card" id="committeeEditorCard">
- <div class="top"><div><h2>🙏 ঈশ্বরমনি কুঠির দুর্গাপূজা উদযাপন কমিটি</h2><div class="small">এখান থেকে সদস্যদের পদবি ও নাম যোগ, সম্পাদনা, মুছে ফেলা এবং Save & Publish করতে পারবেন।</div></div></div>
+ <div class="top"><div><h2>ঈশ্বরমনি কুঠির দুর্গাপূজা উদযাপন কমিটি</h2><div class="small">এখান থেকে সদস্যদের পদবি ও নাম যোগ, সম্পাদনা, মুছে ফেলা এবং Save & Publish করতে পারবেন।</div></div></div>
  <div id="committeeEditorRows"></div>
- <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">＋ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">💾 কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">↻ Reload</button><span id="committeeEditorStatus" class="small"></span></div>
+ <div class="save-row" style="margin-top:12px"><button class="btn secondary" type="button" onclick="addCommitteeRow()">+ সদস্য যোগ করুন</button><button class="btn" type="button" onclick="saveCommittee()">কমিটি Save & Publish</button><button class="btn secondary" type="button" onclick="loadCommitteeEditor()">Reload</button><span id="committeeEditorStatus" class="small"></span></div>
 </div>
 
-<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>📸🎥 গ্যালারিতে ছবি / ভিডিও যোগ করুন</h2><div class="small">এখান থেকে ছবি অথবা ভিডিও আপলোড করলে ওয়েবসাইটের গ্যালারিতে যোগ হবে।</div></div></div>
+<div id="photosSection"><div class="card" style="margin-bottom:18px"><div class="top"><div><h2>গ্যালারিতে ছবি / ভিডিও যোগ করুন</h2><div class="small">এখান থেকে ছবি অথবা ভিডিও আপলোড করলে ওয়েবসাইটের গ্যালারিতে যোগ হবে।</div></div></div>
 <label>গ্যালারির বিভাগ</label><select id="photoSection" style="width:100%;padding:13px;border:1px solid #d9c49c;border-radius:10px;background:#fff">
 <option value="gallery">শারদীয় দুর্গোৎসব ২০২৬ (সাধারণ গ্যালারি)</option>
 <option value="press">পত্রিকায় ঈশ্বর মনি কুঠির</option>
@@ -235,12 +287,12 @@ input,textarea,select{font:inherit;color:var(--lux-ink);background:#fffefa;borde
 <label>ছবির নাম / ক্যাপশন (ঐচ্ছিক)</label><input id="photoCaption" placeholder="যেমন: সাহা বাড়ির দুর্গাপূজার প্রতিমা">
 <label>প্রতিমার সাল (শুধু ‘বিগত বছরের প্রতিমা’ বিভাগের জন্য)</label><input id="photoYear" type="number" min="1900" max="2100" placeholder="যেমন: ২০২৪ বা 2024">
 <div class="editor-help">‘বিগত বছরের প্রতিমা’ নির্বাচন করলে সাল লিখুন। ওয়েবসাইটে ছবির নিচে “শারদীয় দুর্গোৎসব ২০২৪” দেখাবে। অন্য বিভাগে সাল ফাঁকা রাখতে পারেন।</div>
- <div id="selectedPhotoFiles" class="editor-help" aria-live="polite">এখনো কোনো ফাইল নির্বাচন করা হয়নি।</div><br><button id="uploadPhotoBtn" class="btn" onclick="uploadPhoto()">⬆️ নির্বাচিত সব ছবি / ভিডিও Upload করুন</button> <span id="uploadStatus" class="small" aria-live="polite"></span>
+ <div id="selectedPhotoFiles" class="editor-help" aria-live="polite">এখনো কোনো ফাইল নির্বাচন করা হয়নি।</div><br><button id="uploadPhotoBtn" class="btn" onclick="uploadPhoto()">নির্বাচিত সব ছবি / ভিডিও Upload করুন</button> <span id="uploadStatus" class="small" aria-live="polite"></span>
 </div>
 
-<div class="card" style="margin-bottom:18px"><h2>🖼️ আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">💾 পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
-<div class="card" style="margin-bottom:18px"><h2>🗑️ আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
-<div class="card" id="visitorSection"><div class="top"><h2>👥 দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
+<div class="card" style="margin-bottom:18px"><h2>আগে থেকে থাকা ছবি</h2><div class="small">Website তৈরির সময় দেওয়া পুরোনো ছবিগুলো এখান থেকে Hide/Show করতে পারবেন।</div><div id="staticPhotoList" style="margin-top:12px">Loading...</div><div class="save-row" style="margin-top:12px"><button class="btn" onclick="saveStaticPhotos()">পরিবর্তন Save করুন</button><span id="staticPhotoStatus" class="small"></span></div></div>
+<div class="card" style="margin-bottom:18px"><h2>আপলোড করা ছবি</h2><div id="photoList" class="small">Loading...</div></div>
+<div class="card" id="visitorSection"><div class="top"><h2>দর্শনার্থীর তথ্য</h2><input id="search" style="max-width:330px" placeholder="নাম / জেলা / উপজেলা খুঁজুন..." oninput="render()"></div>
 <div id="status" class="small"></div><div class="table-wrap"><table><thead><tr><th>#</th><th>নাম</th><th>জেলা</th><th>উপজেলা</th><th>মতামত</th><th>Rating</th><th>সময়</th></tr></thead>
 <tbody id="rows"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table></div></div>
 </section></div>
@@ -256,7 +308,7 @@ if(!email||!password)return showMsg("ইমেইল ও পাসওয়ার�
 const loginButton=document.getElementById("loginButton");if(loginButton){loginButton.disabled=true;loginButton.innerHTML='<span>যাচাই করা হচ্ছে…</span><span>•••</span>'}
 try{let r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})}),d=await r.json();
 if(!r.ok)throw Error(d.error_description||d.msg||"Login failed");accessToken=d.access_token;sessionStorage.setItem("ishwarmani_admin_token",accessToken);if(d.refresh_token)sessionStorage.setItem("ishwarmani_admin_refresh",d.refresh_token);
-document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
+document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadGreetingCardLogs();loadProblemReports()}catch(e){showMsg(e.message)}finally{if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span>নিরাপদে প্রবেশ করুন</span><span aria-hidden="true">→</span>'}}}
 async function loadVisitors(){
 document.getElementById("status").textContent="তথ্য লোড হচ্ছে...";
 try{let r=await fetch(SUPABASE_URL+"/rest/v1/visitors?select=*&order=created_at.desc",{headers:h()}),d=await r.json();
@@ -293,21 +345,6 @@ function exportVisitorsCSV(){
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){let q=document.getElementById("search").value.toLowerCase().trim(),list=visitors.filter(v=>[v.name,v.district,v.upazila,v.opinion,v.rating].some(x=>String(x||"").toLowerCase().includes(q))),b=document.getElementById("rows");if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">কোনো তথ্য পাওয়া যায়নি।</td></tr>';return}b.innerHTML=list.map((v,i)=>`<tr><td>${i+1}</td><td>${esc(v.name)}</td><td>${esc(v.district)}</td><td>${esc(v.upazila)}</td><td>${esc(v.opinion||"—")}</td><td><b>${esc(v.rating||"—")}</b></td><td>${v.created_at?new Date(v.created_at).toLocaleString("bn-BD"):"—"}</td></tr>`).join("")}
-async function loadChandipathClicks(){
- const status=document.getElementById('cpStatus'), body=document.getElementById('cpRows');
- if(!status||!body)return; status.textContent='ক্লিক রিপোর্ট লোড হচ্ছে…';
- try{
-  const r=await fetch(SUPABASE_URL+'/rest/v1/chandipath_clicks?select=id,visitor_name,district,upazila,clicked_at,created_at&or=(district.is.null,district.neq.Greeting%20Card)&order=clicked_at.desc&limit=500',{headers:h()});
-  const d=await r.json(); if(!r.ok) throw Error(d.message||d.details||'Supabase error '+r.status);
-  const rows=Array.isArray(d)?d:[], now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()), week=new Date(now.getTime()-7*86400000);
-  const stamp=x=>new Date(x.clicked_at||x.created_at||0);
-  document.getElementById('cpTotal').textContent=rows.length;
-  document.getElementById('cpToday').textContent=rows.filter(x=>stamp(x)>=start).length;
-  document.getElementById('cpWeek').textContent=rows.filter(x=>stamp(x)>=week).length;
-  body.innerHTML=rows.length?rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.visitor_name||'অজানা/তথ্য দেননি')}</td><td>${esc(x.district||'—')}</td><td>${esc(x.upazila||'—')}</td><td>${stamp(x).getTime()?stamp(x).toLocaleString('bn-BD'):'—'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">এখনো কোনো ক্লিক রেকর্ড নেই। SQL চালানো হয়েছে কি না দেখুন।</td></tr>';
-  status.textContent=`${rows.length}টি ক্লিক রেকর্ড লোড হয়েছে। সর্বোচ্চ সাম্প্রতিক ৫০০টি দেখানো হচ্ছে।`;
- }catch(e){status.textContent='ক্লিক রিপোর্ট লোড হয়নি: '+e.message+' — SQL সেটআপ ও Supabase RLS/GRANT পরীক্ষা করুন।';body.innerHTML='<tr><td colspan="5" class="empty">ডেটা পাওয়া যায়নি।</td></tr>';}
-}
 function showAdminSection(id){document.querySelectorAll('.admin-section-active').forEach(e=>e.classList.remove('admin-section-active'));const el=document.getElementById(id);if(el){el.classList.add('admin-section-active');setTimeout(()=>el.classList.remove('admin-section-active'),1800);}}
 
 function showSelectedPhotoFiles(){
@@ -561,7 +598,7 @@ async function saveProblemReport(id,btn){
 function logout(){sessionStorage.removeItem("ishwarmani_admin_token");sessionStorage.removeItem("ishwarmani_admin_refresh");accessToken="";location.reload()}
 
 
-if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadChandipathClicks();loadGreetingCardLogs();loadProblemReports()}
+if(accessToken){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";loadVisitors();loadPhotos();loadWebsiteEditor();loadCommitteeEditor();loadStaticPhotos();loadGreetingCardLogs();loadProblemReports()}
 
 let websiteContentCache={};
 const defaultNav=[
