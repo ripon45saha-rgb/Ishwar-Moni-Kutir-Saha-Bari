@@ -2,29 +2,76 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#761321">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2b070d">
 <meta name="description" content="পত্রিকায় ঈশ্বর মনি কুঠির — সংবাদপত্রে প্রকাশিত প্রতিবেদন, ছবি ও স্মৃতি।">
 <title>পত্রিকায় ঈশ্বর মনি কুঠির | সাহা বাড়ি</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root{--wine:#761321;--gold:#bd9140;--cream:#fff8e9;--ink:#32191b;--muted:#765f5c}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8e9,#fff);color:var(--ink);font-family:"Noto Serif Bengali","Nirmala UI",serif;line-height:1.7}
-header{background:linear-gradient(135deg,#4b0912,#8f1d2d);color:#fff8e9;padding:22px 18px 34px;text-align:center;border-bottom:4px solid var(--gold)}
-.toplinks{max-width:1120px;margin:0 auto 24px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.toplinks a{color:#fff0c9;text-decoration:none;font-size:14px;font-weight:700}
-.eyebrow{color:#f1d38d;font:800 12px Arial,sans-serif;letter-spacing:1.5px}h1{font-size:clamp(30px,5vw,48px);margin:10px 0;line-height:1.35}header p{margin:0 auto;color:#f8e7d7;max-width:720px}
-main{max-width:1180px;margin:0 auto;padding:30px 16px 64px}.note{text-align:center;color:var(--muted);line-height:1.9;margin:0 auto 25px;max-width:800px}
-.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.item{overflow:hidden;border:1px solid #ead8b4;border-radius:16px;background:#fff;box-shadow:0 8px 25px #4d15120c}.item img,.item video{display:block;width:100%;max-height:560px;aspect-ratio:4/3;object-fit:contain;background:#f9f5ed;cursor:zoom-in}.caption{padding:12px 14px 15px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}.state{grid-column:1/-1;padding:35px 16px;text-align:center;border:1px dashed #d8bd84;border-radius:16px;background:#fffdf8;color:var(--muted);line-height:1.9}.back{display:inline-flex;margin:30px auto 0;padding:12px 18px;background:var(--wine);color:white;text-decoration:none;border-radius:999px;font-weight:700}
-footer{text-align:center;padding:22px;color:var(--muted);font-size:13px}.lightbox{display:none;position:fixed;inset:0;z-index:99;background:#16070ced;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}.lightbox.open{display:flex}.lightbox img{max-width:96vw;max-height:92vh;object-fit:contain;border-radius:8px}
-@media(max-width:800px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.caption{padding:10px;font-size:14px}}@media(max-width:480px){.gallery{grid-template-columns:1fr}.toplinks{justify-content:center}}
+:root{--maroon:#7a1424;--deep:#2b070d;--ink:#2d1518;--muted:#6d5a58;--gold:#c8962f;--gold-lt:#ecd08a;--paper:#fbf7ef;--line:#e8dcc3;--r:14px;--bar:60px;
+--sans:"Noto Sans Bengali",system-ui,-apple-system,"Segoe UI",sans-serif;--serif:"Tiro Bangla","Noto Serif Bengali",Georgia,serif}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font:400 17px/1.85 var(--sans);color:var(--ink);background:var(--paper);overflow-x:hidden}
+img,video{max-width:100%}a{color:inherit;text-decoration:none}h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.4;margin:0}p{margin:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:50;background:rgba(43,7,13,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(236,208,138,.22)}
+.bar-in{max-width:1180px;margin:0 auto;min-height:var(--bar);padding:8px 20px;padding-top:max(8px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font:400 22px/1.3 var(--serif);color:var(--gold-lt)}.brand svg{color:var(--gold);flex:none}
+.back-top{padding:9px 18px;border:1px solid rgba(236,208,138,.45);border-radius:99px;color:var(--gold-lt);font-size:15px;font-weight:500;line-height:1.4;white-space:nowrap}
+.back-top:hover{background:rgba(236,208,138,.12)}
+.page-head{position:relative;text-align:center;color:#fff;padding:clamp(48px,8vw,88px) 20px clamp(44px,7vw,76px);background:linear-gradient(160deg,#4a0e1a,#1d0409);overflow:hidden}
+.page-head::before{content:"";position:absolute;inset:0;background:url("temple.jpg") center 62%/cover no-repeat}
+.page-head::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,3,8,.82),rgba(30,4,9,.7) 55%,rgba(20,3,7,.9))}
+.ph-in{position:relative;z-index:1;max-width:760px;margin:0 auto}
+.kicker{font-size:15px;color:var(--gold-lt)}
+.page-head h1{margin:10px 0 0;font-size:clamp(38px,8vw,68px);line-height:1.3;color:#fff4d2;text-shadow:0 4px 24px rgba(0,0,0,.5)}
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:14px 0;color:var(--gold)}.orn::before,.orn::after{content:"";width:64px;height:1px;background:currentColor}.orn i{width:8px;height:8px;background:currentColor;transform:rotate(45deg)}
+.page-head p{font:400 clamp(18px,2.6vw,22px)/1.7 var(--serif);color:#f6e6c2}
+.tabs{background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs-in{display:flex;gap:6px;max-width:1120px;margin:0 auto;padding:10px 16px;white-space:nowrap}
+.tabs a{padding:8px 18px;border-radius:99px;font-size:16px;font-weight:500;line-height:1.5;color:var(--muted)}
+.tabs a:hover{background:var(--paper);color:var(--maroon)}
+.tabs a[aria-current=page]{background:var(--maroon);color:#fff}
+main{max-width:1120px;margin:0 auto;padding:clamp(36px,6vw,64px) 20px clamp(56px,8vw,88px)}
+.note{max-width:720px;margin:0 auto 36px;text-align:center;font-size:15px;color:var(--muted)}
+.gallery{column-count:3;column-gap:18px}
+.photo,.item{break-inside:avoid;margin:0 0 18px;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(60,10,15,.08)}
+.photo img,.item img,.item video{display:block;width:100%;height:auto;background:#f4eee2}
+.photo img,.item img{cursor:zoom-in;transition:transform .5s}.photo:hover img,.item:hover img{transform:scale(1.03)}
+.caption{padding:12px 16px 16px;font-size:16px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
+.state{column-span:all;padding:44px 20px;text-align:center;border:1px dashed #d8bd84;border-radius:var(--r);background:#fff;color:var(--muted)}
+.back{display:inline-flex;align-items:center;min-height:48px;margin-top:20px;padding:11px 26px;border-radius:99px;background:var(--maroon);color:#fff;font-weight:600;font-size:16px}.back:hover{background:var(--deep)}
+.toolbar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:32px}
+.btn{display:inline-flex;align-items:center;min-height:46px;padding:10px 22px;border:1px solid var(--line);border-radius:99px;background:#fff;color:var(--maroon);font-weight:600;font-size:16px}.btn:hover{border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:900px;margin:0 auto}
+.person{display:flex;align-items:center;gap:16px;padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:var(--r)}
+.num{flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:var(--maroon);color:var(--gold-lt);font:400 18px/1 var(--serif)}
+.role{font-size:14px;font-weight:600;line-height:1.5;color:#8c6a36}
+.name{font:400 21px/1.5 var(--serif);color:var(--deep);overflow-wrap:anywhere}
+.foot{margin-top:28px;text-align:center;font-size:14px;color:var(--muted)}
+.site-footer{padding:48px 20px 34px;text-align:center;background:var(--deep);color:#d9bdad;font-size:15px}
+.site-footer::before{content:"";display:block;width:90px;height:1px;margin:0 auto 22px;background:var(--gold)}
+.site-footer h3{font-size:24px;color:var(--gold-lt);margin-bottom:2px}.site-footer a{display:inline-block;margin-top:12px;font-size:12px;color:#8f7a73}
+.lightbox{display:none;position:fixed;inset:0;z-index:99;align-items:center;justify-content:center;padding:16px;background:rgba(10,2,4,.94);cursor:zoom-out}
+.lightbox.open{display:flex}.lightbox img{max-width:100%;max-height:92svh;width:auto;height:auto;object-fit:contain;border-radius:8px}
+@media(max-width:900px){.gallery{column-count:2}}
+@media(max-width:600px){body{font-size:16px}.bar-in{padding:8px 14px}.brand{font-size:19px}.back-top{padding:8px 14px;font-size:14px}.gallery{column-count:1;max-width:480px;margin:0 auto}.grid{grid-template-columns:1fr}.name{font-size:19px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
-<header><div class="toplinks"><a href="index.html">← মূল ওয়েবসাইট</a><a href="admin.html">অ্যাডমিন প্যানেল</a></div><div class="eyebrow">ঈশ্বরমনি কুঠির · সাহা বাড়ি</div><h1>পত্রিকায় ঈশ্বর মনি কুঠির</h1><p>পত্রিকায় প্রকাশিত সংবাদ, প্রতিবেদন, ছবি ও স্মৃতিচিহ্ন</p></header>
-<main><p class="note">অ্যাডমিন প্যানেল থেকে “পত্রিকায় ঈশ্বর মনি কুঠির” বিভাগে ছবি বা ভিডিও আপলোড করুন। প্রতিটি ফাইলের ক্যাপশন অ্যাডমিন প্যানেল থেকেই সম্পাদনা করা যাবে।</p><div class="gallery" id="gallery"><div class="state">ছবি ও ভিডিও লোড হচ্ছে…</div></div><div style="text-align:center"><a class="back" href="index.html">← মূল ওয়েবসাইটে ফিরে যান</a></div></main>
-<footer>© ঈশ্বরমনি কুঠির, সাহা বাড়ি · খড়মা, দেওয়ানগঞ্জ</footer>
-<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt="বড় ছবি"></div>
+<nav class="bar" aria-label="প্রধান মেনু"><div class="bar-in"><a class="brand" href="index.html"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1.6 2 2.4 3.4 2.4 4.8A2.4 2.4 0 0 1 12 9.2a2.4 2.4 0 0 1-2.4-2.4C9.6 5.4 10.4 4 12 2Z"/><path d="M3 13h18c0 4-3.6 7-9 7s-9-3-9-7Z"/></svg><span>ঈশ্বরমনি কুঠির</span></a><a class="back-top" href="index.html">মূল ওয়েবসাইট</a></div></nav>
+<header class="page-head"><div class="ph-in"><div class="kicker">ঈশ্বরমনি কুঠির · সাহা বাড়ি</div><h1>পত্রিকায় ঈশ্বর মনি কুঠির</h1><div class="orn" aria-hidden="true"><i></i></div><p>পত্রিকায় প্রকাশিত সংবাদ, প্রতিবেদন, ছবি ও স্মৃতিচিহ্ন</p></div></header>
+
+<main>
+<p class="note">অ্যাডমিন প্যানেল থেকে “পত্রিকায় ঈশ্বর মনি কুঠির” বিভাগে ছবি বা ভিডিও আপলোড করুন। প্রতিটি ফাইলের ক্যাপশন অ্যাডমিন প্যানেল থেকেই সম্পাদনা করা যাবে।</p>
+<div class="gallery" id="gallery"><div class="state">ছবি ও ভিডিও লোড হচ্ছে…</div></div>
+<div style="text-align:center"><a class="back" href="index.html">মূল ওয়েবসাইটে ফিরে যান</a></div>
+</main>
+<footer class="site-footer"><h3>ঈশ্বরমনি কুঠির, সাহা বাড়ি</h3><p>খড়মা, দেওয়ানগঞ্জ, জামালপুর</p><br><a href="admin.html">অ্যাডমিন প্যানেল</a></footer>
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt="বড় ছবি"></div>
 <script>
 const SUPABASE_URL='https://evkjwiicnzruijfthwpm.supabase.co';
 const SUPABASE_KEY='sb_publishable_jZoDvrriWst7JRwnicUWIQ_HjzTZD2d';
@@ -51,4 +98,5 @@ async function loadPressItems(){
 function openPhoto(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('open')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lightbox').classList.remove('open')});loadPressItems();
 </script>
-</body></html>
+</body>
+</html>
